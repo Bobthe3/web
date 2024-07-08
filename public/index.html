@@ -94,66 +94,111 @@
             border-bottom: 1px solid #555;
         }
         .gallery {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-        .gallery img {
-            width: 100%;
-            height: 100%;
-            max-width: 300px;
-            max-height: 300px;
-            object-fit: cover;
-            margin: 10px;
-            border: 1px solid #555;
-            cursor: pointer;
-            transition: transform 0.2s;
-        }
-        .gallery img:hover {
-            transform: scale(1.05);
-        }
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.9);
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            flex-direction: column;
-        }
-        .modal img {
-            max-width: 90%;
-            max-height: 70%;
-        }
-        .modal .info {
-            color: #fff;
-            text-align: center;
-            margin-top: 20px;
-        }
-        .close, .prev, .next {
-            position: absolute;
-            top: 50%;
-            font-size: 30px;
-            color: #ffffff;
-            cursor: pointer;
-            user-select: none;
-            transform: translateY(-50%);
-        }
-        .close {
-            top: 20px;
-            left: 20px;
-        }
-        .prev {
-            left: 20px;
-        }
-        .next {
-            right: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Adjust column width as needed */
+            gap: 10px;
+            padding: 20px;
         }
 
+        .gallery img {
+            width: 100%;
+            height: 200px; /* Set a constant height for all images */
+            object-fit: cover; /* Ensure images fill the space while maintaining aspect ratio */
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        @media (max-width: 600px) {
+            .gallery {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); /* Adjust for smaller screens */
+            }
+        }
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed;
+            z-index: 1; /* Sit on top */
+            padding-top: 100px; /* Location of the box */
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.7); /* Black w/ opacity */
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+        }
+
+        #caption {
+            margin: auto;
+            display: block;
+            width: 80%;
+            max-width: 700px;
+            text-align: center;
+            color: #ccc;
+            padding: 10px 0;
+            height: 150px;
+        }
+
+        .modal-content, #caption {  
+            animation-name: zoom;
+            animation-duration: 0.3s;
+        }
+
+        @keyframes zoom {
+            from {transform:scale(0)} 
+            to {transform:scale(1)}
+        }
+
+        .close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            transition: 0.2s;
+        }
+
+        .close:hover,
+        .close:focus {
+            color: #bbb;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .prev, .next {
+            cursor: pointer;
+            position: absolute;
+            top: 50%;
+            width: auto;
+            padding: 16px;
+            margin-top: -50px;
+            color: white;
+            font-weight: bold;
+            font-size: 20px;
+            transition: 0.6s ease;
+            border-radius: 0 3px 3px 0;
+            user-select: none;
+        }
+
+        .next {
+            right: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev {
+            left: 0;
+            border-radius: 3px 0 0 3px;
+        }
+
+        .prev:hover, .next:hover {
+            background-color: rgba(0,0,0,0.8);
+        }
         @media (max-width: 600px) {
             .gallery img {
                 max-width: 100%;
@@ -162,6 +207,28 @@
             .container {
                 width: 95%;
             }
+            header h1 {
+                font-size: 2em;
+            }
+
+            header p {
+                font-size: 1em;
+            }
+
+            .prev, .next {
+                font-size: 30px;
+                padding: 10px;
+            }
+
+            .modal-content {
+                max-width: 90%;
+                max-height: 70%;
+            }
+        }
+                /* Optional: Add CSS for styling */
+        #map {
+            width: 100%; /* Full width */
+            height: auto; /* Responsive height */
         }
     </style>
 </head>
@@ -176,36 +243,38 @@
     </div>
     <div class="container">
         <header>
-            <h1>Photography</h1>
+            <h1>Photos</h1>
         </header>
 
 
-        <img src="https://images.unsplash.com/photo-1719835999992-8bfde56aa5e6?q=80&w=3106&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Nature Photo 1" data-title="Nature Photo 1" data-date="2024-07-01">
-        <img src="https://images.unsplash.com/photo-1719835999992-8bfde56aa5e6?q=80&w=3106&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Nature Photo 1" data-title="Nature Photo 1" data-date="2024-07-01">
-        <img src="https://images.unsplash.com/photo-1719835999992-8bfde56aa5e6?q=80&w=3106&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" alt="Nature Photo 1" data-title="Nature Photo 1" data-date="2024-07-01">
-
-        <div class="gallery"></div>
+    <div class="gallery" id="gallery"></div>
 
     <div class="modal">
-        <span class="close">&times;</span>
-        <span class="prev">&#10094;</span>
         <img>
         <div class="title"></div>
         <div class="date"></div>
-        <span class="next">&#10095;</span>
     </div>
 
-    
+
+    <div id="modal" class="modal">
+        <span class="close">&times;</span>
+        <span class="prev">&#10094;</span>
+        <span class="next">&#10095;</span>
+        <img class="modal-content" id="modal-img">
+        <div id="caption"></div>
+    </div>
+
+    <!-- <svg id="map" viewBox="0 0 1000 600" xmlns="http://www.w3.org/2000/svg"></svg> -->
 
         <footer>
             <div class="additional-links">
                 <a href="https://spotify.com" target="_blank"><i class="fab fa-spotify"></i></a>
                 <a href="https://strava.com" target="_blank"><i class="fab fa-strava"></i></a>
+                <!-- Add VSCO ACC -->
             </div>
-            <p>&copy; <span id="year"></span> Devan Velji</p>
         </footer>
     </div>
 
-    <script src="scripts/script.js"></script>
+    <script src="index.js"></script>
 </body>
 </html>

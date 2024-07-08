@@ -1,0 +1,19 @@
+{
+  "name": "public",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "exif-parser": "^0.1.12",
+    "express": "^4.19.2",
+    "fs-extra": "^11.2.0",
+    "image-size": "^1.1.1",
+    "moment": "^2.30.1"
+  }
+}
