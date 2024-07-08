@@ -19,9 +19,11 @@ jobs:
         node-version: '14'
 
     - name: Install dependencies
+      working-directory: ./public
       run: npm ci
 
     - name: Build project
+      working-directory: ./public
       run: npm run build
 
     - name: Deploy to Firebase
