@@ -82,36 +82,3 @@ document.addEventListener('DOMContentLoaded', function() {
         return filename.replace(/\.[^/.]+$/, "");
     }
 });
-
-
-// Map stuf
-
-// Array of GPS coordinates (x, y) for your visited locations (normalized to SVG viewBox)
-const placesVisited = [
-    { lat: 37.7749, lng: -122.4194 }, // Example: San Francisco, CA
-    { lat: 40.7128, lng: -74.0060 },  // Example: New York, NY
-    // Add more coordinates as needed
-];
-
-// Function to initialize the map
-function initMap() {
-    const map = document.getElementById("map");
-
-    // Add markers to the SVG map for each place visited
-    placesVisited.forEach((place, index) => {
-        const marker = document.createElementNS("http://www.w3.org/2000/svg", "circle");
-        marker.setAttribute("cx", place.x);
-        marker.setAttribute("cy", place.y);
-        marker.setAttribute("r", 8); // Adjust marker size as needed
-        marker.setAttribute("fill", "red"); // Adjust marker color as needed
-        marker.setAttribute("stroke", "white"); // Adjust marker border color as needed
-        marker.setAttribute("stroke-width", 1); // Adjust marker border width as needed
-        marker.setAttribute("title", `Visited Location ${index + 1}`); // Optional: Add a title to each marker
-        
-
-        map.appendChild(marker);
-    });
-}
-
-// Call initMap when the page loads
-window.onload = initMap;
