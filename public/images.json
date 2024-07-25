@@ -1,19 +1,66 @@
 [
-  "images/Amsterdam Canal.JPG",
-  "images/Barcelona, Spain.JPG",
-  "images/Benny.jpeg",
-  "images/Big Ben.jpeg",
-  "images/Black n White Bridge.jpeg",
-  "images/Car.jpeg",
-  "images/Cheeta Chase.JPG",
-  "images/Cheeta Kill.JPG",
-  "images/Death Valley.jpeg",
-  "images/Golden Gate Bridge (Foggy).jpeg",
-  "images/Hyde Park Sunset.JPG",
-  "images/Lassen National Park.jpeg",
-  "images/National Geographic.jpg",
-  "images/Palau Nacional.jpeg",
-  "images/Piccadilly Circus.JPG",
-  "images/Top Study Spot.jpeg",
-  "images/Zebras.jpeg"
+  {
+    "fullImage": "images/Amsterdam Canal.JPG",
+    "preview": "images/previews/preview_Amsterdam Canal.JPG"
+  },
+  {
+    "fullImage": "images/Barcelona, Spain.JPG",
+    "preview": "images/previews/preview_Barcelona, Spain.JPG"
+  },
+  {
+    "fullImage": "images/Benny.jpeg",
+    "preview": "images/previews/preview_Benny.jpeg"
+  },
+  {
+    "fullImage": "images/Big Ben.jpeg",
+    "preview": "images/previews/preview_Big Ben.jpeg"
+  },
+  {
+    "fullImage": "images/Black n White Bridge.jpeg",
+    "preview": "images/previews/preview_Black n White Bridge.jpeg"
+  },
+  {
+    "fullImage": "images/Car.jpeg",
+    "preview": "images/previews/preview_Car.jpeg"
+  },
+  {
+    "fullImage": "images/Cheeta Chase.JPG",
+    "preview": "images/previews/preview_Cheeta Chase.JPG"
+  },
+  {
+    "fullImage": "images/Cheeta Kill.JPG",
+    "preview": "images/previews/preview_Cheeta Kill.JPG"
+  },
+  {
+    "fullImage": "images/Death Valley.jpeg",
+    "preview": "images/previews/preview_Death Valley.jpeg"
+  },
+  {
+    "fullImage": "images/Golden Gate Bridge (Foggy).jpeg",
+    "preview": "images/previews/preview_Golden Gate Bridge (Foggy).jpeg"
+  },
+  {
+    "fullImage": "images/Hyde Park Sunset.JPG",
+    "preview": "images/previews/preview_Hyde Park Sunset.JPG"
+  },
+  {
+    "fullImage": "images/Lassen National Park.jpeg",
+    "preview": "images/previews/preview_Lassen National Park.jpeg"
+  },
+  {
+    "fullImage": "images/Palau Nacional.jpeg",
+    "preview": "images/previews/preview_Palau Nacional.jpeg"
+  },
+  {
+    "fullImage": "images/Piccadilly Circus.JPG",
+    "preview": "images/previews/preview_Piccadilly Circus.JPG"
+  },
+  {
+    "fullImage": "images/Top Study Spot.jpeg",
+    "preview": "images/previews/preview_Top Study Spot.jpeg"
+  },
+  {
+    "fullImage": "images/Zebras.jpeg",
+    "preview": "images/previews/preview_Zebras.jpeg"
+  }
 ]

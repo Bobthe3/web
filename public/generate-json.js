@@ -27,7 +27,7 @@ fs.readdir(imageDirectory, async (err, files) => {
         
         // Generate preview
         await sharp(fullPath)
-            .resize(200) // Resize to 200px width, maintaining aspect ratio
+            .resize(300) // Resize to 200px width, maintaining aspect ratio
             .toFile(previewPath);
 
         return {
