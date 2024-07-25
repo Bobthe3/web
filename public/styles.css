@@ -78,7 +78,7 @@ header {
     display: none; /* Hidden by default */
     position: fixed;
     z-index: 1; /* Sit on top */
-    padding-top: 200px; /* Location of the box */
+    padding-top: 100px; /* Location of the box */
     left: 0;
     top: 0;
     width: 100%;
@@ -95,16 +95,30 @@ header {
     max-width: 700px;
 }
 
-#caption {
-    margin: auto;
-    display: block;
+#metadata-container {
+    margin: 10px auto;
+    padding: 10px;
     width: 80%;
     max-width: 700px;
-    text-align: center;
-    color: #ccc;
-    padding: 10px 0;
-    height: 150px;
+    background-color: rgba(255, 255, 255, 0.8);
+    color: black;
+    border-radius: 5px;
+    font-size: 14px;
+    line-height: 1.4;
+    overflow-wrap: break-word;
+} 
+
+@media only screen and (max-width: 700px) {
+    .modal-content {
+        width: 100%;
+    }
+    
+    #metadata-container {
+        width: 90%;
+        font-size: 12px;
+    }
 }
+
 
 .modal-content, #caption {  
     animation-name: zoom;
@@ -161,33 +175,6 @@ header {
 .prev:hover, .next:hover {
     background-color: rgba(0, 0, 0, 0.261);
 }
-@media (max-width: 600px) {
-    .gallery img {
-        max-width: 100%;
-        height: auto;
-    }
-    .container {
-        width: 95%;
-    }
-    header h1 {
-        font-size: 2em;
-    }
-
-    header p {
-        font-size: 1em;
-    }
-
-    .prev, .next {
-        font-size: 30px;
-        padding: 10px;
-    }
-
-    .modal-content {
-        max-width: 90%;
-        max-height: 70%;
-    }
-}
-        /* Optional: Add CSS for styling */
 #map {
     width: 100%; /* Full width */
     height: auto; /* Responsive height */

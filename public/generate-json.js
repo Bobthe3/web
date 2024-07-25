@@ -1,9 +1,10 @@
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
+const exifReader = require('exif-reader');
 
 const imageDirectory = './images';
-const previewDirectory = './images/previews';
+const previewDirectory = './previews';
 const jsonFile = 'images.json';
 
 // Ensure the preview directory exists
@@ -27,12 +28,20 @@ fs.readdir(imageDirectory, async (err, files) => {
         
         // Generate preview
         await sharp(fullPath)
-            .resize(300) // Resize to 200px width, maintaining aspect ratio
+            .resize(200) // Resize to 200px width, maintaining aspect ratio
             .toFile(previewPath);
+
+        // Extract metadata
+        const metadata = await sharp(fullPath).metadata();
+        const exif = metadata.exif ? exifReader(metadata.exif) : {};
 
         return {
             fullImage: fullPath,
-            preview: previewPath
+            preview: previewPath,
+            title: path.basename(file, path.extname(file)),
+            deviceModel: exif.image ? exif.image.Model : 'Unknown',
+            fNumber: exif.exif ? `f/${exif.exif.FNumber}` : 'Unknown',
+            exposureTime: exif.exif ? `${exif.exif.ExposureTime}s` : 'Unknown'
         };
     }));
 
@@ -42,6 +51,6 @@ fs.readdir(imageDirectory, async (err, files) => {
             return;
         }
 
-        console.log('JSON file has been saved with image filenames and preview paths at images.json in this same directory.');
+        console.log('JSON file has been saved with image filenames, preview paths, and metadata at images.json in this same directory.');
     });
 });
