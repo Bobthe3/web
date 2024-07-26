@@ -84,24 +84,25 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateModalContent() {
-      const image = albums[currentAlbum].images[currentIndex];
-      modalImg.src = image.fullImage;
-      
-      // Clean up the date string
-      const cleanedDate = image.dateTaken.replace(/:/g, '-').split('T')[0];
-      
-      metadataContainer.innerHTML = `
-          <p><strong>Title:</strong> ${image.title}</p>
-          <p><strong>Device:</strong> ${truncateDeviceModel(image.deviceModel)}</p>
-          <p><strong>F-Number:</strong> ${image.fNumber}</p>
-          <p><strong>Exposure Time:</strong> ${image.exposureTime}</p>
-          <p><strong>Date Taken:</strong> ${cleanedDate}</p>
-      `;
-  }
-  function truncateDeviceModel(deviceModel) {
-    const parts = deviceModel.split(' ');
-    return parts.length > 3 ? parts.slice(0, 3).join(' ') : deviceModel;
-}
+        const image = albums[currentAlbum].images[currentIndex];
+        modalImg.src = image.fullImage;
+        
+        // Clean up the date string
+        const cleanedDate = image.dateTaken.split('T')[0].replace(/:/g, '-');
+        
+        metadataContainer.innerHTML = `
+            <p><strong>Title:</strong> ${image.title}</p>
+            <p><strong>Device:</strong> ${truncateDeviceModel(image.deviceModel)}</p>
+            <p><strong>F-Number:</strong> ${image.fNumber}</p>
+            <p><strong>Exposure Time:</strong> ${image.exposureTime}</p>
+            <p><strong>Date Taken:</strong> ${cleanedDate}</p>
+        `;
+    }
+    
+    function truncateDeviceModel(deviceModel) {
+        const parts = deviceModel.split(' ');
+        return parts.length > 3 ? parts.slice(0, 3).join(' ') : deviceModel;
+    }
 
     function showPreviousImage() {
         if (currentIndex > 0) {
