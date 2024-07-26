@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Photo Albums</title>
+    <link rel="stylesheet" href="album.css">
+</head>
+<body>
+    <header>
+        <h1>Photo Albums</h1>
+        <nav>
+            <a href="index.html">All Photos</a>
+        </nav>
+    </header>
+
+    <main>
+        <section id="albums-container"></section>
+    </main>
+
+    <div id="modal" class="modal">
+        <span class="close">&times;</span>
+        <img id="modal-img" class="modal-content">
+        <div id="metadata-container"></div>
+        <button id="prev-button" class="nav-button">&lt;</button>
+        <button id="next-button" class="nav-button">&gt;</button>
+    </div>
+
+    <script src="scripts/album.js"></script>
+</body>
+</html>
