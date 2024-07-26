@@ -1,66 +1,130 @@
 [
   {
     "fullImage": "images/Amsterdam Canal.JPG",
-    "preview": "images/previews/preview_Amsterdam Canal.JPG"
+    "preview": "previews/preview_Amsterdam Canal.JPG",
+    "title": "Amsterdam Canal",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/5",
+    "exposureTime": "1/180s"
   },
   {
     "fullImage": "images/Barcelona, Spain.JPG",
-    "preview": "images/previews/preview_Barcelona, Spain.JPG"
+    "preview": "previews/preview_Barcelona, Spain.JPG",
+    "title": "Barcelona, Spain",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/5",
+    "exposureTime": "1/500s"
   },
   {
     "fullImage": "images/Benny.jpeg",
-    "preview": "images/previews/preview_Benny.jpeg"
+    "preview": "previews/preview_Benny.jpeg",
+    "title": "Benny",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/5.9",
+    "exposureTime": "1/250s"
   },
   {
     "fullImage": "images/Big Ben.jpeg",
-    "preview": "images/previews/preview_Big Ben.jpeg"
+    "preview": "previews/preview_Big Ben.jpeg",
+    "title": "Big Ben",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/5",
+    "exposureTime": "1/250s"
   },
   {
     "fullImage": "images/Black n White Bridge.jpeg",
-    "preview": "images/previews/preview_Black n White Bridge.jpeg"
+    "preview": "previews/preview_Black n White Bridge.jpeg",
+    "title": "Black n White Bridge",
+    "deviceModel": "Canon EOS 80D",
+    "fNumber": "f/2",
+    "exposureTime": "1/1250s"
   },
   {
     "fullImage": "images/Car.jpeg",
-    "preview": "images/previews/preview_Car.jpeg"
+    "preview": "previews/preview_Car.jpeg",
+    "title": "Car",
+    "deviceModel": "NIKON D3300",
+    "fNumber": "f/18",
+    "exposureTime": "1/1250s"
   },
   {
     "fullImage": "images/Cheeta Chase.JPG",
-    "preview": "images/previews/preview_Cheeta Chase.JPG"
+    "preview": "previews/preview_Cheeta Chase.JPG",
+    "title": "Cheeta Chase",
+    "deviceModel": "NIKON D3300",
+    "fNumber": "f/7.1",
+    "exposureTime": "1/3200s"
   },
   {
     "fullImage": "images/Cheeta Kill.JPG",
-    "preview": "images/previews/preview_Cheeta Kill.JPG"
+    "preview": "previews/preview_Cheeta Kill.JPG",
+    "title": "Cheeta Kill",
+    "deviceModel": "NIKON D3300",
+    "fNumber": "f/7.1",
+    "exposureTime": "1/3200s"
   },
   {
     "fullImage": "images/Death Valley.jpeg",
-    "preview": "images/previews/preview_Death Valley.jpeg"
+    "preview": "previews/preview_Death Valley.jpeg",
+    "title": "Death Valley",
+    "deviceModel": "iPhone 13",
+    "fNumber": "f/1.6",
+    "exposureTime": "1/122s"
   },
   {
     "fullImage": "images/Golden Gate Bridge (Foggy).jpeg",
-    "preview": "images/previews/preview_Golden Gate Bridge (Foggy).jpeg"
+    "preview": "previews/preview_Golden Gate Bridge (Foggy).jpeg",
+    "title": "Golden Gate Bridge (Foggy)",
+    "deviceModel": "Canon EOS 80D",
+    "fNumber": "f/5.6",
+    "exposureTime": "1/160s"
   },
   {
     "fullImage": "images/Hyde Park Sunset.JPG",
-    "preview": "images/previews/preview_Hyde Park Sunset.JPG"
+    "preview": "previews/preview_Hyde Park Sunset.JPG",
+    "title": "Hyde Park Sunset",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/3.5",
+    "exposureTime": "1/60s"
   },
   {
     "fullImage": "images/Lassen National Park.jpeg",
-    "preview": "images/previews/preview_Lassen National Park.jpeg"
+    "preview": "previews/preview_Lassen National Park.jpeg",
+    "title": "Lassen National Park",
+    "deviceModel": "iPhone 13",
+    "fNumber": "f/1.6",
+    "exposureTime": "1/11905s"
   },
   {
     "fullImage": "images/Palau Nacional.jpeg",
-    "preview": "images/previews/preview_Palau Nacional.jpeg"
+    "preview": "previews/preview_Palau Nacional.jpeg",
+    "title": "Palau Nacional",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/8.9",
+    "exposureTime": "1/180s"
   },
   {
     "fullImage": "images/Piccadilly Circus.JPG",
-    "preview": "images/previews/preview_Piccadilly Circus.JPG"
+    "preview": "previews/preview_Piccadilly Circus.JPG",
+    "title": "Piccadilly Circus",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/3.5",
+    "exposureTime": "1/500s"
   },
   {
     "fullImage": "images/Top Study Spot.jpeg",
-    "preview": "images/previews/preview_Top Study Spot.jpeg"
+    "preview": "previews/preview_Top Study Spot.jpeg",
+    "title": "Top Study Spot",
+    "deviceModel": "iPhone 13",
+    "fNumber": "f/1.6",
+    "exposureTime": "1/344s"
   },
   {
     "fullImage": "images/Zebras.jpeg",
-    "preview": "images/previews/preview_Zebras.jpeg"
+    "preview": "previews/preview_Zebras.jpeg",
+    "title": "Zebras",
+    "deviceModel": "NIKON D3300",
+    "fNumber": "f/5.6",
+    "exposureTime": "1/500s"
   }
 ]

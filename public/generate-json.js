@@ -2,19 +2,20 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 const exifReader = require('exif-reader');
+const { exiftool } = require('exiftool-vendored');
 
 const imageDirectory = './images';
 const previewDirectory = './previews';
 const jsonFile = 'images.json';
 
 // Ensure the preview directory exists
-if (!fs.existsSync(previewDirectory)){
+if (!fs.existsSync(previewDirectory)) {
     fs.mkdirSync(previewDirectory);
 }
 
 fs.readdir(imageDirectory, async (err, files) => {
     if (err) {
-        console.error('Error: Error reading directory:', err);
+        console.error('Error reading directory:', err);
         return;
     }
 
@@ -22,35 +23,54 @@ fs.readdir(imageDirectory, async (err, files) => {
         return file.toLowerCase().endsWith('.jpg') || file.toLowerCase().endsWith('.png') || file.toLowerCase().endsWith('.jpeg');
     });
 
-    const imageData = await Promise.all(imageFiles.map(async (file) => {
-        const fullPath = path.join(imageDirectory, file);
-        const previewPath = path.join(previewDirectory, `preview_${file}`);
-        
-        // Generate preview
-        await sharp(fullPath)
-            .resize(200) // Resize to 200px width, maintaining aspect ratio
-            .toFile(previewPath);
+    try {
+        const imageData = await Promise.all(imageFiles.map(async (file) => {
+            const fullPath = path.join(imageDirectory, file);
+            const previewPath = path.join(previewDirectory, `preview_${file}`);
+            
+            // Generate preview
+            await sharp(fullPath)
+                .resize(200) // Resize to 200px width, maintaining aspect ratio
+                .toFile(previewPath);
 
-        // Extract metadata
-        const metadata = await sharp(fullPath).metadata();
-        const exif = metadata.exif ? exifReader(metadata.exif) : {};
+            // Extract metadata using exiftool
+            let exif = {};
+            try {
+                exif = await exiftool.read(fullPath);
+                console.log(`Parsed EXIF for ${file}:`, exif);
+            } catch (error) {
+                console.error(`Error parsing EXIF for ${file}:`, error);
+            }
 
-        return {
-            fullImage: fullPath,
-            preview: previewPath,
-            title: path.basename(file, path.extname(file)),
-            deviceModel: exif.image ? exif.image.Model : 'Unknown',
-            fNumber: exif.exif ? `f/${exif.exif.FNumber}` : 'Unknown',
-            exposureTime: exif.exif ? `${exif.exif.ExposureTime}s` : 'Unknown'
-        };
-    }));
+            // Log individual EXIF properties to debug
+            const deviceModel = exif.Model || 'Unknown';
+            const fNumber = exif.FNumber ? `f/${exif.FNumber}` : 'Unknown';
+            const exposureTime = exif.ExposureTime ? `${exif.ExposureTime}s` : 'Unknown';
 
-    fs.writeFile(jsonFile, JSON.stringify(imageData, null, 2), err => {
-        if (err) {
-            console.error('Error: Error writing JSON file:', err);
-            return;
-        }
+            console.log(`EXIF data for ${file}:`);
+            console.log(`  Device Model: ${deviceModel}`);
+            console.log(`  fNumber: ${fNumber}`);
+            console.log(`  Exposure Time: ${exposureTime}`);
 
-        console.log('JSON file has been saved with image filenames, preview paths, and metadata at images.json in this same directory.');
-    });
+            return {
+                fullImage: fullPath,
+                preview: previewPath,
+                title: path.basename(file, path.extname(file)),
+                deviceModel: deviceModel,
+                fNumber: fNumber,
+                exposureTime: exposureTime
+            };
+        }));
+
+        fs.writeFile(jsonFile, JSON.stringify(imageData, null, 2), err => {
+            if (err) {
+                console.error('Error writing JSON file:', err);
+                return;
+            }
+
+            console.log('JSON file has been saved with image filenames, preview paths, and metadata at images.json in this same directory.');
+        });
+    } catch (error) {
+        console.error('Error processing images:', error);
+    }
 });
