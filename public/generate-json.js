@@ -1,7 +1,6 @@
 const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
-const exifReader = require('exif-reader');
 const { exiftool } = require('exiftool-vendored');
 
 const imageDirectory = './images';
@@ -62,14 +61,10 @@ fs.readdir(imageDirectory, async (err, files) => {
             };
         }));
 
-        fs.writeFile(jsonFile, JSON.stringify(imageData, null, 2), err => {
-            if (err) {
-                console.error('Error writing JSON file:', err);
-                return;
-            }
+        // Write to JSON file using promises for better async control
+        await fs.promises.writeFile(jsonFile, JSON.stringify(imageData, null, 2));
 
-            console.log('JSON file has been saved with image filenames, preview paths, and metadata at images.json in this same directory.');
-        });
+        console.log('JSON file has been saved with image filenames, preview paths, and metadata at images.json in this same directory.');
     } catch (error) {
         console.error('Error processing images:', error);
     }
