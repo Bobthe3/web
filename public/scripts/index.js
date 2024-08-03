@@ -1,175 +1,125 @@
-let allImages = [];
-let albums = {};
-let currentAlbum = null;
-let currentIndex = 0;
+document.addEventListener("DOMContentLoaded", () => {
+    const navbar = document.querySelector(".navbar");
+    let lastScrollY = window.scrollY;
 
-document.addEventListener('DOMContentLoaded', function() {
-    const albumsContainer = document.getElementById('albums-container');
-    const gallery = document.getElementById('gallery');
-    const modal = document.getElementById('modal');
-    const modalImg = document.getElementById('modal-img');
-    const metadataContainer = document.getElementById('metadata-container');
-    const prevButton = document.querySelector('.prev');
-    const nextButton = document.querySelector('.next');
-    const albumPopup = document.getElementById('album-popup');
-    const albumTitle = document.getElementById('album-title');
-    const albumDescription = document.getElementById('album-description');
-    const albumGallery = document.getElementById('album-gallery');
+    window.addEventListener("scroll", () => {
+        if (lastScrollY < window.scrollY) {
+            navbar.classList.add("navbar-hidden");
+        } else {
+            navbar.classList.remove("navbar-hidden");
+        }
+        lastScrollY = window.scrollY;
+    });
 
-    function createAlbumElement(albumName, images) {
-        const album = document.createElement('div');
-        album.classList.add('album');
-        album.innerHTML = `
-            <h2>${albumName}</h2>
-            <div class="album-preview"></div>
-            <p>${images.length} photos</p>
-        `;
-        album.addEventListener('click', () => openAlbumPopup(albumName));
+    // Function to fetch and display photos
+    function displayPhotos() {
+        fetch("photos.json") // Assuming your photo metadata is stored in photos.json
+            .then(response => response.json())
+            .then(data => {
+                const albumsContainer = document.getElementById("albums-container");
+                albumsContainer.innerHTML = ""; // Clear previous content
 
-        // Add preview images
-        const previewContainer = album.querySelector('.album-preview');
-        images.slice(0, 4).forEach(image => {
-            const img = document.createElement('img');
-            img.src = image.preview;
-            img.alt = image.title;
-            previewContainer.appendChild(img);
-        });
+                data.albums.forEach(album => {
+                    const albumElement = document.createElement("div");
+                    albumElement.classList.add("album");
+                    albumElement.innerHTML = `
+                        <div class="album-preview">
+                            ${album.photos.map(photo => `<img src="${photo.thumbnail}" alt="${photo.title}">`).join("")}
+                        </div>
+                        <h2>${album.title}</h2>
+                        <p>${album.description}</p>
+                    `;
+                    albumsContainer.appendChild(albumElement);
 
-        return album;
+                    albumElement.addEventListener("click", () => openAlbum(album));
+                });
+            })
+            .catch(error => console.error("Error loading photos:", error));
     }
 
-    function openAlbumPopup(albumName) {
-        currentAlbum = albumName;
-        albumTitle.textContent = albumName;
-        albumDescription.textContent = albums[albumName].description;
-        albumGallery.innerHTML = '';
-    
-        // Sort images by date taken
-        albums[albumName].images.sort((a, b) => new Date(b.dateTaken) - new Date(a.dateTaken));
-    
-        albums[albumName].images.forEach((image, index) => {
-            const img = document.createElement('img');
-            img.src = image.preview;
-            img.alt = image.title;
-            img.addEventListener('click', () => openModal(index));
-            albumGallery.appendChild(img);
-        });
-    
-        albumPopup.style.display = 'block';
-    }
-
-    function loadAlbums() {
-        albumsContainer.innerHTML = '';
+    // Function to open an album
+    function openAlbum(album) {
+        const albumPopup = document.getElementById("album-popup");
+        document.getElementById("album-title").textContent = album.title;
+        document.getElementById("album-description").textContent = album.description;
         
-        // Sort albums based on the latest photo date
-        const sortedAlbums = Object.entries(albums).sort((a, b) => {
-            const latestDateA = Math.max(...a[1].images.map(img => new Date(img.dateTaken).getTime()));
-            const latestDateB = Math.max(...b[1].images.map(img => new Date(img.dateTaken).getTime()));
-            return latestDateB - latestDateA;
-        });
-    
-        sortedAlbums.forEach(([albumName, albumData]) => {
-            // Sort images within the album
-            albumData.images.sort((a, b) => new Date(b.dateTaken) - new Date(a.dateTaken));
+        const albumGallery = document.getElementById("album-gallery");
+        albumGallery.innerHTML = album.photos.map(photo => `
+            <img src="${photo.url}" alt="${photo.title}" data-title="${photo.title}" data-date="${photo.date}">
+        `).join("");
+        
+        albumPopup.style.display = "block";
+    }
+
+    // Function to close the album popup
+    document.querySelector(".close-popup").addEventListener("click", () => {
+        document.getElementById("album-popup").style.display = "none";
+    });
+
+    // Function to open the modal
+    document.getElementById("album-gallery").addEventListener("click", event => {
+        if (event.target.tagName === "IMG") {
+            const modal = document.getElementById("modal");
+            const modalImg = document.getElementById("modal-img");
+            const modalTitle = document.getElementById("modal-title");
+            const metadataContainer = document.getElementById("metadata-container");
             
-            const albumElement = createAlbumElement(albumName, albumData.images);
-            albumsContainer.appendChild(albumElement);
+            modalImg.src = event.target.src;
+            modalTitle.textContent = event.target.dataset.title;
+            metadataContainer.textContent = `Date: ${event.target.dataset.date}`;
+            
+            modal.style.display = "block";
+        }
+    });
+
+    // Function to close the modal
+    document.querySelector(".close").addEventListener("click", () => {
+        document.getElementById("modal").style.display = "none";
+    });
+
+    // Navigation buttons for modal
+    const prevButton = document.querySelector(".prev");
+    const nextButton = document.querySelector(".next");
+    const images = document.querySelectorAll("#album-gallery img");
+    let currentIndex;
+
+    images.forEach((img, index) => {
+        img.addEventListener("click", () => {
+            currentIndex = index;
         });
-    }
+    });
 
-    function openModal(index) {
-        currentIndex = index;
-        updateModalContent();
-        modal.style.display = "block";
-    }
-
-    function updateModalContent() {
-        const image = albums[currentAlbum].images[currentIndex];
-        modalImg.src = image.fullImage;
+    function showImage(index) {
+        const modalImg = document.getElementById("modal-img");
+        const modalTitle = document.getElementById("modal-title");
+        const metadataContainer = document.getElementById("metadata-container");
         
-        // Clean up the date string
-        const cleanedDate = image.dateTaken.split('T')[0].replace(/:/g, '-');
-        
-        metadataContainer.innerHTML = `
-            <p><strong>Title:</strong> ${image.title}</p>
-            <p><strong>Device:</strong> ${truncateDeviceModel(image.deviceModel)}</p>
-            <p><strong>F-Number:</strong> ${image.fNumber}</p>
-            <p><strong>Exposure Time:</strong> ${image.exposureTime}</p>
-            <p><strong>Date Taken:</strong> ${cleanedDate}</p>
-        `;
-    }
-    
-    function truncateDeviceModel(deviceModel) {
-        const parts = deviceModel.split(' ');
-        return parts.length > 3 ? parts.slice(0, 3).join(' ') : deviceModel;
+        const img = images[index];
+        modalImg.src = img.src;
+        modalTitle.textContent = img.dataset.title;
+        metadataContainer.textContent = `Date: ${img.dataset.date}`;
     }
 
-    function showPreviousImage() {
+    prevButton.addEventListener("click", () => {
         if (currentIndex > 0) {
             currentIndex--;
-            updateModalContent();
+            showImage(currentIndex);
         }
-    }
+    });
 
-    function showNextImage() {
-        if (currentIndex < albums[currentAlbum].images.length - 1) {
+    nextButton.addEventListener("click", () => {
+        if (currentIndex < images.length - 1) {
             currentIndex++;
-            updateModalContent();
-        }
-    }
-
-    // Event Listeners
-    prevButton.addEventListener('click', showPreviousImage);
-    nextButton.addEventListener('click', showNextImage);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            modal.style.display = "none";
+            showImage(currentIndex);
         }
     });
 
-    albumPopup.addEventListener('click', (e) => {
-        if (e.target === albumPopup) {
-            albumPopup.style.display = "none";
+    // Close modal when clicking outside the image
+    document.getElementById("modal").addEventListener("click", event => {
+        if (event.target === event.currentTarget) {
+            document.getElementById("modal").style.display = "none";
         }
     });
 
-    document.querySelector('.close').addEventListener('click', () => {
-        modal.style.display = "none";
-    });
-
-    document.querySelector('.close-popup').addEventListener('click', () => {
-        albumPopup.style.display = "none";
-    });
-
-    document.addEventListener('keydown', (e) => {
-        if (modal.style.display === "block") {
-            if (e.key === "ArrowLeft") showPreviousImage();
-            if (e.key === "ArrowRight") showNextImage();
-            if (e.key === "Escape") modal.style.display = "none";
-        }
-        if (albumPopup.style.display === "block" && e.key === "Escape") {
-            albumPopup.style.display = "none";
-        }
-    });
-
-    // Fetch and process images
-    fetch('images.json')
-        .then(response => response.json())
-        .then(images => {
-            allImages = images;
-            // Group images by tags
-            images.forEach(image => {
-                image.tags.forEach(tag => {
-                    if (!albums[tag]) {
-                        albums[tag] = {
-                            images: [],
-                            description: `This is the ${tag} album.`
-                        };
-                    }
-                    albums[tag].images.push(image);
-                });
-            });
-            loadAlbums();
-        })
-        .catch(error => console.error('Error loading images:', error));
+    displayPhotos();
 });

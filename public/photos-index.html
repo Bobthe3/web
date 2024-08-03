@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Devan Velji Photography</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-8KXBZ9JTSG"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-8KXBZ9JTSG');
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <h1>Devan Velji</h1>
+        <div class="social-links">
+            <a href="https://www.instagram.com/devanvelji/" target="_blank"><i class="fab fa-instagram"></i></a>
+            <a href="https://www.linkedin.com/in/devanvelji/" target="_blank"><i class="fab fa-linkedin"></i></a>
+            <a href="mailto:devanvelji@gmail.com"><i class="fas fa-envelope"></i></a>
+        </div>
+    </nav>
+
+    <div class="container">
+        <header>
+            <h1>Photos</h1>
+        </header>
+
+        <main>
+            <section id="albums-container">
+                <!-- Album thumbnails will be populated here by JavaScript -->
+            </section>
+
+            <div id="album-popup" class="popup">
+                <div class="popup-content">
+                    <span class="close-popup">&times;</span>
+                    <h2 id="album-title"></h2>
+                    <p id="album-description"></p>
+                    <div id="album-gallery">
+                        <!-- Album images will be populated here by JavaScript -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="modal" class="modal">
+                <span class="close">&times;</span>
+                <h2 id="modal-title"></h2>
+                <img id="modal-img" class="modal-content" src="" alt="">
+                <div id="metadata-container"></div>
+                <div class="modal-navigation">
+                    <button class="nav-button prev">&lt; Previous</button>
+                    <button class="nav-button next">Next &gt;</button>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="additional-links">
+                <a href="https://open.spotify.com/user/31u2yupp67v34q2yhdr7ieeaylry?si=3c57f080a4f04cb1" target="_blank"><i class="fab fa-spotify"></i></a>
+                <a href="https://www.strava.com/athletes/51124943" target="_blank"><i class="fab fa-strava"></i></a>
+                <a href="https://pin.it/4UOpbSSCO" target="_blank"><i class="fab fa-pinterest"></i></a>
+            </div>
+        </footer>
+    </div>
+
+    <script src="index.js"></script>
+</body>
+</html>

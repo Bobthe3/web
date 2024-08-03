@@ -17,6 +17,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
+    transition: top 0.3s;
 }
 
 .navbar h1 {
@@ -69,7 +70,7 @@ header {
 .modal {
     display: none;
     position: fixed;
-    z-index: 1000;
+    z-index: 10011;
     padding-top: 100px;
     left: 0;
     top: 0;
@@ -243,3 +244,77 @@ footer {
         margin: 2% auto;
     }
 }
+
+/* Animation */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Search styles */
+#search-container {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+#search-icon {
+    cursor: pointer;
+    font-size: 1.5rem;
+    color: #666;
+    transition: color 0.3s ease;
+}
+
+#search-icon:hover {
+    color: #333;
+}
+
+#search-input {
+    position: absolute;
+    right: 100%;
+    width: 0;
+    padding: 0.5rem;
+    border: none;
+    border-radius: 20px;
+    background-color: #f0f0f0;
+    transition: all 0.3s ease;
+    opacity: 0;
+}
+
+#search-container.active #search-input {
+    width: 200px;
+    opacity: 1;
+    right: 120%;
+}
+
+#search-results {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    background-color: #fff;
+    padding: 0.5rem;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    display: none;
+}
+
+/* Filter styles */
+#filter-select {
+    padding: 0.5rem;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #fff;
+    color: #333;
+}
+
+/* Navbar disappear on scroll styles */
+.navbar-hidden {
+    top: -100px;
+}
+
