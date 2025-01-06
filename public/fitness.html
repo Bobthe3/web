@@ -15,7 +15,7 @@
 
         .navbar {
             background-color: #2c2c2c;
-            padding: 10px 20px;
+            padding: 10px 0px;
             color: #fff;
             text-align: center;
             position: fixed;
@@ -47,7 +47,7 @@
         }
 
         .social-links a:hover {
-            color: #4b0082;
+            color: #ef4e21;
         }
 
         .widgets {
@@ -61,7 +61,7 @@
         .sports-text {
             margin-top: 30px;
             font-size: 1.2em;
-            color: #fff;
+            color: #ef4e21;
         }
 
         @media (min-width: 600px) {
@@ -76,11 +76,28 @@
                 margin: 0;
             }
         }
+        .title h1 {
+            display: block;
+            margin: 20px 0;
+            color: #ef4e21;
+            text-decoration: none;
+            font-size: 2em;
+            transition: color 0.3s ease;
+        }
+
+        .title h1:hover {
+            color: #f0f0f1;
+        }
+        .title-link a:visited, a:active  {
+            color: #ef4e21;
+        }
     </style>
 </head>
 <body>
     <nav class="navbar">
-        <a href="index.html"><h1>Devan Velji</h1></a>
+        <h1 class="title">
+            <a class="title-link" href="index.html">Back</a>
+        </h1>
     </nav>
 
     <div class="container">
@@ -94,7 +111,7 @@
             <iframe height='500' width='300' frameborder='0' allowtransparency='true' scrolling='yes' src='https://www.strava.com/athletes/51124943/latest-rides/600608c6fb2bd070d25da94a94f5119b6850d9ee'></iframe>
         </div>
         <div class="sports-text">
-            Sports Attempted: Run, Bike, Swim<br> Hiking, Sailing, Surf<br>
+            Sports Attempted: Run, Bike, Swim<br> Hiking, Sailing, Surfing<br>
             In Progress: Triathlon - Summer 2025
         </div>
     </div>
