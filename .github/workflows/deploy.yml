@@ -1,4 +1,5 @@
-name: Deploy to Firebase
+# .github/workflows/firebase.yml
+name: Build and Deploy to Firebase
 
 on:
   push:
@@ -6,29 +7,30 @@ on:
       - main
 
 jobs:
-  build:
+  build_and_deploy:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+      - name: Checkout code
+        uses: actions/checkout@v3
 
-    - name: Set up Node.js
-      uses: actions/setup-node@v2
-      with:
-        node-version: '14'
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # or your preferred version
 
-    - name: Install dependencies
-      working-directory: ./public
-      run: npm install && npm ci
+      - name: Install dependencies
+        run: npm install
 
-    - name: Build project
-      working-directory: ./public
-      run: npm run build
-      
-    - name: Deploy to Firebase
-      uses: w9jds/firebase-action@master
-      with:
-        args: deploy --only hosting
-      env:
-        FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
+      - name: Generate images.json
+        run: node public/generate-json.js
+
+      - name: Build (Firebase or other)
+        run: npm run build # or your build command
+
+      - name: Deploy to Firebase
+        uses: w9jds/firebase-action@v13
+        with:
+          args: deploy --only hosting
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}

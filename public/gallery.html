@@ -42,6 +42,8 @@
         .gallery-item {
             position: relative;
             cursor: pointer;
+            opacity: 0;
+            animation: fadeIn 0.8s forwards;
         }
         .gallery-image {
             width: 100%;
@@ -82,6 +84,10 @@
             background: rgba(0,0,0,0.8);
             justify-content: center;
             align-items: center;
+            animation: fadeInModal 0.3s;
+        }
+        .modal.show {
+            display: flex;
         }
         .modal-content {
             background: #222;
@@ -91,12 +97,16 @@
             max-height: 90vh;
             color: #fff;
             text-align: center;
+            position: relative;
+            animation: fadeInModal 0.3s;
         }
         .modal-content img {
             max-width: 80vw;
             max-height: 60vh;
             border-radius: 10px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+            animation: fadeIn 0.5s;
         }
         .close {
             position: absolute;
@@ -117,6 +127,26 @@
         }
         .back-link a:hover {
             text-decoration: underline;
+        }
+        @media (max-width: 600px) {
+            .gallery-image {
+                height: 150px;
+            }
+            .modal-content img {
+                max-width: 95vw;
+                max-height: 40vh;
+            }
+            .modal-content {
+                padding: 10px;
+            }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInModal {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
         }
     </style>
 </head>
@@ -139,102 +169,84 @@
         </div>
     </div>
     <script>
-        // List of images and their metadata
-        const images = [
-            {
-                src: 'images/Golden Gate Bridge (Foggy).jpeg',
-                title: 'Golden Gate Bridge (Foggy)',
-                meta: 'San Francisco, CA'
-            },
-            {
-                src: 'images/Black n White Bridge.jpeg',
-                title: 'Black n White Bridge',
-                meta: 'Artistic black and white bridge photo'
-            },
-            {
-                src: 'images/Death Valley.jpeg',
-                title: 'Death Valley',
-                meta: 'Death Valley National Park, CA'
-            },
-            {
-                src: 'images/Lassen National Park.jpeg',
-                title: 'Lassen National Park',
-                meta: 'Lassen Volcanic National Park, CA'
-            },
-            {
-                src: 'images/Palau Nacional.jpeg',
-                title: 'Palau Nacional',
-                meta: 'Barcelona, Spain'
-            },
-            {
-                src: 'images/Big Ben.jpeg',
-                title: 'Big Ben',
-                meta: 'London, UK'
-            },
-            {
-                src: 'images/Benny.jpeg',
-                title: 'Benny',
-                meta: 'A friendly dog!'
-            },
-            {
-                src: 'images/Amsterdam Canal.JPG',
-                title: 'Amsterdam Canal',
-                meta: 'Amsterdam, Netherlands'
-            },
-            {
-                src: 'images/Hyde Park Sunset.JPG',
-                title: 'Hyde Park Sunset',
-                meta: 'London, UK'
-            },
-            {
-                src: 'images/Barcelona, Spain.JPG',
-                title: 'Barcelona, Spain',
-                meta: 'Barcelona, Spain'
-            },
-            {
-                src: 'images/Piccadilly Circus.JPG',
-                title: 'Piccadilly Circus',
-                meta: 'London, UK'
-            },
-        ];
+    let images = [];
+    let currentIndex = 0;
+    const galleryContainer = document.getElementById('galleryContainer');
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMeta = document.getElementById('modalMeta');
+    const closeModalBtn = document.getElementById('closeModal');
+    let touchStartX = 0;
 
-        const galleryContainer = document.getElementById('galleryContainer');
-        images.forEach((img, idx) => {
-            const item = document.createElement('div');
-            item.className = 'gallery-item';
-            item.tabIndex = 0;
-            item.innerHTML = `
-                <img src="${img.src}" alt="${img.title}" class="gallery-image" />
-                <div class="image-title">${img.title}</div>
-            `;
-            // Show modal on click
-            item.addEventListener('click', () => showModal(idx));
-            // Show title on hover (handled by CSS)
-            galleryContainer.appendChild(item);
+    // Fetch images.json and build gallery
+    fetch('images.json')
+        .then(res => res.json())
+        .then(data => {
+            images = data;
+            images.forEach((img, idx) => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.tabIndex = 0;
+                item.style.animationDelay = (idx * 0.07) + 's';
+                item.innerHTML = `
+                    <img src="${img.preview}" data-full="${img.fullImage}" alt="${img.title}" class="gallery-image" loading="lazy" />
+                    <div class="image-title">${img.title}</div>
+                `;
+                item.addEventListener('click', () => showModal(idx));
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') showModal(idx);
+                });
+                galleryContainer.appendChild(item);
+            });
         });
 
-        // Modal logic
-        const modal = document.getElementById('modal');
-        const modalImg = document.getElementById('modalImg');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalMeta = document.getElementById('modalMeta');
-        const closeModalBtn = document.getElementById('closeModal');
-
-        function showModal(idx) {
-            const img = images[idx];
-            modalImg.src = img.src;
-            modalTitle.textContent = img.title;
-            modalMeta.textContent = img.meta || '';
-            modal.style.display = 'flex';
-        }
-        closeModalBtn.onclick = function() {
-            modal.style.display = 'none';
-        };
-        window.onclick = function(event) {
-            if (event.target === modal) {
-                modal.style.display = 'none';
-            }
-        };
+    function showModal(idx) {
+        currentIndex = idx;
+        const img = images[idx];
+        modalImg.src = img.fullImage;
+        modalImg.alt = img.title;
+        modalTitle.textContent = img.title;
+        modalMeta.innerHTML = `
+            <div><b>Camera:</b> ${img.deviceModel || 'Unknown'}</div>
+            <div><b>f-number:</b> ${img.fNumber || 'Unknown'}</div>
+            <div><b>Exposure:</b> ${img.exposureTime || 'Unknown'}</div>
+            <div><b>Date:</b> ${formatDate(img.dateTaken)}</div>
+            <div><b>Tags:</b> ${(img.tags || []).join(', ')}</div>
+        `;
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+    closeModalBtn.onclick = closeModal;
+    window.onclick = function(event) {
+        if (event.target === modal) closeModal();
+    };
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (!modal.classList.contains('show')) return;
+        if (e.key === 'Escape') closeModal();
+        if (e.key === 'ArrowLeft') showModal((currentIndex - 1 + images.length) % images.length);
+        if (e.key === 'ArrowRight') showModal((currentIndex + 1) % images.length);
+    });
+    // Touch support for closing modal (swipe down)
+    modal.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].clientY;
+    });
+    modal.addEventListener('touchend', function(e) {
+        let touchEndX = e.changedTouches[0].clientY;
+        if (touchEndX - touchStartX > 80) closeModal();
+    });
+    // Helper to format date
+    function formatDate(dateObj) {
+        if (!dateObj) return 'Unknown';
+        if (typeof dateObj === 'string') return dateObj;
+        if (dateObj.rawValue) return dateObj.rawValue.split(' ')[0];
+        return 'Unknown';
+    }
     </script>
 </body>
 </html> 
