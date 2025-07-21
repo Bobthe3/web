@@ -6,17 +6,145 @@
     <title>Devan Velji</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
+        :root {
+            --color-bg1: #252323;
+            --color-bg2: #252323;
+            --color-accent1: #ef4e21;
+            --color-accent2: #ffb347;
+            --color-accent3: #f03535ef;
+            --color-accent4: #ff4482;
+            --color-accent5: #ffa340;
+            --color-accent6: #9c86ff;
+            --color-accent7: #3c56ff;
+            --color-text: #9DA3A4;
+            --color-muted: #9DA3A4;
+            --color-link: #ef4e21;
+            --color-link-hover: #ffb347;
+        }
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background-color: #1c1c1c;
-            color: #fff;
+            background: var(--color-bg1);
+            color: var(--color-muted);
+            min-height: 100vh;
+            position: relative;
+            overflow-x: hidden;
+        }
+        .blobs-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            z-index: -1;
+            pointer-events: none;
+            overflow: hidden;
+        }
+        .blob {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(100px);
+            opacity: 0.96;
+            mix-blend-mode: lighten;
+            will-change: transform;
+            animation-timing-function: ease-in-out;
+            transition: filter 8s linear, transform 0.7s cubic-bezier(.4,1.6,.4,1);
+        }
+        .blob1 {
+            width: 90vw; height: 90vw;
+            min-width: 300px; min-height: 300px;
+            background: var(--color-accent1);
+            left: 5vw; top: 20vh;
+            animation: moveBlob1 17s infinite alternate;
+        }
+        .blob2 {
+            width: 50vw; height: 40vw;
+            min-width: 220px; min-height: 220px;
+            background: var(--color-accent2);
+            left: 20vw; bottom: 20vh;
+            animation: moveBlob2 13s infinite alternate;
+        }
+        .blob3 {
+            width: 60vw; height: 60vw;
+            min-width: 180px; min-height: 180px;
+            background: var(--color-accent3);
+            left: 40vw; top: 20vh;
+            animation: moveBlob3 19s infinite alternate;
+        }
+        .blob4 {
+            width: 50vw; height: 22vw;
+            min-width: 80px; min-height: 80px;
+            background: var(--color-accent4);
+            left: 70vw; bottom: 25vh;
+            opacity: 0.7;
+            animation: moveBlob4 11s infinite alternate;
+        }
+        .blob5 {
+            width: 20vw; height: 72vw;
+            min-width: 60px; min-height: 60px;
+            background: var(--color-accent5);
+            left: 5vw; top: 5vh;
+            opacity: 0.55;
+            animation: moveBlob5 15s infinite alternate;
+        }
+        .blob6 {
+            width: 25vh; height: 20vh;
+            background: var(--color-accent6);
+            right: 80vw; bottom: 10vh;
+            opacity: 0.5;
+            animation: moveBlob6 18s infinite alternate;
+        }
+        .blob7 {
+            width: 50vh; height: 50vh;
+            background: var(--color-accent7);
+            right: 10vw; bottom: 10vh;
+            opacity: 0.5;
+            animation: moveBlob7 14s infinite alternate;
+        }
+        @keyframes moveBlob1 {
+            0% { transform: translateY(0) scale(1); }
+            40% { transform: translateY(10vh) scale(1.1, 0.9); }
+            70% { transform: translateY(-10vh) scale(0.95, 1.05); }
+            100% { transform: translate(10vw, 5vh) scale(1.1); }
+        }
+        @keyframes moveBlob2 {
+            0% { transform: translate(0,0) scale(1); }
+            30% { transform: translate(-10vw, 5vh) scale(1.05, 0.95); }
+            60% { transform: translate(-5vw, -10vh) scale(0.9, 1.1); }
+            100% { transform: translate(8vw, -8vh) scale(.8); }
+        }
+        @keyframes moveBlob3 {
+            0% { transform: translate(0,0) scale(1); }
+            50% { transform: translate(10vw, -10vh) scale(1.1, 0.9); }
+            100% { transform: translate(-8vw, 8vh) scale(1.2); }
+        }
+        @keyframes moveBlob4 {
+            0% { transform: translate(0,0) scale(1); }
+            40% { transform: translate(-5vw, 8vh) scale(1.1, 0.9); }
+            80% { transform: translate(3vw, -6vh) scale(0.95, 1.05); }
+            100% { transform: translate(-6vw, 6vh) scale(.7); }
+        }
+        @keyframes moveBlob5 {
+            0% { transform: translate(0,0) scale(1); }
+            30% { transform: translate(4vw, -7vh) scale(1.05, 0.95); }
+            70% { transform: translate(-10vw, 6vh) scale(0.9, 1.1); }
+            100% { transform: translate(7vw, -7vh) scale(1.4); }
+        }
+        @keyframes moveBlob6 {
+            0% { transform: translate(0,0) scale(1); }
+            25% { transform: translate(2vw, 2vh) scale(1.1); }
+            50% { transform: translate(-2vw, 3vh) scale(0.9); }
+            75% { transform: translate(1vw, -2vh) scale(1.05); }
+            100% { transform: translate(0,0) scale(1); }
+        }
+        @keyframes moveBlob7 {
+            0% { transform: translate(0,0) scale(1); }
+            20% { transform: translate(-2vw, 2vh) scale(1.1); }
+            60% { transform: translate(2vw, -3vh) scale(0.95); }
+            100% { transform: translate(0,0) scale(1); }
         }
 
         .navbar {
-            background-color: #2c2c2c;
+            background-color: var(--color-bg2);
             padding: 10px 0px;
-            color: #fff;
+            color: var(--color-muted);
             text-align: center;
             position: fixed;
             top: 0;
@@ -28,12 +156,13 @@
         }
 
         .navbar h1:hover {
-            color: #ef4e21;
+            color: var(--color-accent1);
         }
 
         .navbar h1 {
             margin: 0;
             font-size: 1.5em;
+            color: var(--color-muted);
         }
 
         .container {
@@ -44,14 +173,14 @@
         .social-links a {
             display: block;
             margin: 20px 0;
-            color: #fff;
+            color: var(--color-muted);
             text-decoration: none;
             font-size: 2em;
-            transition: color 0.3s ease;
+            transition: color 0.3s;
         }
 
         .social-links a:hover {
-            color: #ef4e21;
+            color: var(--color-accent1);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -72,41 +201,95 @@
         .fitness-link {
             padding: 10px;
         }
+        .fitness-link a {
+            color: var(--color-muted) !important;
+        }
+        a {
+            color: var(--color-muted);
+            text-decoration: none;
+        }
+        a:hover {
+            color: var(--color-link-hover);
+        }
+        .frosted-glass {
+            background: rgba(30, 30, 30, 0.55);
+            border-radius: 18px;
+            box-shadow: 0 4px 32px 0 rgba(0,0,0,0.12);
+            backdrop-filter: blur(12px) saturate(1.5);
+            -webkit-backdrop-filter: blur(12px) saturate(1.5);
+            padding: 32px 24px 24px 24px;
+            margin: 0 auto 0 auto;
+            max-width: 420px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .frosted-glass .social-links {
+            margin-bottom: 18px;
+        }
+        .frosted-glass .fitness-link {
+            padding: 0;
+        }
+        @media (max-width: 600px) {
+            .frosted-glass {
+                max-width: 95vw;
+                padding: 18px 6vw 18px 6vw;
+            }
+        }
+        .main-link {
+            color: var(--color-muted);
+            font-size: 1.5em;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        .main-link:hover {
+            color: var(--color-link-hover);
+        }
     </style>
 </head>
 <body>
+    <div class="blobs-bg">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+        <div class="blob blob3"></div>
+        <div class="blob blob4"></div>
+        <div class="blob blob5"></div>
+        <div class="blob blob6"></div>
+        <div class="blob blob7"></div>
+    </div>
     <nav class="navbar">
         <h1>Devan Velji</h1>
     </nav>
 
     <div class="container">
-        <div class="social-links">
-            <a href="https://www.instagram.com/devanvelji/" target="_blank" aria-label="Instagram">
-                <i class="fab fa-instagram"></i>
-            </a>
-            <a href="https://www.linkedin.com/in/devanvelji/" target="_blank" aria-label="LinkedIn">
-                <i class="fab fa-linkedin"></i>
-            </a>
-            <a href="mailto:devanvelji@gmail.com" aria-label="Email">
-                <i class="fas fa-envelope"></i>
-            </a>
-            <a href="https://open.spotify.com/user/31u2yupp67v34q2yhdr7ieeaylry?si=3c57f080a4f04cb1" target="_blank" aria-label="Spotify">
-                <i class="fab fa-spotify"></i>
-            </a>
-            <a href="https://www.strava.com/athletes/51124943" target="_blank" aria-label="Strava">
-                <i class="fab fa-strava"></i>
-            </a>
-            <a href="https://pin.it/4UOpbSSCO" target="_blank" aria-label="Pinterest">
-                <i class="fab fa-pinterest"></i>
-            </a>
-        </div>
-        <div class="fitness-link">
-            <a href="fitness.html" style="color: #ef4e21; font-size: 1.5em; text-decoration: none;">Fitness →</a>
-        </div>
-        <div class="fitness-link">
-            <a href="gallery.html" style="color: #ef4e21; font-size: 1.5em; text-decoration: none;">← Photo Gallery </a>
+        <div class="frosted-glass">
+            <div class="social-links">
+                <a href="https://www.instagram.com/devanvelji/" target="_blank" aria-label="Instagram">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://www.linkedin.com/in/devanvelji/" target="_blank" aria-label="LinkedIn">
+                    <i class="fab fa-linkedin"></i>
+                </a>
+                <a href="mailto:devanvelji@gmail.com" aria-label="Email">
+                    <i class="fas fa-envelope"></i>
+                </a>
+                <a href="https://open.spotify.com/user/31u2yupp67v34q2yhdr7ieeaylry?si=3c57f080a4f04cb1" target="_blank" aria-label="Spotify">
+                    <i class="fab fa-spotify"></i>
+                </a>
+                <a href="https://www.strava.com/athletes/51124943" target="_blank" aria-label="Strava">
+                    <i class="fab fa-strava"></i>
+                </a>
+                <a href="https://pin.it/4UOpbSSCO" target="_blank" aria-label="Pinterest">
+                    <i class="fab fa-pinterest"></i>
+                </a>
+            </div>
+            <div class="fitness-link">
+                <a href="fitness.html" class="main-link">Fitness →</a>
+            </div>
+            <div class="fitness-link">
+                <a href="gallery.html" class="main-link">← Photo Gallery </a>
+            </div>
         </div>
     </div>
-
 </body>
 </html>
