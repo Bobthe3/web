@@ -21,16 +21,16 @@ jobs:
 
       - name: Install dependencies
         run: npm install
-        working-directory: web
+        working-directory: public
 
       - name: Generate images.json
-        run: node public/generate-json.js
-        working-directory: web
+        run: node generate-json.js
+        working-directory: public
 
       - name: Build (Firebase or other)
         run: npm run build
-        working-directory: web
+        working-directory: public
 
       - name: Deploy to Firebase Hosting
         run: npx firebase-tools deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
-        working-directory: web
+        working-directory: public
