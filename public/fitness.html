@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Devan Velji</title>
+    <meta name="description" content="Follow Devan Velji's fitness journey and triathlon training progress through Strava integration.">
+    <title>Fitness - Devan Velji</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <style>
         body {
@@ -35,23 +37,43 @@
         .container {
             margin: 80px auto;
             text-align: center;
+            max-width: 1000px;
+            padding: 0 20px;
+        }
+        .frosted-glass {
+            background: rgba(30, 30, 30, 0.55);
+            border-radius: 18px;
+            box-shadow: 0 4px 32px 0 rgba(0,0,0,0.12);
+            backdrop-filter: blur(12px) saturate(1.5);
+            -webkit-backdrop-filter: blur(12px) saturate(1.5);
+            padding: 32px 24px 24px 24px;
+            margin: 0 auto 30px auto;
         }
 
-        .social-links a {
-            display: block;
+        .social-links {
+            text-align: center;
             margin: 20px 0;
+        }
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             color: #fff;
             text-decoration: none;
-            font-size: 2em;
+            font-size: 1.2em;
             transition: color 0.3s ease;
+            padding: 12px 20px;
+            background: rgba(239, 78, 33, 0.1);
+            border-radius: 8px;
         }
 
         .social-links a:hover {
             color: #ef4e21;
+            background: rgba(239, 78, 33, 0.2);
         }
 
         .widgets {
-            margin: 40px auto;
+            margin: 20px auto;
             display: flex;
             flex-direction: column;
             align-items: center;
@@ -59,21 +81,21 @@
         }
 
         .sports-text {
-            margin-top: 30px;
-            font-size: 1.2em;
-            color: #ef4e21;
+            font-size: 1.1em;
+            line-height: 1.6;
+            text-align: left;
         }
 
-        @media (min-width: 600px) {
-            .social-links {
-                display: flex;
-                justify-content: center;
-                gap: 30px;
+        @media (max-width: 600px) {
+            .frosted-glass {
+                padding: 20px 16px;
             }
-
-            .social-links a {
-                display: inline-block;
-                margin: 0;
+            .widgets iframe {
+                width: 280px;
+                height: 180px;
+            }
+            .widgets iframe:last-child {
+                height: 400px;
             }
         }
         .title h1 {
@@ -99,18 +121,42 @@
     </nav>
 
     <div class="container">
-        <div class="social-links">
-            <a href="https://www.strava.com/athletes/51124943" target="_blank" aria-label="Strava">
-                <i class="fab fa-strava"></i>
-            </a>
+        <div class="frosted-glass">
+            <h1 style="color: #ef4e21; margin-bottom: 16px;">Fitness Journey</h1>
+            <p>Follow my athletic journey as I train for my first triathlon in Summer 2025. From cycling through the Bay Area to running trails and swimming laps, every workout brings me closer to my goal.</p>
+            
+            <div class="social-links">
+                <a href="https://www.strava.com/athletes/51124943" target="_blank" aria-label="Strava">
+                    <i class="fab fa-strava"></i> Follow on Strava
+                </a>
+            </div>
         </div>
-        <div class="widgets">
-            <iframe height='200' width='300' frameborder='0' allowtransparency='true' scrolling='no' src='https://www.strava.com/athletes/51124943/activity-summary/600608c6fb2bd070d25da94a94f5119b6850d9ee'></iframe>
-            <iframe height='500' width='300' frameborder='0' allowtransparency='true' scrolling='yes' src='https://www.strava.com/athletes/51124943/latest-rides/600608c6fb2bd070d25da94a94f5119b6850d9ee'></iframe>
+
+        <div class="frosted-glass">
+            <h2 style="color: #ffb347; margin-bottom: 20px;">Activity Summary</h2>
+            <div class="widgets">
+                <iframe height='200' width='300' frameborder='0' allowtransparency='true' scrolling='no' src='https://www.strava.com/athletes/51124943/activity-summary/600608c6fb2bd070d25da94a94f5119b6850d9ee'></iframe>
+            </div>
         </div>
-        <div class="sports-text">
-            Sports Attempted: Run, Bike, Swim<br> Hiking, Sailing, Surfing<br>
-            In Progress: Triathlon - Summer 2025
+
+        <div class="frosted-glass">
+            <h2 style="color: #ffb347; margin-bottom: 20px;">Recent Activities</h2>
+            <div class="widgets">
+                <iframe height='500' width='300' frameborder='0' allowtransparency='true' scrolling='yes' src='https://www.strava.com/athletes/51124943/latest-rides/600608c6fb2bd070d25da94a94f5119b6850d9ee'></iframe>
+            </div>
+        </div>
+
+        <div class="frosted-glass">
+            <h2 style="color: #ffb347; margin-bottom: 20px;">Sports & Goals</h2>
+            <div class="sports-text">
+                <strong>Sports Attempted:</strong> Running, Cycling, Swimming, Hiking, Sailing, Surfing<br><br>
+                <strong>Current Goal:</strong> Complete my first Triathlon in Summer 2025<br><br>
+                <strong>Training Focus:</strong> Building endurance across all three disciplines while maintaining consistency and preventing injury.
+            </div>
+        </div>
+
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="index.html" style="color: #ef4e21; text-decoration: none; font-size: 1.2em;">← Back to Home</a>
         </div>
     </div>
 </body>
