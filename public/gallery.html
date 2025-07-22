@@ -3,7 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Photo gallery featuring travel photography from Europe, National Parks, and urban landscapes by Devan Velji.">
     <title>Photo Gallery - Devan Velji</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
     <style>
         body {
             margin: 0;
@@ -31,8 +33,39 @@
             margin: 0;
             font-size: 1.5em;
         }
+        .search-filter-container {
+            margin: 100px auto 20px auto;
+            max-width: 1200px;
+            width: 90vw;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .search-input {
+            padding: 12px 16px;
+            border: 1px solid rgba(157, 163, 164, 0.3);
+            border-radius: 8px;
+            background: rgba(30, 30, 30, 0.7);
+            color: #fff;
+            font-size: 1em;
+            min-width: 200px;
+        }
+        .search-input:focus {
+            outline: none;
+            border-color: #ef4e21;
+            box-shadow: 0 0 0 2px rgba(239, 78, 33, 0.2);
+        }
+        .filter-select {
+            padding: 12px 16px;
+            border: 1px solid rgba(157, 163, 164, 0.3);
+            border-radius: 8px;
+            background: rgba(30, 30, 30, 0.7);
+            color: #fff;
+            font-size: 1em;
+        }
         .gallery-container {
-            margin: 100px auto 0 auto;
+            margin: 0 auto;
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
             gap: 30px;
@@ -154,6 +187,15 @@
     <nav class="navbar">
         <h1><a href="index.html" style="color: inherit; text-decoration: none;">Devan Velji</a></h1>
     </nav>
+    <div class="search-filter-container">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search photos...">
+        <select class="filter-select" id="filterSelect">
+            <option value="">All Photos</option>
+            <option value="Europe">Europe</option>
+            <option value="SF">San Francisco</option>
+            <option value="National Parks">National Parks</option>
+        </select>
+    </div>
     <div class="gallery-container" id="galleryContainer">
         <!-- Images will be inserted here by JS -->
     </div>
@@ -176,27 +218,56 @@
     const closeModalBtn = document.getElementById('closeModal');
     let touchStartX = 0;
 
+    let allImages = [];
+    let filteredImages = [];
+    const searchInput = document.getElementById('searchInput');
+    const filterSelect = document.getElementById('filterSelect');
+
     // Fetch images.json and build gallery
     fetch('images.json')
         .then(res => res.json())
         .then(data => {
-            images = data;
-            images.forEach((img, idx) => {
-                const item = document.createElement('div');
-                item.className = 'gallery-item';
-                item.tabIndex = 0;
-                item.style.animationDelay = (idx * 0.07) + 's';
-                item.innerHTML = `
-                    <img src="${img.preview}" data-full="${img.fullImage}" alt="${img.title}" class="gallery-image" loading="lazy" />
-                    <div class="image-title">${img.title}</div>
-                `;
-                item.addEventListener('click', () => showModal(idx));
-                item.addEventListener('keydown', (e) => {
-                    if (e.key === 'Enter' || e.key === ' ') showModal(idx);
-                });
-                galleryContainer.appendChild(item);
-            });
+            allImages = data;
+            filteredImages = [...allImages];
+            images = filteredImages;
+            renderGallery();
         });
+
+    function renderGallery() {
+        galleryContainer.innerHTML = '';
+        filteredImages.forEach((img, idx) => {
+            const item = document.createElement('div');
+            item.className = 'gallery-item';
+            item.tabIndex = 0;
+            item.style.animationDelay = (idx * 0.07) + 's';
+            item.innerHTML = `
+                <img src="${img.preview}" data-full="${img.fullImage}" alt="${img.title}" class="gallery-image" loading="lazy" />
+                <div class="image-title">${img.title}</div>
+            `;
+            item.addEventListener('click', () => showModal(idx));
+            item.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') showModal(idx);
+            });
+            galleryContainer.appendChild(item);
+        });
+        images = filteredImages;
+    }
+
+    function filterImages() {
+        const searchTerm = searchInput.value.toLowerCase();
+        const selectedTag = filterSelect.value;
+        
+        filteredImages = allImages.filter(img => {
+            const matchesSearch = img.title.toLowerCase().includes(searchTerm);
+            const matchesTag = !selectedTag || img.tags.includes(selectedTag);
+            return matchesSearch && matchesTag;
+        });
+        
+        renderGallery();
+    }
+
+    searchInput.addEventListener('input', filterImages);
+    filterSelect.addEventListener('change', filterImages);
 
     function showModal(idx) {
         currentIndex = idx;
@@ -238,12 +309,7 @@
         if (touchEndX - touchStartX > 80) closeModal();
     });
     // Helper to format date
-    function formatDate(dateObj) {
-        if (!dateObj) return 'Unknown';
-        if (typeof dateObj === 'string') return dateObj;
-        if (dateObj.rawValue) return dateObj.rawValue.split(' ')[0];
-        return 'Unknown';
-    }
     </script>
+    <script src="scripts/unified-modal.js"></script>
 </body>
-</html> 
+</html>    
