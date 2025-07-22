@@ -176,14 +176,22 @@
             color: var(--color-muted);
             text-decoration: none;
             font-size: 2em;
-            transition: color 0.3s;
+            transition: color 0.3s, transform 0.25s cubic-bezier(.4,1.6,.4,1), box-shadow 0.3s;
+            opacity: 0;
+            transform: translateY(30px) scale(1);
         }
 
         .social-links a:hover {
             color: var(--color-accent1);
-            display: flex;
-            justify-content: center;
-            align-items: center;
+            z-index: 2;
+            box-shadow: 0 2px 16px 0 var(--color-accent1, #ef4e21);
+        }
+        .social-links a.magnetic {
+            transition: color 0.3s, transform 0.12s cubic-bezier(.4,1.6,.4,1), box-shadow 0.3s;
+        }
+        .social-links a.animated-in {
+            opacity: 1;
+            transform: translateY(0) scale(1);
         }
 
         @media (min-width: 600px) {
@@ -245,6 +253,44 @@
         .main-link:hover {
             color: var(--color-link-hover);
         }
+        .hero {
+            margin-top: 120px;
+            margin-bottom: 40px;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+        }
+        .greeting {
+            font-size: 1.3em;
+            color: var(--color-link-hover);
+            margin-bottom: 0.5em;
+            letter-spacing: 0.01em;
+        }
+        .hero-name {
+            font-size: 2.8em;
+            font-weight: bold;
+            color: var(--color-accent1);
+            letter-spacing: 0.04em;
+            display: inline-block;
+            background: linear-gradient(90deg, var(--color-accent1), var(--color-accent2), var(--color-accent3));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: heroTypewriter 2.5s steps(16) 1 normal both;
+            border-right: 0.08em solid var(--color-accent2);
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        @keyframes heroTypewriter {
+            from { width: 0; }
+            to { width: 100%; }
+        }
+        @media (max-width: 600px) {
+            .hero-name { font-size: 2em; }
+        }
+        /* Parallax/morphing blobs */
+        .blobs-bg { perspective: 800px; }
+        .blob { transition: filter 8s linear, transform 0.7s cubic-bezier(.4,1.6,.4,1); }
     </style>
 </head>
 <body>
@@ -260,6 +306,10 @@
     <nav class="navbar">
         <h1>Devan Velji</h1>
     </nav>
+    <div class="hero">
+        <div class="greeting" id="greeting"></div>
+        <span class="hero-name" id="heroName">Devan Velji</span>
+    </div>
 
     <div class="container">
         <div class="frosted-glass">
@@ -291,5 +341,77 @@
             </div>
         </div>
     </div>
+    <script>
+    // Personalized greeting
+    function getGreeting() {
+        const hour = new Date().getHours();
+        if (hour < 5) return 'Good night 🌙';
+        if (hour < 12) return 'Good morning ☀️';
+        if (hour < 18) return 'Good afternoon 🌤️';
+        return 'Good evening 🌇';
+    }
+    document.getElementById('greeting').textContent = getGreeting() + ", I’m";
+
+    // Parallax blobs on mouse move
+    const blobs = Array.from(document.querySelectorAll('.blob'));
+    document.addEventListener('mousemove', e => {
+        const x = e.clientX / window.innerWidth - 0.5;
+        const y = e.clientY / window.innerHeight - 0.5;
+        blobs.forEach((blob, i) => {
+            const depth = (i + 1) * 8;
+            blob.style.transform += ` translate(${x * depth}px, ${y * depth}px)`;
+        });
+    });
+    // Subtle morphing (randomize border-radius)
+    setInterval(() => {
+        blobs.forEach(blob => {
+            const r1 = 40 + Math.random() * 60;
+            const r2 = 40 + Math.random() * 60;
+            const r3 = 40 + Math.random() * 60;
+            const r4 = 40 + Math.random() * 60;
+            blob.style.borderRadius = `${r1}% ${r2}% ${r3}% ${r4}%`;
+        });
+    }, 3000);
+
+    // Animate social icons in with stagger
+    window.addEventListener('DOMContentLoaded', () => {
+        const socialLinks = document.querySelectorAll('.social-links a');
+        socialLinks.forEach((el, i) => {
+            setTimeout(() => {
+                el.classList.add('animated-in');
+            }, 200 + i * 120);
+        });
+    });
+
+    // Magnetic social icons
+    const socialLinks = document.querySelectorAll('.social-links a');
+    socialLinks.forEach(link => {
+        let hovering = false;
+        let mouseMoveHandler;
+        link.addEventListener('mouseenter', e => {
+            hovering = true;
+            link.classList.add('magnetic');
+            mouseMoveHandler = ev => {
+                const rect = link.getBoundingClientRect();
+                const mx = ev.clientX - (rect.left + rect.width / 2);
+                const my = ev.clientY - (rect.top + rect.height / 2);
+                const dist = Math.sqrt(mx*mx + my*my);
+                const maxDist = 40;
+                if (dist < maxDist) {
+                    link.style.transform = `scale(1.18) translate(${mx * 0.25}px, ${my * 0.25}px)`;
+                } else {
+                    link.style.transform = 'scale(1.18)';
+                }
+            };
+            window.addEventListener('mousemove', mouseMoveHandler);
+        });
+        link.addEventListener('mouseleave', e => {
+            hovering = false;
+            link.classList.remove('magnetic');
+            link.style.transform = '';
+            window.removeEventListener('mousemove', mouseMoveHandler);
+        });
+    });
+    </script>
 </body>
 </html>
