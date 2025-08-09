@@ -3,387 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Devan Velji - Photographer, fitness enthusiast, and technology professional based in the San Francisco Bay Area.">
-    <meta name="keywords" content="photography, fitness, travel, technology, San Francisco, triathlon">
+    <meta name="description" content="Devan Velji - Young Professional">
+    <meta name="keywords" content="Man">
     <meta name="author" content="Devan Velji">
-    <title>Devan Velji - Photography & Fitness</title>
+    <title>Devan Velji</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link rel="stylesheet" href="styles/theme.css">
-    <style>
-        :root {
-            --color-bg1: #252323;
-            --color-bg2: #252323;
-            --color-accent1: #ef4e21;
-            --color-accent2: #ffb347;
-            --color-accent3: #f03535ef;
-            --color-accent4: #ff4482;
-            --color-accent5: #ffa340;
-            --color-accent6: #9c86ff;
-            --color-accent7: #3c56ff;
-            --color-text: #9DA3A4;
-            --color-muted: #9DA3A4;
-            --color-link: #ef4e21;
-            --color-link-hover: #ffb347;
-        }
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: var(--color-bg1);
-            color: var(--color-muted);
-            min-height: 100vh;
-            position: relative;
-            overflow-x: hidden;
-        }
-        .blobs-bg {
-            position: fixed;
-            top: 0; left: 0; width: 100vw; height: 100vh;
-            z-index: -1;
-            pointer-events: none;
-            overflow: hidden;
-        }
-        .blob {
-            position: absolute;
-            border-radius: 50%;
-            filter: blur(100px);
-            opacity: 0.96;
-            mix-blend-mode: lighten;
-            will-change: transform;
-            animation-timing-function: ease-in-out;
-            transition: filter 8s linear, transform 0.7s cubic-bezier(.4,1.6,.4,1);
-        }
-        .blob1 {
-            width: 90vw; height: 90vw;
-            min-width: 300px; min-height: 300px;
-            background: var(--color-accent1);
-            left: 5vw; top: 20vh;
-            animation: moveBlob1 17s infinite alternate;
-        }
-        .blob2 {
-            width: 50vw; height: 40vw;
-            min-width: 220px; min-height: 220px;
-            background: var(--color-accent2);
-            left: 20vw; bottom: 20vh;
-            animation: moveBlob2 13s infinite alternate;
-        }
-        .blob3 {
-            width: 60vw; height: 60vw;
-            min-width: 180px; min-height: 180px;
-            background: var(--color-accent3);
-            left: 40vw; top: 20vh;
-            animation: moveBlob3 19s infinite alternate;
-        }
-        .blob4 {
-            width: 50vw; height: 22vw;
-            min-width: 80px; min-height: 80px;
-            background: var(--color-accent4);
-            left: 70vw; bottom: 25vh;
-            opacity: 0.7;
-            animation: moveBlob4 11s infinite alternate;
-        }
-        .blob5 {
-            width: 20vw; height: 72vw;
-            min-width: 60px; min-height: 60px;
-            background: var(--color-accent5);
-            left: 5vw; top: 5vh;
-            opacity: 0.55;
-            animation: moveBlob5 15s infinite alternate;
-        }
-        .blob6 {
-            width: 25vh; height: 20vh;
-            background: var(--color-accent6);
-            right: 80vw; bottom: 10vh;
-            opacity: 0.5;
-            animation: moveBlob6 18s infinite alternate;
-        }
-        .blob7 {
-            width: 50vh; height: 50vh;
-            background: var(--color-accent7);
-            right: 10vw; bottom: 10vh;
-            opacity: 0.5;
-            animation: moveBlob7 14s infinite alternate;
-        }
-        @keyframes moveBlob1 {
-            0% { transform: translateY(0) scale(1); }
-            40% { transform: translateY(10vh) scale(1.1, 0.9); }
-            70% { transform: translateY(-10vh) scale(0.95, 1.05); }
-            100% { transform: translate(10vw, 5vh) scale(1.1); }
-        }
-        @keyframes moveBlob2 {
-            0% { transform: translate(0,0) scale(1); }
-            30% { transform: translate(-10vw, 5vh) scale(1.05, 0.95); }
-            60% { transform: translate(-5vw, -10vh) scale(0.9, 1.1); }
-            100% { transform: translate(8vw, -8vh) scale(.8); }
-        }
-        @keyframes moveBlob3 {
-            0% { transform: translate(0,0) scale(1); }
-            50% { transform: translate(10vw, -10vh) scale(1.1, 0.9); }
-            100% { transform: translate(-8vw, 8vh) scale(1.2); }
-        }
-        @keyframes moveBlob4 {
-            0% { transform: translate(0,0) scale(1); }
-            40% { transform: translate(-5vw, 8vh) scale(1.1, 0.9); }
-            80% { transform: translate(3vw, -6vh) scale(0.95, 1.05); }
-            100% { transform: translate(-6vw, 6vh) scale(.7); }
-        }
-        @keyframes moveBlob5 {
-            0% { transform: translate(0,0) scale(1); }
-            30% { transform: translate(4vw, -7vh) scale(1.05, 0.95); }
-            70% { transform: translate(-10vw, 6vh) scale(0.9, 1.1); }
-            100% { transform: translate(7vw, -7vh) scale(1.4); }
-        }
-        @keyframes moveBlob6 {
-            0% { transform: translate(0,0) scale(1); }
-            25% { transform: translate(2vw, 2vh) scale(1.1); }
-            50% { transform: translate(-2vw, 3vh) scale(0.9); }
-            75% { transform: translate(1vw, -2vh) scale(1.05); }
-            100% { transform: translate(0,0) scale(1); }
-        }
-        @keyframes moveBlob7 {
-            0% { transform: translate(0,0) scale(1); }
-            20% { transform: translate(-2vw, 2vh) scale(1.1); }
-            60% { transform: translate(2vw, -3vh) scale(0.95); }
-            100% { transform: translate(0,0) scale(1); }
-        }
 
-        .navbar {
-            background-color: var(--color-bg2);
-            padding: 10px 0px;
-            color: var(--color-muted);
-            text-align: center;
-            position: fixed;
-            top: 0;
-            width: 100%;
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-
-        .navbar h1:hover {
-            color: var(--color-accent1);
-        }
-
-        .navbar h1 {
-            margin: 0;
-            font-size: 1.5em;
-            color: var(--color-muted);
-        }
-
-        .container {
-            margin: 80px auto;
-            text-align: center;
-        }
-
-        .social-links a {
-            display: block;
-            margin: 20px 0;
-            color: var(--color-muted);
-            text-decoration: none;
-            font-size: 2em;
-            transition: color 0.3s, transform 0.25s cubic-bezier(.4,1.6,.4,1), box-shadow 0.3s;
-            opacity: 0;
-            transform: translateY(30px) scale(1);
-        }
-
-        .social-links a:hover {
-            color: var(--color-accent1);
-            z-index: 2;
-            box-shadow: 0 2px 16px 0 var(--color-accent1, #ef4e21);
-        }
-        .social-links a.magnetic {
-            transition: color 0.3s, transform 0.12s cubic-bezier(.4,1.6,.4,1), box-shadow 0.3s;
-        }
-        .social-links a.animated-in {
-            opacity: 1;
-            transform: translateY(0) scale(1);
-        }
-
-        @media (min-width: 600px) {
-            .social-links {
-                display: flex;
-                justify-content: center;
-                gap: 30px;
-            }
-
-            .social-links a {
-                display: inline-block;
-                margin: 0;
-            }
-        }
-        .fitness-link {
-            padding: 10px;
-        }
-        .fitness-link a {
-            color: var(--color-muted) !important;
-        }
-        a {
-            color: var(--color-muted);
-            text-decoration: none;
-        }
-        a:hover {
-            color: var(--color-link-hover);
-        }
-        .frosted-glass {
-            background: rgba(30, 30, 30, 0.55);
-            border-radius: 18px;
-            box-shadow: 0 4px 32px 0 rgba(0,0,0,0.12);
-            backdrop-filter: blur(12px) saturate(1.5);
-            -webkit-backdrop-filter: blur(12px) saturate(1.5);
-            padding: 32px 24px 24px 24px;
-            margin: 0 auto 0 auto;
-            max-width: 420px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .frosted-glass .social-links {
-            margin-bottom: 18px;
-        }
-        .frosted-glass .fitness-link {
-            padding: 0;
-        }
-        @media (max-width: 600px) {
-            .frosted-glass {
-                max-width: 95vw;
-                padding: 18px 6vw 18px 6vw;
-            }
-        }
-        .main-nav {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 24px;
-            padding-bottom: 20px;
-            border-bottom: 1px solid rgba(157, 163, 164, 0.2);
-        }
-        .nav-link {
-            color: var(--color-muted);
-            text-decoration: none;
-            font-size: 1.1em;
-            transition: color 0.3s;
-            padding: 8px 12px;
-            border-radius: 8px;
-            transition: all 0.3s;
-        }
-        .nav-link:hover {
-            color: var(--color-link-hover);
-            background: rgba(239, 78, 33, 0.1);
-        }
-        .about-section {
-            margin-top: 30px;
-            text-align: left;
-        }
-        .about-section h2 {
-            color: var(--color-accent1);
-            margin-bottom: 16px;
-            text-align: center;
-        }
-        .about-section p {
-            line-height: 1.6;
-            margin-bottom: 24px;
-        }
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 20px;
-            margin-top: 24px;
-        }
-        .skill-category {
-            text-align: center;
-            padding: 16px;
-            background: rgba(239, 78, 33, 0.1);
-            border-radius: 12px;
-        }
-        .skill-category h3 {
-            color: var(--color-accent2);
-            margin-bottom: 8px;
-        }
-        .skill-category p {
-            font-size: 0.9em;
-            margin: 0;
-        }
-        @media (max-width: 600px) {
-            .main-nav {
-                gap: 12px;
-            }
-            .nav-link {
-                font-size: 1em;
-                padding: 6px 10px;
-            }
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-        .hero {
-            margin-top: 120px;
-            margin-bottom: 40px;
-            text-align: center;
-            position: relative;
-            z-index: 2;
-        }
-        .greeting {
-            font-size: 1.3em;
-            color: var(--color-link-hover);
-            margin-bottom: 0.5em;
-            letter-spacing: 0.01em;
-        }
-        .hero-name {
-            font-size: 2.8em;
-            font-weight: bold;
-            color: var(--color-accent1);
-            letter-spacing: 0.04em;
-            display: inline-block;
-            background: linear-gradient(90deg, var(--color-accent1), var(--color-accent2), var(--color-accent3));
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            animation: heroTypewriter 2.5s steps(16) 1 normal both;
-            border-right: 0.08em solid var(--color-accent2);
-            white-space: nowrap;
-            overflow: hidden;
-        }
-        @keyframes heroTypewriter {
-            from { width: 0; }
-            to { width: 100%; }
-        }
-        @media (max-width: 600px) {
-            .hero-name { font-size: 2em; }
-        }
-        /* Parallax/morphing blobs */
-        .blobs-bg { perspective: 800px; }
-        .blob { transition: filter 8s linear, transform 0.7s cubic-bezier(.4,1.6,.4,1); }
-    </style>
 </head>
 <body>
-    <div class="blobs-bg">
-        <div class="blob blob1"></div>
-        <div class="blob blob2"></div>
-        <div class="blob blob3"></div>
-        <div class="blob blob4"></div>
-        <div class="blob blob5"></div>
-        <div class="blob blob6"></div>
-        <div class="blob blob7"></div>
-    </div>
+    <!-- Minimal background only -->
     <nav class="navbar">
         <h1>Devan Velji</h1>
     </nav>
-    <div class="hero">
+    <div class="hero card">
         <div class="greeting" id="greeting"></div>
         <span class="hero-name" id="heroName">Devan Velji</span>
     </div>
 
     <div class="container">
-        <div class="frosted-glass">
+        <div class="card">
             <nav class="main-nav">
-                <a href="#about" class="nav-link">About</a>
-                <a href="projects.html" class="nav-link">Projects</a>
+                <!-- <a href="projects.html" class="nav-link">Projects</a> -->
                 <a href="gallery.html" class="nav-link">Gallery</a>
                 <a href="fitness.html" class="nav-link">Fitness</a>
                 <a href="blog/index.html" class="nav-link">Blog</a>
-                <a href="resume/resume.html" class="nav-link">Resume</a>
-                <a href="contact.html" class="nav-link">Contact</a>
+                <a href="resume.html" class="nav-link">Resume</a>
+                <!-- <a href="contact.html" class="nav-link">Contact</a> -->
             </nav>
             <div class="social-links">
                 <a href="https://www.instagram.com/devanvelji/" target="_blank" aria-label="Instagram">
@@ -407,27 +54,14 @@
             </div>
         </div>
         
-        <div class="frosted-glass about-section" id="about">
+        <section class="card about-section" id="about">
             <h2>About Me</h2>
-            <p>I'm a passionate photographer, fitness enthusiast, and technology professional based in the San Francisco Bay Area. When I'm not capturing moments through my lens or pushing my limits on the bike, I'm exploring new technologies and working on innovative projects.</p>
-            
-            <div class="skills-grid">
-                <div class="skill-category">
-                    <h3>Photography</h3>
-                    <p>Travel • Landscape • Street Photography</p>
-                </div>
-                <div class="skill-category">
-                    <h3>Fitness</h3>
-                    <p>Cycling • Running • Swimming • Triathlon Training</p>
-                </div>
-                <div class="skill-category">
-                    <h3>Travel</h3>
-                    <p>Europe • National Parks • Urban Exploration</p>
-                </div>
-            </div>
-        </div>
+            <p>
+                Young Professional
+            </p>
+        </section>
     </div>
-<<<<<<< HEAD
+
     <script>
     // Personalized greeting
     function getGreeting() {
@@ -439,27 +73,6 @@
     }
     document.getElementById('greeting').textContent = getGreeting() + ", I’m";
 
-    // Parallax blobs on mouse move
-    const blobs = Array.from(document.querySelectorAll('.blob'));
-    document.addEventListener('mousemove', e => {
-        const x = e.clientX / window.innerWidth - 0.5;
-        const y = e.clientY / window.innerHeight - 0.5;
-        blobs.forEach((blob, i) => {
-            const depth = (i + 1) * 8;
-            blob.style.transform += ` translate(${x * depth}px, ${y * depth}px)`;
-        });
-    });
-    // Subtle morphing (randomize border-radius)
-    setInterval(() => {
-        blobs.forEach(blob => {
-            const r1 = 40 + Math.random() * 60;
-            const r2 = 40 + Math.random() * 60;
-            const r3 = 40 + Math.random() * 60;
-            const r4 = 40 + Math.random() * 60;
-            blob.style.borderRadius = `${r1}% ${r2}% ${r3}% ${r4}%`;
-        });
-    }, 3000);
-
     // Animate social icons in with stagger
     window.addEventListener('DOMContentLoaded', () => {
         const socialLinks = document.querySelectorAll('.social-links a');
@@ -470,39 +83,7 @@
         });
     });
 
-    // Magnetic social icons
-    const socialLinks = document.querySelectorAll('.social-links a');
-    socialLinks.forEach(link => {
-        let hovering = false;
-        let mouseMoveHandler;
-        link.addEventListener('mouseenter', e => {
-            hovering = true;
-            link.classList.add('magnetic');
-            mouseMoveHandler = ev => {
-                const rect = link.getBoundingClientRect();
-                const mx = ev.clientX - (rect.left + rect.width / 2);
-                const my = ev.clientY - (rect.top + rect.height / 2);
-                const dist = Math.sqrt(mx*mx + my*my);
-                const maxDist = 40;
-                if (dist < maxDist) {
-                    link.style.transform = `scale(1.18) translate(${mx * 0.25}px, ${my * 0.25}px)`;
-                } else {
-                    link.style.transform = 'scale(1.18)';
-                }
-            };
-            window.addEventListener('mousemove', mouseMoveHandler);
-        });
-        link.addEventListener('mouseleave', e => {
-            hovering = false;
-            link.classList.remove('magnetic');
-            link.style.transform = '';
-            window.removeEventListener('mousemove', mouseMoveHandler);
-        });
-    });
+    // Keep social interactions minimal (no magnetic effects)
     </script>
-=======
-    
-    <script src="scripts/theme.js"></script>
->>>>>>> 963eff0fa6094a7f8fe3952df1ae78676ecf8eb9
 </body>
 </html>

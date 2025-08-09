@@ -1,12 +1,12 @@
 ---
-title: "Lorem Ipsum with Mathematical Equations"
+title: "This is a test"
 date: "2025-07-22"
-tags: ["mathematics", "lorem", "sample"]
+tags: ["mathematics", "test"]
 ---
 
-# Lorem Ipsum with Mathematical Equations
+# Test Blog with Mathematical Equations
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. 
+Testing 
 
 ## Mathematical Concepts
 
@@ -18,15 +18,12 @@ And here's a more complex integral that appears frequently in probability theory
 
 $$\int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}$$
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
 
 ### Quadratic Formula
 
 The quadratic formula is one of the most fundamental equations in algebra:
 
 $$x = \frac{-b \pm \sqrt{b^2 - 4ac}}{2a}$$
-
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 
 ## Advanced Mathematics
 
@@ -42,7 +39,6 @@ The fundamental theorem of calculus states:
 
 $$\frac{d}{dx} \int_a^x f(t) dt = f(x)$$
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris.
 
 ### Series and Summations
 
@@ -50,8 +46,8 @@ The Taylor series expansion of $e^x$ is:
 
 $$e^x = \sum_{n=0}^{\infty} \frac{x^n}{n!} = 1 + x + \frac{x^2}{2!} + \frac{x^3}{3!} + \cdots$$
 
-Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis.
+
 
 ## Conclusion
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mathematical expressions enhance the beauty of scientific communication.
+This was a test 

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Devan Velji - Blog</title>
+  <link href="https://devanvelji.com/atom.xml" rel="self" />
+  <link href="https://devanvelji.com/blog/" />
+  <updated>2025-01-27T00:00:00Z</updated>
+  <id>https://devanvelji.com/</id>
+  <author>
+    <name>Devan Velji</name>
+    <email>devanvelji@gmail.com</email>
+  </author>
+  <entry>
+    <title>Sample Post</title>
+    <link href="https://devanvelji.com/blog/generated/sample-post.html" />
+    <id>https://devanvelji.com/blog/generated/sample-post.html</id>
+    <updated>2025-01-27T00:00:00Z</updated>
+    <summary>Sample blog post.</summary>
+  </entry>
+</feed>
+
+

@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Devan Velji - Blog</title>
+    <description>Thoughts on technology, photography, fitness, and life from Devan Velji</description>
+    <link>https://devanvelji.com/blog/</link>
+    <atom:link href="https://devanvelji.com/rss.xml" rel="self" type="application/rss+xml" />
+    <language>en-us</language>
+    <managingEditor>devanvelji@gmail.com (Devan Velji)</managingEditor>
+    <webMaster>devanvelji@gmail.com (Devan Velji)</webMaster>
+    <pubDate>Mon, 27 Jan 2025 00:00:00 GMT</pubDate>
+    <lastBuildDate>Mon, 27 Jan 2025 00:00:00 GMT</lastBuildDate>
+    <category>Technology</category>
+    <category>Photography</category>
+    <category>Fitness</category>
+    <category>Travel</category>
+    <generator>Custom RSS Generator</generator>
+    <ttl>1440</ttl>
+    
+    <item>
+      <title>Lorem Ipsum with Mathematical Equations</title>
+      <description>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Mathematical concepts and equations with advanced formulas.</description>
+      <link>https://devanvelji.com/blog/generated/sample-post.html</link>
+      <guid isPermaLink="true">https://devanvelji.com/blog/generated/sample-post.html</guid>
+      <pubDate>Mon, 22 Jul 2025 00:00:00 GMT</pubDate>
+      <author>devanvelji@gmail.com (Devan Velji)</author>
+      <category>Mathematics</category>
+      <category>Technology</category>
+    </item>
+  </channel>
+</rss>
+

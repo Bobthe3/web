@@ -196,16 +196,9 @@ function generatePostHtml(post) {
         body {
             margin: 0;
             font-family: Arial, sans-serif;
-            background: linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab);
-            background-size: 400% 400%;
-            animation: gradient 15s ease infinite;
+            background: var(--bg-color);
+            color: var(--text-color);
             min-height: 100vh;
-        }
-        
-        @keyframes gradient {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
         }
         
         .navbar {
@@ -293,7 +286,7 @@ function generatePostHtml(post) {
 </head>
 <body>
     <nav class="navbar">
-        <h1><a href="../index.html" style="color: inherit; text-decoration: none;">Devan Velji</a></h1>
+        <h1><a href="../index.html">Devan Velji</a></h1>
     </nav>
     
     <div class="container">
@@ -314,7 +307,7 @@ function generatePostHtml(post) {
         </div>
     </div>
     
-    <script src="../scripts/theme.js"></script>
+    
 </body>
 </html>`;
 }
@@ -421,13 +414,13 @@ function generateBlogIndexHtml(posts) {
 </head>
 <body>
     <nav class="navbar">
-        <h1><a href="../index.html" style="color: inherit; text-decoration: none;">Devan Velji</a></h1>
+        <h1><a href="../index.html">Devan Velji</a></h1>
     </nav>
     
     <div class="container">
         <div class="frosted-glass">
-            <h1 style="color: var(--accent-primary); text-align: center; margin-bottom: 30px;">Blog</h1>
-            <p style="text-align: center; margin-bottom: 40px;">Thoughts on technology, photography, fitness, and life.</p>
+            <h1 class="page-title" style="text-align: center; margin-bottom: 16px;">Blog</h1>
+            <p style="text-align: center; margin-bottom: 24px;">Thoughts on technology, photography, fitness, and life.</p>
         </div>
         
         ${postsHtml}
@@ -437,7 +430,7 @@ function generateBlogIndexHtml(posts) {
         </div>
     </div>
     
-    <script src="../scripts/theme.js"></script>
+    
 </body>
 </html>`;
 }

@@ -1,50 +1,67 @@
 :root {
-  --bg-color: #1c1c1c;
-  --text-color: #fff;
-  --navbar-bg: #2c2c2c;
-  --frosted-bg: rgba(30, 30, 30, 0.55);
-  --accent-primary: #ef4e21;
-  --accent-secondary: #ffb347;
-  --border-color: rgba(157, 163, 164, 0.3);
-  --shadow-color: rgba(0,0,0,0.12);
+  /* Nord palette mapping */
+  --nord0: #2e3440; /* base background */
+  --nord1: #3b4252; /* elevated surfaces/nav */
+  --nord2: #434c5e; /* borders/lines */
+  --nord3: #4c566a; /* subtle text/borders */
+  --nord4: #d8dee9; /* text bright */
+  --nord5: #e5e9f0;
+  --nord6: #eceff4;
+  --nord7: #8fbcbb;
+  --nord8: #88c0d0; /* primary accent */
+  --nord9: #81a1c1; /* secondary accent */
+  --nord10: #5e81ac;
+  --nord11: #bf616a;
+  --nord12: #d08770; /* hover accent */
+  --nord13: #ebcb8b;
+  --nord14: #a3be8c;
+  --nord15: #b48ead;
+
+  /* Site tokens based on Nord - aligned with user preferences */
+  --bg-color: #2e3440; /* nord0 */
+  --text-color: #d8dee9; /* nord4 */
+  --navbar-bg: var(--nord1);
+  --frosted-bg: rgba(59, 66, 82, 0.65); /* nord1 @ 65% */
+  --accent-primary: var(--nord8);
+  --accent-secondary: var(--nord9);
+  --accent-hover: #d08770; /* nord12 for hover effects */
+  --border-color: rgba(76, 86, 106, 0.4); /* nord3 @ 40% */
+  --shadow-color: rgba(0,0,0,0.2);
+  --card-bg: rgba(255,255,255,0.03);
+  --hover-bg: rgba(208, 135, 112, 0.12); /* nord12 @ 12% */
+  
+  /* Legacy compatibility */
+  --color-bg1: var(--bg-color);
+  --color-bg2: var(--bg-color);
+  --color-text: var(--text-color);
+  --color-muted: var(--text-color);
+  --color-link: var(--accent-primary);
+  --color-link-hover: var(--accent-hover);
+  --color-accent1: var(--accent-primary);
+  --color-accent2: var(--accent-secondary);
 }
 
-[data-theme="light"] {
-  --bg-color: #f5f5f5;
-  --text-color: #333;
-  --navbar-bg: #fff;
-  --frosted-bg: rgba(255, 255, 255, 0.85);
-  --accent-primary: #ef4e21;
-  --accent-secondary: #d4691a;
-  --border-color: rgba(0, 0, 0, 0.2);
-  --shadow-color: rgba(0,0,0,0.1);
-}
+/* Single dark theme guided by Nord best practices */
 
-.theme-toggle {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: var(--frosted-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 50px;
-  padding: 8px 16px;
-  color: var(--text-color);
-  cursor: pointer;
-  z-index: 1001;
-  font-size: 14px;
-  transition: all 0.3s ease;
-  backdrop-filter: blur(12px);
-}
-
-.theme-toggle:hover {
-  background: var(--accent-primary);
-  color: white;
-}
+/* Removed theme toggle (dark-only) */
 
 body {
   background-color: var(--bg-color);
   color: var(--text-color);
   transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Subtle vignette/noise overlay for minimal depth */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: -1;
+  background:
+    radial-gradient(120% 80% at 50% 0%, rgba(255,255,255,0.05), transparent 60%),
+    radial-gradient(120% 80% at 50% 100%, rgba(0,0,0,0.25), transparent 60%);
+  opacity: 0.35;
 }
 
 .navbar {
@@ -56,4 +73,395 @@ body {
   background: var(--frosted-bg);
   border: 1px solid var(--border-color);
   box-shadow: 0 4px 32px 0 var(--shadow-color);
+}
+
+/* Minimal card surface */
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  box-shadow: 0 4px 24px 0 var(--shadow-color);
+  border-radius: 12px;
+  padding: 24px;
+}
+
+/* Universal styles */
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: var(--bg-color);
+  color: var(--text-color);
+  min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+/* Navigation */
+.navbar {
+  background-color: var(--navbar-bg);
+  padding: 10px 0px;
+  color: var(--text-color);
+  text-align: center;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navbar h1 {
+  margin: 0;
+  font-size: 1.5em;
+  color: var(--text-color);
+}
+
+.navbar h1:hover {
+  color: var(--accent-hover);
+}
+
+.navbar h1 a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Main container */
+.container {
+  margin: 80px auto;
+  text-align: center;
+}
+
+/* Project/contact page container */
+.container.projects,
+.container.contact {
+  max-width: 1200px;
+  padding: 0 20px;
+}
+
+/* Hero section */
+.hero {
+  margin-top: 120px;
+  margin-bottom: 40px;
+  text-align: center;
+  position: relative;
+  z-index: 2;
+}
+
+.greeting {
+  font-size: 1.3em;
+  color: var(--accent-hover);
+  margin-bottom: 0.5em;
+  letter-spacing: 0.01em;
+}
+
+.hero-name {
+  font-size: 2.8em;
+  font-weight: 700;
+  color: var(--text-color);
+  letter-spacing: 0.01em;
+}
+
+/* Navigation links */
+.main-nav {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 20px;
+  margin-bottom: 24px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid rgba(157, 163, 164, 0.2);
+}
+
+.nav-link {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 1.1em;
+  transition: color 0.3s;
+  padding: 8px 12px;
+  border-radius: 8px;
+  transition: all 0.3s;
+}
+
+.nav-link:hover {
+  color: var(--accent-hover);
+  background: var(--hover-bg);
+}
+
+/* Social links */
+.social-links a {
+  display: block;
+  margin: 20px 0;
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 2em;
+  transition: color 0.3s, transform 0.25s cubic-bezier(.4,1.6,.4,1), box-shadow 0.3s;
+  opacity: 0;
+  transform: translateY(30px) scale(1);
+}
+
+.social-links a:hover {
+  color: var(--accent-hover);
+  background: var(--hover-bg);
+  border-radius: 8px;
+}
+
+.social-links a.magnetic {
+  transition: color 0.3s, transform 0.12s cubic-bezier(.4,1.6,.4,1), box-shadow 0.3s;
+}
+
+.social-links a.animated-in {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+/* About section */
+.about-section {
+  margin-top: 30px;
+  text-align: left;
+}
+
+.about-section h2 {
+  color: var(--accent-primary);
+  margin-bottom: 16px;
+  text-align: center;
+}
+
+.about-section p {
+  line-height: 1.6;
+  margin-bottom: 24px;
+}
+
+/* Skills grid */
+.skills-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
+  margin-top: 24px;
+}
+
+.skill-category {
+  text-align: center;
+  padding: 16px;
+  background: var(--hover-bg);
+  border-radius: 12px;
+}
+
+.skill-category h3 {
+  color: var(--accent-secondary);
+  margin-bottom: 8px;
+}
+
+.skill-category p {
+  font-size: 0.9em;
+  margin: 0;
+}
+
+/* Base link styles */
+a { 
+  color: var(--text-color); 
+  text-decoration: none; 
+}
+
+a:hover { 
+  color: var(--accent-hover); 
+}
+
+/* Responsive design */
+@media (min-width: 600px) {
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+  }
+
+  .social-links a {
+    display: inline-block;
+    margin: 0;
+  }
+}
+
+@media (max-width: 600px) {
+  .hero-name { 
+    font-size: 2em; 
+  }
+  
+  .main-nav {
+    gap: 12px;
+  }
+  
+  .nav-link {
+    font-size: 1em;
+    padding: 6px 10px;
+  }
+  
+  .skills-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Project-specific styles */
+.page-header {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 32px 24px;
+  margin: 0 auto 30px auto;
+  max-width: 800px;
+  box-shadow: 0 4px 24px 0 var(--shadow-color);
+}
+
+.page-title {
+  color: var(--accent-primary);
+  margin-bottom: 16px;
+}
+
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 30px;
+  margin-top: 30px;
+}
+
+.project-card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 24px;
+  text-align: left;
+  transition: transform 0.3s, box-shadow 0.3s;
+  box-shadow: 0 4px 24px 0 var(--shadow-color);
+}
+
+.project-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 32px 0 var(--shadow-color);
+}
+
+.project-card h3 {
+  color: var(--accent-primary);
+  margin-bottom: 12px;
+  font-size: 1.3em;
+}
+
+.project-card p {
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
+.project-tech {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.tech-tag {
+  background: var(--hover-bg);
+  color: var(--accent-secondary);
+  padding: 4px 12px;
+  border-radius: 12px;
+  font-size: 0.85em;
+}
+
+.project-links {
+  display: flex;
+  gap: 16px;
+}
+
+.project-link {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-size: 0.9em;
+  transition: color 0.3s;
+}
+
+.project-link:hover {
+  color: var(--accent-hover);
+}
+
+.back-link {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.back-link a {
+  color: var(--accent-primary);
+  text-decoration: none;
+  font-size: 1.2em;
+}
+
+.back-link a:hover {
+  color: var(--accent-hover);
+}
+
+/* Resume page */
+.resume-iframe {
+  width: 100%;
+  height: 80vh;
+  border: none;
+  border-radius: 10px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.5);
+  background: #fff;
+}
+
+/* Contact form styles */
+.contact-form {
+  max-width: 600px;
+  margin: 0 auto;
+  text-align: left;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  color: var(--text-color);
+  font-weight: 500;
+}
+
+.form-group input,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+  background: var(--card-bg);
+  color: var(--text-color);
+  font-family: inherit;
+  font-size: 1em;
+}
+
+.form-group input:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--accent-primary);
+  box-shadow: 0 0 0 2px rgba(136, 192, 208, 0.2);
+}
+
+.form-group textarea {
+  min-height: 120px;
+  resize: vertical;
+}
+
+.submit-btn {
+  background: var(--accent-primary);
+  color: var(--bg-color);
+  border: none;
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-size: 1em;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background: var(--accent-hover);
+}
+
+/* Reduce motion preference */
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
 }

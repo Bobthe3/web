@@ -27,7 +27,7 @@ jobs:
         run: node generate-json.js
         working-directory: public
 
-      - name: Build (Firebase or other)
+      - name: Build (generate images, feeds, sitemap)
         run: npm run build
         working-directory: public
 
