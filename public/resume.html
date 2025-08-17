@@ -3,29 +3,688 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional resume and career information for Devan Velji.">
-    <title>Resume - Devan Velji</title>
+    <meta name="description" content="Professional resume and career information for Devan Velji - Young Professional with expertise in technology, photography, and fitness.">
+    <meta name="keywords" content="resume, CV, career, professional, Devan Velji, young professional, technology, skills">
+    <meta name="author" content="Devan Velji">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://devanvelji.com/resume.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://devanvelji.com/resume.html">
+    <meta property="og:title" content="Resume - Devan Velji">
+    <meta property="og:description" content="Professional resume and career information for Devan Velji - Young Professional.">
+    <meta property="og:image" content="https://devanvelji.com/images/resume-preview.jpg">
+    <meta property="og:site_name" content="Devan Velji">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://devanvelji.com/resume.html">
+    <meta property="twitter:title" content="Resume - Devan Velji">
+    <meta property="twitter:description" content="Professional resume and career information for Devan Velji - Young Professional.">
+    <meta property="twitter:image" content="https://devanvelji.com/images/resume-preview.jpg">
+    
+    <title>Resume - Professional Experience | Devan Velji</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="styles/theme.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     
+    <!-- Analytics -->
+    <script src="scripts/analytics.js"></script>
+    
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .navbar {
+            background-color: var(--navbar-bg);
+            padding: 10px 0px;
+            color: var(--text-color);
+            text-align: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        
+        .navbar a {
+            color: var(--text-color);
+            text-decoration: none;
+        }
+        
+        .navbar a:hover {
+            color: var(--accent-primary);
+        }
+        
+        .container {
+            margin: 80px auto 30px auto;
+            max-width: 1000px;
+            padding: 0 20px;
+        }
+        
+        .resume-header {
+            background: var(--frosted-bg);
+            border-radius: 18px;
+            padding: 40px 30px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 32px 0 var(--shadow-color);
+            backdrop-filter: blur(12px) saturate(1.5);
+            -webkit-backdrop-filter: blur(12px) saturate(1.5);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .resume-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-primary));
+        }
+        
+        .profile-info h1 {
+            color: var(--accent-primary);
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        
+        .profile-subtitle {
+            color: var(--accent-secondary);
+            font-size: 1.3em;
+            margin-bottom: 20px;
+        }
+        
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-color);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        
+        .contact-item:hover {
+            color: var(--accent-primary);
+        }
+        
+        .resume-section {
+            background: var(--frosted-bg);
+            border-radius: 18px;
+            padding: 30px;
+            margin-bottom: 25px;
+            box-shadow: 0 4px 32px 0 var(--shadow-color);
+            backdrop-filter: blur(12px) saturate(1.5);
+            -webkit-backdrop-filter: blur(12px) saturate(1.5);
+            border: 1px solid var(--border-color);
+        }
+        
+        .section-title {
+            color: var(--accent-primary);
+            font-size: 1.8em;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .section-icon {
+            font-size: 1.2em;
+        }
+        
+        .experience-item, .education-item, .project-item {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .experience-item:last-child,
+        .education-item:last-child,
+        .project-item:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+        }
+        
+        .item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .item-title {
+            font-size: 1.3em;
+            font-weight: bold;
+            color: var(--accent-primary);
+            margin-bottom: 5px;
+        }
+        
+        .item-company {
+            font-size: 1.1em;
+            color: var(--accent-secondary);
+            margin-bottom: 8px;
+        }
+        
+        .item-date {
+            color: var(--accent-secondary);
+            font-size: 0.95em;
+            white-space: nowrap;
+        }
+        
+        .item-description {
+            color: var(--text-color);
+            margin-top: 10px;
+        }
+        
+        .item-description ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
+        
+        .item-description li {
+            margin-bottom: 8px;
+        }
+        
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        
+        .skill-category {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .skill-category h4 {
+            color: var(--accent-primary);
+            margin-bottom: 15px;
+            font-size: 1.1em;
+        }
+        
+        .skill-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .skill-tag {
+            background: var(--accent-primary);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+        }
+        
+        .skill-tag:hover {
+            background: var(--accent-hover);
+            transform: translateY(-2px);
+        }
+        
+        .achievements-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        
+        .achievement-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+        
+        .achievement-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .achievement-icon {
+            font-size: 2.5em;
+            color: var(--accent-primary);
+            margin-bottom: 15px;
+        }
+        
+        .achievement-title {
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: var(--accent-secondary);
+        }
+        
+        .download-section {
+            text-align: center;
+            margin-top: 40px;
+        }
+        
+        .download-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+        
+        .download-btn {
+            background: var(--accent-primary);
+            color: white;
+            padding: 15px 30px;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .download-btn:hover {
+            background: var(--accent-hover);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+        }
+        
+        .download-btn.secondary {
+            background: var(--accent-secondary);
+        }
+        
+        .back-links {
+            text-align: center;
+            margin-top: 30px;
+        }
+        
+        .back-links a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            margin: 0 15px;
+            font-size: 1.1em;
+        }
+        
+        .back-links a:hover {
+            text-decoration: underline;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 15px;
+            }
+            
+            .resume-header {
+                padding: 30px 20px;
+            }
+            
+            .profile-info h1 {
+                font-size: 2em;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                gap: 15px;
+                align-items: center;
+            }
+            
+            .item-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .skills-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .download-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+        
+        /* Print styles */
+        @media print {
+            .navbar, .download-section, .back-links {
+                display: none !important;
+            }
+            
+            .container {
+                margin: 0;
+                max-width: none;
+            }
+            
+            .resume-section {
+                break-inside: avoid;
+                margin-bottom: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
     <nav class="navbar">
         <h1><a href="index.html">Devan Velji</a></h1>
     </nav>
+    
     <div class="container">
-        <div class="page-header">
-            <h1 class="page-title">Resume</h1>
+        <!-- Header Section -->
+        <div class="resume-header">
+            <div class="profile-info">
+                <h1>Devan Velji</h1>
+                <div class="profile-subtitle">Young Professional</div>
+                <div class="contact-info">
+                    <a href="mailto:devanvelji@gmail.com" class="contact-item">
+                        <i class="fas fa-envelope"></i>
+                        devanvelji@gmail.com
+                    </a>
+                    <a href="https://www.linkedin.com/in/devanvelji/" target="_blank" class="contact-item">
+                        <i class="fab fa-linkedin"></i>
+                        LinkedIn
+                    </a>
+                    <a href="https://devanvelji.com" class="contact-item">
+                        <i class="fas fa-globe"></i>
+                        devanvelji.com
+                    </a>
+                </div>
+            </div>
         </div>
-        <iframe class="resume-iframe" src="resume/resume.pdf" title="Resume PDF"></iframe>
-        <div class="back-link">
-            <a href="resume/resume.pdf" target="_blank">Download/View Resume (PDF)</a>
+        
+        <!-- Summary Section -->
+        <div class="resume-section">
+            <h3 class="section-title">
+                <i class="fas fa-user section-icon"></i>
+                Professional Summary
+            </h3>
+            <div class="item-description">
+                <p>Motivated young professional with a passion for technology, photography, and fitness. Currently pursuing my first triathlon while building expertise in digital innovation and creative problem-solving. Committed to continuous learning and personal development across multiple disciplines.</p>
+            </div>
         </div>
-        <div class="back-link">
-            <a href="index.html">← Back to Home</a>
+        
+        <!-- Experience Section -->
+        <div class="resume-section">
+            <h3 class="section-title">
+                <i class="fas fa-briefcase section-icon"></i>
+                Professional Experience
+            </h3>
+            
+            <div class="experience-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title">Young Professional</div>
+                        <div class="item-company">Professional Services</div>
+                    </div>
+                    <div class="item-date">Present</div>
+                </div>
+                <div class="item-description">
+                    <ul>
+                        <li>Developing expertise in modern web technologies and digital innovation</li>
+                        <li>Building professional portfolio showcasing photography and technical skills</li>
+                        <li>Maintaining active engagement in fitness and triathlon training</li>
+                        <li>Contributing to various projects with focus on user experience and design</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Education Section -->
+        <div class="resume-section">
+            <h3 class="section-title">
+                <i class="fas fa-graduation-cap section-icon"></i>
+                Education & Learning
+            </h3>
+            
+            <div class="education-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title">Continuous Learning</div>
+                        <div class="item-company">Self-Directed Education</div>
+                    </div>
+                    <div class="item-date">Ongoing</div>
+                </div>
+                <div class="item-description">
+                    <ul>
+                        <li>Web Development: HTML, CSS, JavaScript, Modern Frameworks</li>
+                        <li>Photography: Digital composition, EXIF data analysis, photo processing</li>
+                        <li>Fitness & Nutrition: Triathlon training, endurance sports methodology</li>
+                        <li>Analytics: Google Analytics, data-driven decision making</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Skills Section -->
+        <div class="resume-section">
+            <h3 class="section-title">
+                <i class="fas fa-tools section-icon"></i>
+                Skills & Technologies
+            </h3>
+            
+            <div class="skills-grid">
+                <div class="skill-category">
+                    <h4>Technical Skills</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">HTML/CSS</span>
+                        <span class="skill-tag">JavaScript</span>
+                        <span class="skill-tag">Web Analytics</span>
+                        <span class="skill-tag">Firebase</span>
+                        <span class="skill-tag">Git</span>
+                        <span class="skill-tag">SEO</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h4>Creative Skills</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Photography</span>
+                        <span class="skill-tag">Photo Editing</span>
+                        <span class="skill-tag">Digital Design</span>
+                        <span class="skill-tag">UI/UX Design</span>
+                        <span class="skill-tag">Content Creation</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h4>Personal Development</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Triathlon Training</span>
+                        <span class="skill-tag">Project Management</span>
+                        <span class="skill-tag">Time Management</span>
+                        <span class="skill-tag">Goal Setting</span>
+                        <span class="skill-tag">Continuous Learning</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h4>Tools & Platforms</h4>
+                    <div class="skill-tags">
+                        <span class="skill-tag">Strava</span>
+                        <span class="skill-tag">Google Analytics</span>
+                        <span class="skill-tag">Adobe Lightroom</span>
+                        <span class="skill-tag">VS Code</span>
+                        <span class="skill-tag">GitHub</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Projects Section -->
+        <div class="resume-section">
+            <h3 class="section-title">
+                <i class="fas fa-rocket section-icon"></i>
+                Featured Projects
+            </h3>
+            
+            <div class="project-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title">Personal Website & Portfolio</div>
+                        <div class="item-company">devanvelji.com</div>
+                    </div>
+                    <div class="item-date">2024 - Present</div>
+                </div>
+                <div class="item-description">
+                    <ul>
+                        <li>Built modern responsive website with interactive photo gallery and blog</li>
+                        <li>Implemented real-time analytics dashboard and advanced SEO optimization</li>
+                        <li>Created interactive map showing photo locations with GPS coordinates</li>
+                        <li>Integrated Strava API for fitness tracking and progress visualization</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="project-item">
+                <div class="item-header">
+                    <div>
+                        <div class="item-title">Photography Portfolio</div>
+                        <div class="item-company">Travel & Urban Photography</div>
+                    </div>
+                    <div class="item-date">2022 - Present</div>
+                </div>
+                <div class="item-description">
+                    <ul>
+                        <li>Curated collection of travel photography from Europe and US National Parks</li>
+                        <li>Implemented EXIF data analysis for technical photography insights</li>
+                        <li>Created dynamic filtering system for photo organization</li>
+                        <li>Optimized images for web performance and mobile viewing</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Achievements Section -->
+        <div class="resume-section">
+            <h3 class="section-title">
+                <i class="fas fa-trophy section-icon"></i>
+                Achievements & Goals
+            </h3>
+            
+            <div class="achievements-list">
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <div class="achievement-title">Photography Portfolio</div>
+                    <div>Built comprehensive travel photography collection with advanced web presentation</div>
+                </div>
+                
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-running"></i>
+                    </div>
+                    <div class="achievement-title">Triathlon Training</div>
+                    <div>Currently training for first triathlon competition in Summer 2025</div>
+                </div>
+                
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <div class="achievement-title">Web Development</div>
+                    <div>Self-taught modern web technologies and deployment practices</div>
+                </div>
+                
+                <div class="achievement-card">
+                    <div class="achievement-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="achievement-title">Analytics Implementation</div>
+                    <div>Built custom analytics dashboard with real-time data visualization</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Download Section -->
+        <div class="download-section">
+            <div class="download-buttons">
+                <a href="resume/resume.pdf" target="_blank" class="download-btn" onclick="trackDownload('resume', 'pdf')">
+                    <i class="fas fa-download"></i>
+                    Download PDF Resume
+                </a>
+                <button class="download-btn secondary" onclick="printResume()">
+                    <i class="fas fa-print"></i>
+                    Print Resume
+                </button>
+            </div>
+        </div>
+        
+        <div class="back-links">
+            <a href="gallery.html">← View Portfolio</a>
+            <a href="fitness.html">Fitness Journey</a>
+            <a href="index.html">Home →</a>
         </div>
     </div>
     
-    
+    <script>
+        // Track resume interactions
+        function trackDownload(fileName, fileType) {
+            if (typeof trackDownload !== 'undefined') {
+                trackDownload(fileName, fileType);
+            }
+        }
+        
+        function printResume() {
+            window.print();
+            if (typeof trackEvent !== 'undefined') {
+                trackEvent('resume_print', 'Resume', 'print_button');
+            }
+        }
+        
+        // Track page engagement
+        document.addEventListener('DOMContentLoaded', () => {
+            if (typeof trackEvent !== 'undefined') {
+                trackEvent('resume_viewed', 'Resume', 'page_load');
+            }
+            
+            // Track section views
+            const sections = document.querySelectorAll('.resume-section');
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const sectionTitle = entry.target.querySelector('.section-title').textContent.trim();
+                        if (typeof trackEvent !== 'undefined') {
+                            trackEvent('resume_section_viewed', 'Resume', sectionTitle);
+                        }
+                    }
+                });
+            }, { threshold: 0.5 });
+            
+            sections.forEach(section => observer.observe(section));
+            
+            // Track contact clicks
+            document.querySelectorAll('.contact-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    const contactType = e.currentTarget.href.includes('mailto') ? 'email' : 
+                                       e.currentTarget.href.includes('linkedin') ? 'linkedin' : 'website';
+                    if (typeof trackEvent !== 'undefined') {
+                        trackEvent('resume_contact_click', 'Resume', contactType);
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 </html>

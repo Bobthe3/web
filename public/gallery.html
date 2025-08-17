@@ -3,10 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Photo gallery featuring travel photography from Europe, National Parks, and urban landscapes by Devan Velji.">
-    <title>Photo Gallery - Devan Velji</title>
+    <meta name="description" content="Photo gallery featuring travel photography from Europe, National Parks, and urban landscapes by Devan Velji. Browse photos by location, camera, and date with detailed EXIF information.">
+    <meta name="keywords" content="photography, travel photos, Europe, National Parks, urban landscapes, EXIF data, camera settings, Devan Velji">
+    <meta name="author" content="Devan Velji">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://devanvelji.com/gallery.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://devanvelji.com/gallery.html">
+    <meta property="og:title" content="Photo Gallery - Devan Velji">
+    <meta property="og:description" content="Travel photography from Europe, National Parks, and urban landscapes with detailed camera settings and EXIF information.">
+    <meta property="og:image" content="https://devanvelji.com/images/gallery-preview.jpg">
+    <meta property="og:site_name" content="Devan Velji">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://devanvelji.com/gallery.html">
+    <meta property="twitter:title" content="Photo Gallery - Devan Velji">
+    <meta property="twitter:description" content="Travel photography from Europe, National Parks, and urban landscapes with detailed camera settings and EXIF information.">
+    <meta property="twitter:image" content="https://devanvelji.com/images/gallery-preview.jpg">
+    
+    <title>Photo Gallery - Travel & Urban Photography | Devan Velji</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="styles/theme.css">
+    
+    <!-- Analytics -->
+    <script src="scripts/analytics.js"></script>
     <style>
         body {
             margin: 0;
@@ -34,28 +57,14 @@
             margin: 0;
             font-size: 1.5em;
         }
-        .search-filter-container {
+        .filter-container {
             margin: 100px auto 20px auto;
-            max-width: 1200px;
+            max-width: 800px;
             width: 90vw;
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
-        }
-        .search-input {
-            padding: 12px 16px;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            background: var(--frosted-bg);
-            color: var(--text-color);
-            font-size: 1em;
-            min-width: 200px;
-        }
-        .search-input:focus {
-            outline: none;
-            border-color: var(--accent-primary);
-            box-shadow: 0 0 0 2px rgba(239, 78, 33, 0.2);
         }
         .filter-select {
             padding: 12px 16px;
@@ -64,6 +73,21 @@
             background: var(--frosted-bg);
             color: var(--text-color);
             font-size: 1em;
+            min-width: 150px;
+        }
+        .filter-button {
+            padding: 12px 20px;
+            border: 1px solid var(--accent-primary);
+            border-radius: 8px;
+            background: var(--accent-primary);
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .filter-button:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
         }
         .gallery-container {
             margin: 0 auto;
@@ -183,19 +207,43 @@
             to { opacity: 1; transform: scale(1); }
         }
     </style>
+    
+    <!-- Structured Data for Gallery -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ImageGallery",
+        "name": "Photo Gallery - Devan Velji",
+        "description": "Travel photography collection featuring Europe, National Parks, and urban landscapes",
+        "url": "https://devanvelji.com/gallery.html",
+        "author": {
+            "@type": "Person",
+            "name": "Devan Velji",
+            "url": "https://devanvelji.com"
+        },
+        "keywords": ["photography", "travel", "Europe", "National Parks", "urban landscapes"],
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://devanvelji.com/gallery.html"
+        }
+    }
+    </script>
 </head>
 <body>
     <nav class="navbar">
         <h1><a href="index.html">Devan Velji</a></h1>
     </nav>
-    <div class="search-filter-container">
-        <input type="text" class="search-input" id="searchInput" placeholder="Search photos...">
-        <select class="filter-select" id="filterSelect">
-            <option value="">All Photos</option>
-            <option value="Europe">Europe</option>
-            <option value="SF">San Francisco</option>
-            <option value="National Parks">National Parks</option>
+    <div class="filter-container">
+        <select class="filter-select" id="tagFilter">
+            <option value="">All Tags</option>
         </select>
+        <select class="filter-select" id="cameraFilter">
+            <option value="">All Cameras</option>
+        </select>
+        <select class="filter-select" id="yearFilter">
+            <option value="">All Years</option>
+        </select>
+        <button class="filter-button" id="clearFilters">Clear Filters</button>
     </div>
     <div class="gallery-container" id="galleryContainer">
         <!-- Images will be inserted here by JS -->
@@ -221,8 +269,10 @@
 
     let allImages = [];
     let filteredImages = [];
-    const searchInput = document.getElementById('searchInput');
-    const filterSelect = document.getElementById('filterSelect');
+    const tagFilter = document.getElementById('tagFilter');
+    const cameraFilter = document.getElementById('cameraFilter');
+    const yearFilter = document.getElementById('yearFilter');
+    const clearFiltersBtn = document.getElementById('clearFilters');
 
     // Fetch images.json and build gallery
     fetch('images.json')
@@ -231,7 +281,9 @@
             allImages = data;
             filteredImages = [...allImages];
             images = filteredImages;
+            populateFilterOptions();
             renderGallery();
+            setupEventListeners();
         });
 
     function renderGallery() {
@@ -254,22 +306,104 @@
         images = filteredImages;
     }
 
+    // Populate filter dropdown options
+    function populateFilterOptions() {
+        const tags = new Set();
+        const cameras = new Set();
+        const years = new Set();
+        
+        allImages.forEach(img => {
+            if (img.tags) {
+                img.tags.forEach(tag => tags.add(tag));
+            }
+            if (img.deviceModel) {
+                cameras.add(img.deviceModel);
+            }
+            if (img.dateTaken) {
+                const year = getYearFromDate(img.dateTaken);
+                if (year) years.add(year);
+            }
+        });
+        
+        // Populate tag filter
+        [...tags].sort().forEach(tag => {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            tagFilter.appendChild(option);
+        });
+        
+        // Populate camera filter
+        [...cameras].sort().forEach(camera => {
+            const option = document.createElement('option');
+            option.value = camera;
+            option.textContent = camera;
+            cameraFilter.appendChild(option);
+        });
+        
+        // Populate year filter
+        [...years].sort((a, b) => b - a).forEach(year => {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            yearFilter.appendChild(option);
+        });
+    }
+    
+    // Simplified filtering function (no search)
     function filterImages() {
-        const searchTerm = searchInput.value.toLowerCase();
-        const selectedTag = filterSelect.value;
+        const selectedTag = tagFilter.value;
+        const selectedCamera = cameraFilter.value;
+        const selectedYear = yearFilter.value;
         
         filteredImages = allImages.filter(img => {
-            const matchesSearch = img.title.toLowerCase().includes(searchTerm);
-            const matchesTag = !selectedTag || img.tags.includes(selectedTag);
-            return matchesSearch && matchesTag;
+            const matchesTag = !selectedTag || (img.tags && img.tags.includes(selectedTag));
+            const matchesCamera = !selectedCamera || img.deviceModel === selectedCamera;
+            const matchesYear = !selectedYear || getYearFromDate(img.dateTaken) == selectedYear;
+            
+            return matchesTag && matchesCamera && matchesYear;
         });
         
         renderGallery();
+        
+        // Track filtering analytics
+        if (typeof trackEvent !== 'undefined') {
+            trackEvent('filter_applied', 'Gallery', `${filteredImages.length} results`);
+        }
+    }
+    
+    // Clear all filters
+    function clearFilters() {
+        tagFilter.value = '';
+        cameraFilter.value = '';
+        yearFilter.value = '';
+        filteredImages = [...allImages];
+        renderGallery();
+        
+        if (typeof trackEvent !== 'undefined') {
+            trackEvent('filters_cleared', 'Gallery');
+        }
+    }
+    
+    // Setup event listeners
+    function setupEventListeners() {
+        tagFilter.addEventListener('change', filterImages);
+        cameraFilter.addEventListener('change', filterImages);
+        yearFilter.addEventListener('change', filterImages);
+        clearFiltersBtn.addEventListener('click', clearFilters);
     }
 
-    searchInput.addEventListener('input', filterImages);
-    filterSelect.addEventListener('change', filterImages);
-
+    // Helper function to extract year from date object
+    function getYearFromDate(dateObj) {
+        if (!dateObj) return null;
+        if (typeof dateObj === 'string') {
+            return new Date(dateObj).getFullYear();
+        }
+        if (dateObj.year) return dateObj.year;
+        if (dateObj._ctor === 'ExifDateTime') return dateObj.year;
+        return null;
+    }
+    
     function showModal(idx) {
         currentIndex = idx;
         const img = images[idx];
@@ -283,6 +417,11 @@
             <div><b>Date:</b> ${formatDate(img.dateTaken)}</div>
             <div><b>Tags:</b> ${(img.tags || []).join(', ')}</div>
         `;
+        
+        // Track photo view
+        if (typeof trackPhotoView !== 'undefined') {
+            trackPhotoView(img.title, 'Gallery');
+        }
         modal.classList.add('show');
         document.body.style.overflow = 'hidden';
     }

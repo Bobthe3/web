@@ -44,28 +44,6 @@
     ]
   },
   {
-    "fullImage": "images/Benny.jpeg",
-    "preview": "previews/preview_Benny.jpeg",
-    "title": "Benny",
-    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
-    "fNumber": "f/5.9",
-    "exposureTime": "1/250s",
-    "dateTaken": {
-      "_ctor": "ExifDateTime",
-      "year": 2023,
-      "month": 6,
-      "day": 25,
-      "hour": 12,
-      "minute": 7,
-      "second": 20,
-      "rawValue": "2023:06:25 12:07:20",
-      "inferredZone": false
-    },
-    "tags": [
-      "Europe"
-    ]
-  },
-  {
     "fullImage": "images/Big Ben.jpeg",
     "preview": "previews/preview_Big Ben.jpeg",
     "title": "Big Ben",

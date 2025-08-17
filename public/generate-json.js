@@ -188,10 +188,36 @@ function generatePostHtml(post) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="${post.excerpt}">
+    <meta name="keywords" content="${post.tags ? post.tags.join(', ') : ''}">
+    <meta name="author" content="Devan Velji">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://devanvelji.com/blog/generated/${post.slug}.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://devanvelji.com/blog/generated/${post.slug}.html">
+    <meta property="og:title" content="${post.title}">
+    <meta property="og:description" content="${post.excerpt}">
+    <meta property="og:image" content="https://devanvelji.com/images/blog-og-image.jpg">
+    <meta property="og:site_name" content="Devan Velji">
+    <meta property="article:author" content="Devan Velji">
+    <meta property="article:published_time" content="${post.date}T00:00:00Z">
+    ${post.tags ? post.tags.map(tag => `<meta property="article:tag" content="${tag}">`).join('\n    ') : ''}
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://devanvelji.com/blog/generated/${post.slug}.html">
+    <meta property="twitter:title" content="${post.title}">
+    <meta property="twitter:description" content="${post.excerpt}">
+    <meta property="twitter:image" content="https://devanvelji.com/images/blog-og-image.jpg">
+    
     <title>${post.title} - Devan Velji</title>
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Analytics -->
+    <script src="../scripts/analytics.js"></script>
     <style>
         body {
             margin: 0;
@@ -283,6 +309,39 @@ function generatePostHtml(post) {
             }
         };
     </script>
+    
+    <!-- Structured Data for Blog Post -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "${post.title}",
+        "description": "${post.excerpt}",
+        "image": "https://devanvelji.com/images/blog-og-image.jpg",
+        "author": {
+            "@type": "Person",
+            "name": "Devan Velji",
+            "url": "https://devanvelji.com"
+        },
+        "publisher": {
+            "@type": "Person",
+            "name": "Devan Velji",
+            "url": "https://devanvelji.com"
+        },
+        "datePublished": "${post.date}T00:00:00Z",
+        "dateModified": "${post.date}T00:00:00Z",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://devanvelji.com/blog/generated/${post.slug}.html"
+        },
+        "keywords": "${post.tags ? post.tags.join(', ') : ''}",
+        "wordCount": "${post.content.split(' ').length}",
+        "url": "https://devanvelji.com/blog/generated/${post.slug}.html"
+    }
+    </script>
+    
+    <!-- Blog Enhancements -->
+    <script src="../scripts/blog-enhancements.js"></script>
 </head>
 <body>
     <nav class="navbar">

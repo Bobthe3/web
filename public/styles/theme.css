@@ -26,7 +26,7 @@
   --accent-secondary: var(--nord9);
   --accent-hover: #d08770; /* nord12 for hover effects */
   --border-color: rgba(76, 86, 106, 0.4); /* nord3 @ 40% */
-  --shadow-color: rgba(0,0,0,0.2);
+  --shadow-color: rgba(0,0,0,0.35);
   --card-bg: rgba(255,255,255,0.03);
   --hover-bg: rgba(208, 135, 112, 0.12); /* nord12 @ 12% */
   
@@ -79,9 +79,9 @@ body::before {
 .card {
   background: var(--card-bg);
   border: 1px solid var(--border-color);
-  box-shadow: 0 4px 24px 0 var(--shadow-color);
+  box-shadow: 0 12px 32px 0 var(--shadow-color);
   border-radius: 12px;
-  padding: 24px;
+  padding: 28px;
 }
 
 /* Universal styles */
@@ -129,6 +129,8 @@ body {
 .container {
   margin: 80px auto;
   text-align: center;
+  max-width: 1000px;
+  padding: 0 24px;
 }
 
 /* Project/contact page container */
@@ -145,6 +147,10 @@ body {
   text-align: center;
   position: relative;
   z-index: 2;
+  max-width: 1000px;
+  margin-left: auto;
+  margin-right: auto;
+  padding: 0 24px;
 }
 
 .greeting {
@@ -266,36 +272,195 @@ a:hover {
   color: var(--accent-hover); 
 }
 
-/* Responsive design */
-@media (min-width: 600px) {
-  .social-links {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-  }
+/* Mobile-first responsive design */
+/* Base styles are mobile-first, then enhanced for larger screens */
 
+/* Mobile optimizations (up to 768px) */
+@media (max-width: 768px) {
+  /* Typography scaling for mobile */
+  html {
+    font-size: 14px;
+  }
+  
+  .hero-name { 
+    font-size: 2em;
+    line-height: 1.2;
+  }
+  
+  .greeting {
+    font-size: 1.1em;
+  }
+  
+  /* Navigation improvements */
+  .navbar {
+    padding: 8px 0;
+  }
+  
+  .navbar h1 {
+    font-size: 1.3em;
+  }
+  
+  /* Container padding */
+  .container {
+    padding: 0 15px;
+  }
+  
+  /* Card spacing */
+  .card {
+    margin: 15px auto;
+    padding: 20px 16px;
+  }
+  
+  .frosted-glass {
+    padding: 20px 16px;
+    margin: 0 auto 20px auto;
+  }
+  
+  /* Social links mobile layout */
+  .social-links {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+    margin-top: 15px;
+    justify-items: center;
+  }
+  
   .social-links a {
+    font-size: 1.8em;
+    padding: 12px;
     display: inline-block;
     margin: 0;
   }
-}
-
-@media (max-width: 600px) {
-  .hero-name { 
-    font-size: 2em; 
-  }
   
+  /* Navigation links mobile */
   .main-nav {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
   }
   
   .nav-link {
-    font-size: 1em;
-    padding: 6px 10px;
+    padding: 12px 8px;
+    font-size: 0.95em;
+    text-align: center;
+  }
+  
+  /* Touch targets */
+  button, .nav-link, .social-links a, .gallery-item {
+    min-height: 44px;
+    min-width: 44px;
   }
   
   .skills-grid {
     grid-template-columns: 1fr;
+  }
+  
+  .projects-grid {
+    grid-template-columns: 1fr;
+    gap: 20px;
+  }
+}
+
+/* Small mobile devices (up to 480px) */
+@media (max-width: 480px) {
+  html {
+    font-size: 13px;
+  }
+  
+  .hero-name {
+    font-size: 1.8em;
+  }
+  
+  .container {
+    padding: 0 10px;
+  }
+  
+  .card {
+    margin: 10px auto;
+    padding: 16px 12px;
+  }
+  
+  .social-links {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 10px;
+  }
+  
+  .main-nav {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablet styles (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .container {
+    max-width: 720px;
+  }
+  
+  .projects-grid {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  }
+}
+
+/* Desktop styles (1025px and up) */
+@media (min-width: 1025px) {
+  html {
+    font-size: 16px;
+  }
+  
+  .social-links {
+    display: flex;
+    justify-content: center;
+    gap: 30px;
+    margin-top: 20px;
+  }
+  
+  .social-links a {
+    display: inline-block;
+    margin: 0;
+  }
+  
+  .main-nav {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  /* Hover effects for desktop only */
+  .nav-link:hover, .social-links a:hover {
+    transform: translateY(-2px);
+  }
+}
+
+/* Large desktop (1440px and up) */
+@media (min-width: 1440px) {
+  .container {
+    max-width: 1200px;
+  }
+}
+
+/* High-DPI display optimizations */
+@media (-webkit-min-device-pixel-ratio: 2), (min-resolution: 192dpi) {
+  .frosted-glass {
+    backdrop-filter: blur(16px) saturate(1.8);
+    -webkit-backdrop-filter: blur(16px) saturate(1.8);
+  }
+}
+
+/* Print styles */
+@media print {
+  .navbar, .social-links, .modal, .search-filter-container {
+    display: none !important;
+  }
+  
+  body {
+    background: white !important;
+    color: black !important;
+  }
+  
+  .frosted-glass, .card {
+    background: transparent !important;
+    box-shadow: none !important;
+    border: 1px solid #ccc !important;
   }
 }
 
