@@ -28,14 +28,30 @@ class PhotoMap {
     
     async init() {
         try {
+            console.log('Initializing PhotoMap...');
             await this.loadPhotos();
+            console.log('Photos loaded:', this.photos.length);
             this.initMap();
+            console.log('Map initialized');
             this.addPhotosToMap();
+            console.log('Photos added to map');
             this.setupControls();
             this.updateStats();
             this.trackMapUsage();
+            console.log('PhotoMap initialization complete');
         } catch (error) {
             console.error('Error initializing photo map:', error);
+            // Show user-friendly error
+            const mapContainer = document.getElementById('photo-map');
+            if (mapContainer) {
+                mapContainer.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 400px; color: var(--text-color); text-align: center; flex-direction: column;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3em; margin-bottom: 20px; color: var(--accent-secondary);"></i>
+                        <h3>Map temporarily unavailable</h3>
+                        <p>Please check back later or visit the <a href="gallery.html" style="color: var(--accent-primary);">gallery</a> to view photos.</p>
+                    </div>
+                `;
+            }
         }
     }
     
