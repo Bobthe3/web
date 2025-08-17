@@ -88,11 +88,6 @@
     <nav class="navbar">
         <h1>Devan Velji</h1>
     </nav>
-    <div class="hero card">
-        <div class="greeting" id="greeting"></div>
-        <span class="hero-name" id="heroName">Devan Velji</span>
-    </div>
-
     <div class="container">
         <div class="card">
             <nav class="main-nav">
@@ -125,25 +120,9 @@
                 </a>
             </div>
         </div>
-        
-        <section class="card about-section" id="about">
-            <h2>About Me</h2>
-            <p>
-                Young Professional
-            </p>
-        </section>
     </div>
 
     <script>
-    // Personalized greeting
-    function getGreeting() {
-        const hour = new Date().getHours();
-        if (hour < 5) return 'Good night 🌙';
-        if (hour < 12) return 'Good morning ☀️';
-        if (hour < 18) return 'Good afternoon 🌤️';
-        return 'Good evening 🌇';
-    }
-    document.getElementById('greeting').textContent = getGreeting() + ", I’m";
 
     // Animate social icons in with stagger
     window.addEventListener('DOMContentLoaded', () => {
