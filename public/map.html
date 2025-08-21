@@ -150,6 +150,45 @@
             color: white;
         }
         
+        #randomLocationBtn {
+            background: linear-gradient(135deg, var(--accent-primary), var(--accent-secondary));
+            color: white;
+            font-weight: bold;
+            position: relative;
+            overflow: hidden;
+            transform: translateZ(0);
+        }
+        
+        #randomLocationBtn:hover {
+            background: linear-gradient(135deg, var(--accent-secondary), var(--accent-primary));
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(136, 192, 208, 0.3);
+        }
+        
+        #randomLocationBtn:active {
+            transform: translateY(0);
+        }
+        
+        #randomLocationBtn i {
+            margin-right: 8px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        #randomLocationBtn.spinning i {
+            animation: spin 0.8s ease-in-out;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg) scale(1); }
+            50% { transform: rotate(180deg) scale(1.2); }
+            100% { transform: rotate(360deg) scale(1); }
+        }
+        
         .photo-popup {
             text-align: center;
             min-width: 200px;
@@ -276,6 +315,11 @@
         </div>
         
         <div class="map-container">
+            <div class="map-controls">
+                <button class="map-control-btn" id="randomLocationBtn">
+                    <i class="fas fa-dice"></i> Random Photo
+                </button>
+            </div>
             <div id="photo-map"></div>
         </div>
     </div>

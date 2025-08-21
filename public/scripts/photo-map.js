@@ -171,6 +171,11 @@ class PhotoMap {
             .leaflet-popup-tip {
                 background: rgba(59, 66, 82, 0.95);
             }
+            @keyframes bounce {
+                0%, 20%, 60%, 100% { transform: translateY(0) scale(1); }
+                40% { transform: translateY(-20px) scale(1.1); }
+                80% { transform: translateY(-10px) scale(1.05); }
+            }
         `;
         document.head.appendChild(style);
     }
@@ -222,11 +227,13 @@ class PhotoMap {
         const europeBtn = document.getElementById('europeBtn');
         const usaBtn = document.getElementById('usaBtn');
         const nationalParksBtn = document.getElementById('nationalParksBtn');
+        const randomLocationBtn = document.getElementById('randomLocationBtn');
         
-        showAllBtn.addEventListener('click', () => this.filterPhotos('all'));
-        europeBtn.addEventListener('click', () => this.filterPhotos('europe'));
-        usaBtn.addEventListener('click', () => this.filterPhotos('usa'));
-        nationalParksBtn.addEventListener('click', () => this.filterPhotos('nationalparks'));
+        if (showAllBtn) showAllBtn.addEventListener('click', () => this.filterPhotos('all'));
+        if (europeBtn) europeBtn.addEventListener('click', () => this.filterPhotos('europe'));
+        if (usaBtn) usaBtn.addEventListener('click', () => this.filterPhotos('usa'));
+        if (nationalParksBtn) nationalParksBtn.addEventListener('click', () => this.filterPhotos('nationalparks'));
+        if (randomLocationBtn) randomLocationBtn.addEventListener('click', () => this.goToRandomLocation());
     }
     
     filterPhotos(category) {
@@ -333,6 +340,60 @@ class PhotoMap {
         if (dateObj.year) return dateObj.year;
         if (dateObj._ctor === 'ExifDateTime') return dateObj.year;
         return null;
+    }
+    
+    goToRandomLocation() {
+        if (this.photos.length === 0) return;
+        
+        // Get currently visible photos based on filter
+        let visiblePhotos = this.photos;
+        if (this.currentFilter !== 'all') {
+            visiblePhotos = this.photos.filter(photo => photo.category === this.currentFilter);
+        }
+        
+        if (visiblePhotos.length === 0) return;
+        
+        // Select random photo
+        const randomPhoto = visiblePhotos[Math.floor(Math.random() * visiblePhotos.length)];
+        const [lat, lng] = randomPhoto.coordinates;
+        
+        // Add spinning animation to button
+        const randomBtn = document.getElementById('randomLocationBtn');
+        if (randomBtn) {
+            randomBtn.classList.add('spinning');
+            setTimeout(() => randomBtn.classList.remove('spinning'), 800);
+        }
+        
+        // Fly to location with smooth animation
+        this.map.flyTo([lat, lng], 15, {
+            animate: true,
+            duration: 2.0,
+            easeLinearity: 0.25
+        });
+        
+        // Find and open the corresponding marker popup after animation
+        setTimeout(() => {
+            const targetMarker = this.markers.find(marker => 
+                marker.photoData.title === randomPhoto.title
+            );
+            if (targetMarker && this.markerGroup.hasLayer(targetMarker)) {
+                targetMarker.openPopup();
+                
+                // Add a subtle bounce effect to the marker
+                const markerElement = targetMarker.getElement();
+                if (markerElement) {
+                    markerElement.style.animation = 'bounce 0.6s ease-out';
+                    setTimeout(() => {
+                        markerElement.style.animation = '';
+                    }, 600);
+                }
+            }
+        }, 2100);
+        
+        // Track random location usage
+        if (typeof trackEvent !== 'undefined') {
+            trackEvent('random_location', 'PhotoMap', randomPhoto.category, 1);
+        }
     }
     
     trackMapUsage() {
