@@ -64,3 +64,14 @@ node_modules/
 
 # dotenv environment variables file
 .env
+
+# macOS system files
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Claude local settings
+.claude/settings.local.json
+
+# Node modules (ensure all instances are ignored)
+**/node_modules/
