@@ -3,19 +3,18 @@
   <title>Devan Velji - Blog</title>
   <link href="https://devanvelji.com/atom.xml" rel="self" />
   <link href="https://devanvelji.com/blog/" />
-  <updated>2025-01-27T00:00:00Z</updated>
+  <updated>2025-11-22T20:04:12.694Z</updated>
   <id>https://devanvelji.com/</id>
   <author>
     <name>Devan Velji</name>
     <email>devanvelji@gmail.com</email>
   </author>
+
   <entry>
-    <title>Sample Post</title>
+    <title>This is a test</title>
     <link href="https://devanvelji.com/blog/generated/sample-post.html" />
     <id>https://devanvelji.com/blog/generated/sample-post.html</id>
-    <updated>2025-01-27T00:00:00Z</updated>
-    <summary>Sample blog post.</summary>
+    <updated>2025-07-22T00:00:00.000Z</updated>
+    <summary>Test Blog with Mathematical Equations Testing Mathematical Concepts Here&apos;s a simple equation that demonstrates the relationship between energy and mass: And here&apos;s a more complex integral that appears...</summary>
   </entry>
 </feed>
-
-

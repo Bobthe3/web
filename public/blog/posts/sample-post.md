@@ -1,12 +1,12 @@
 ---
-title: "This is a test"
+title: "Markdown Test Blog"
 date: "2025-07-22"
 tags: ["mathematics", "test"]
 ---
 
 # Test Blog with Mathematical Equations
 
-Testing 
+Testing the markdown parser with mathematical equations.
 
 ## Mathematical Concepts
 
@@ -39,6 +39,23 @@ The fundamental theorem of calculus states:
 
 $$\frac{d}{dx} \int_a^x f(t) dt = f(x)$$
 
+### Limits
+
+The definition of a limit is:
+
+$$\lim_{x \to a} f(x) = L$$
+
+### Derivatives
+
+The definition of a derivative is:
+
+$$\frac{d}{dx} f(x) = \lim_{h \to 0} \frac{f(x+h) - f(x)}{h}$$
+
+### Integration by Parts
+
+Integration by parts is a powerful technique for integrating products of functions:
+
+$$\int u dv = uv - \int v du$$
 
 ### Series and Summations
 
@@ -50,4 +67,5 @@ $$e^x = \sum_{n=0}^{\infty} \frac{x^n}{n!} = 1 + x + \frac{x^2}{2!} + \frac{x^3}
 
 ## Conclusion
 
-This was a test 
+This was a test of the markdown parser.
+Thank you for reading.
