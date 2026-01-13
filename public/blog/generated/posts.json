@@ -1,5 +1,18 @@
 [
   {
+    "slug": "bouncing-ball",
+    "title": "Bouncing Ball",
+    "date": "2026-01-12",
+    "tags": [
+      "rive",
+      "animation"
+    ],
+    "content": "",
+    "excerpt": "A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.",
+    "readingTime": 1,
+    "type": "rive"
+  },
+  {
     "slug": "sample-post",
     "title": "This is a test",
     "date": "2025-07-22",

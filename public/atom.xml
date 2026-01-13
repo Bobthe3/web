@@ -3,12 +3,20 @@
   <title>Devan Velji - Blog</title>
   <link href="https://devanvelji.com/atom.xml" rel="self" />
   <link href="https://devanvelji.com/blog/" />
-  <updated>2025-11-22T20:04:12.694Z</updated>
+  <updated>2026-01-12T00:00:00.000Z</updated>
   <id>https://devanvelji.com/</id>
   <author>
     <name>Devan Velji</name>
     <email>devanvelji@gmail.com</email>
   </author>
+
+  <entry>
+    <title>Bouncing Ball</title>
+    <link href="https://devanvelji.com/blog/generated/bouncing-ball.html" />
+    <id>https://devanvelji.com/blog/generated/bouncing-ball.html</id>
+    <updated>2026-01-12T00:00:00.000Z</updated>
+    <summary>A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.</summary>
+  </entry>
 
   <entry>
     <title>This is a test</title>

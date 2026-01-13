@@ -35,11 +35,12 @@ public/
 ├── index.html              # Main landing page
 ├── gallery.html            # Photo gallery with modal viewing
 ├── fitness.html            # Fitness/wellness content
-├── resume.html             # Resume display page
+├── resume.html             # Resume display page (minimal design)
 ├── blog/
-│   ├── index.html          # Blog listing (generated)
+│   ├── index.html          # Blog listing with search/filters
 │   ├── posts/              # Markdown source files
-│   └── generated/          # Generated HTML posts
+│   ├── generated/          # Generated HTML posts
+│   └── rive/               # Rive animation files (.riv)
 ├── images/                 # Full-size photos
 ├── previews/               # Auto-generated thumbnails
 ├── scripts/
@@ -49,6 +50,8 @@ public/
 ├── styles/
 │   ├── theme.css           # Nord-based theme variables
 │   └── styles.css          # Main styles
+├── rss.xml                 # RSS feed
+├── atom.xml                # Atom feed
 ├── generate-json.js        # Image processing and blog generation
 └── package.json            # Dependencies and build scripts
 ```
@@ -65,8 +68,15 @@ public/
 ### Blog System
 - Markdown files in `blog/posts/` with frontmatter support
 - Auto-generates HTML with MathJax support for equations
-- Creates RSS and Atom feeds
-- Supports tags and excerpts
+- Creates RSS and Atom feeds (rss.xml, atom.xml)
+- Supports tags, search, and filtering
+- RSS subscription link visible on blog index
+
+### Rive Animations
+- Rive animation files (.riv) stored in `blog/rive/`
+- Static HTML pages in `blog/generated/` display animations
+- Uses @rive-app/canvas runtime from CDN
+- CSP configured to allow WebAssembly execution (`wasm-unsafe-eval`)
 
 ### Theme System
 - Nord color palette defined in CSS custom properties
@@ -140,6 +150,12 @@ Post content here...
 
 Images are automatically processed when placed in `images/` directory. Tags can be manually assigned in `images.json`.
 
+### Resume Page
+- Minimal single-card design with frosted glass styling
+- Shows degree (B.S. Mathematics & Economics) and minor (Marine Sciences)
+- Quick experience summary: position, company, dates
+- PDF download button links to `resume/resume.pdf`
+
 ## Recent Enhancements
 
 The site now includes:
@@ -148,3 +164,5 @@ The site now includes:
 3. **SEO Optimization**: Comprehensive meta tags, structured data, and social media integration
 4. **Analytics Integration**: User behavior tracking and performance monitoring
 5. **Mobile-First Design**: Responsive layouts optimized for all device sizes
+6. **Rive Animations**: Support for interactive Rive animations in blog posts
+7. **RSS/Atom Feeds**: Blog subscription via RSS and Atom feeds

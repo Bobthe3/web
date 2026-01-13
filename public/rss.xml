@@ -6,7 +6,15 @@
     <link>https://devanvelji.com/blog/</link>
     <atom:link href="https://devanvelji.com/rss.xml" rel="self" type="application/rss+xml" />
     <language>en-us</language>
-    <lastBuildDate>Sat, 22 Nov 2025 20:04:12 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 12 Jan 2026 00:00:00 GMT</lastBuildDate>
+
+    <item>
+      <title>Bouncing Ball</title>
+      <link>https://devanvelji.com/blog/generated/bouncing-ball.html</link>
+      <guid>https://devanvelji.com/blog/generated/bouncing-ball.html</guid>
+      <pubDate>Sun, 12 Jan 2026 00:00:00 GMT</pubDate>
+      <description>A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.</description>
+    </item>
 
     <item>
       <title>This is a test</title>

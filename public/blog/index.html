@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="description" content="Blog posts by Devan Velji covering technology, photography, fitness, and more.">
     <title>Blog - Devan Velji</title>
+    <link rel="alternate" type="application/rss+xml" title="Devan Velji - Blog RSS" href="../rss.xml">
+    <link rel="alternate" type="application/atom+xml" title="Devan Velji - Blog Atom" href="../atom.xml">
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -216,12 +218,23 @@
             <input type="text" id="searchBox" class="search-box" placeholder="🔍 Search posts by title, content, or tags...">
             <div class="tag-filters">
                 <button class="clear-filters" id="clearFilters">Clear Filters</button>
-                
+                <button class="tag-filter" data-tag="animation">animation</button>
             </div>
         </div>
 
         <div id="postsContainer">
-            
+
+        <div class="frosted-glass post-preview" data-tags="animation" data-title="bouncing ball" data-excerpt="a simple bouncing ball animation created with rive. an experiment with rive animation tools and state machines.">
+            <h2><a href="generated/bouncing-ball.html" style="color: var(--accent-primary); text-decoration: none; font-size: 1.75rem; font-weight: 600;">Bouncing Ball</a></h2>
+            <div class="post-meta">
+                <i class="fas fa-calendar"></i> 2026-01-12
+                <span style="margin-left: 20px;"><i class="fas fa-clock"></i> 1 min read</span>
+                <span style="margin-left: 20px;"><i class="fas fa-tags"></i> animation</span>
+            </div>
+            <p style="color: var(--text-color); line-height: 1.6; margin-bottom: 16px;">A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.</p>
+            <a href="generated/bouncing-ball.html" style="color: var(--accent-primary); font-weight: 500;">View animation →</a>
+        </div>
+
         <div class="frosted-glass post-preview" data-tags="" data-title="this is a test" data-excerpt="test blog with mathematical equations testing mathematical concepts here's a simple equation that demonstrates the relationship between energy and mass: and here's a more complex integral that appears...">
             <h2><a href="generated/sample-post.html" style="color: var(--accent-primary); text-decoration: none; font-size: 1.75rem; font-weight: 600;">This is a test</a></h2>
             <div class="post-meta">
@@ -242,6 +255,8 @@
 
         <div style="text-align: center; margin-top: 30px;">
             <a href="../index.html" class="back-link">← Back to Home</a>
+            <span style="margin: 0 15px; color: var(--accent-secondary);">|</span>
+            <a href="../rss.xml" class="back-link" title="Subscribe via RSS"><i class="fas fa-rss"></i> RSS</a>
         </div>
     </div>
 

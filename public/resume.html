@@ -3,384 +3,181 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Professional resume and career information for Devan Velji - Young Professional with expertise in technology, photography, and fitness.">
-    <meta name="keywords" content="resume, CV, career, professional, Devan Velji, young professional, technology, skills">
-    <meta name="author" content="Devan Velji">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://devanvelji.com/resume.html">
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://devanvelji.com/resume.html">
-    <meta property="og:title" content="Resume - Devan Velji">
-    <meta property="og:description" content="Professional resume and career information for Devan Velji - Young Professional.">
-    <meta property="og:image" content="https://devanvelji.com/images/resume-preview.jpg">
-    <meta property="og:site_name" content="Devan Velji">
-    
-    <!-- Twitter -->
-    <meta property="twitter:card" content="summary_large_image">
-    <meta property="twitter:url" content="https://devanvelji.com/resume.html">
-    <meta property="twitter:title" content="Resume - Devan Velji">
-    <meta property="twitter:description" content="Professional resume and career information for Devan Velji - Young Professional.">
-    <meta property="twitter:image" content="https://devanvelji.com/images/resume-preview.jpg">
-    
-    <title>Resume - Professional Experience | Devan Velji</title>
+    <meta name="description" content="Resume for Devan Velji - Mathematics & Economics at UC San Diego.">
+    <title>Resume - Devan Velji</title>
     <link rel="icon" type="image/x-icon" href="favicon.ico">
     <link rel="stylesheet" href="styles/theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <!-- Analytics -->
-    <script src="scripts/analytics.js"></script>
-    
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
             min-height: 100vh;
-            line-height: 1.6;
         }
-        
+
         .navbar {
             background-color: var(--navbar-bg);
-            padding: 10px 0px;
-            color: var(--text-color);
+            padding: 10px 0;
             text-align: center;
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
         }
-        
+
         .navbar h1 {
             margin: 0;
             font-size: 1.5em;
         }
-        
+
         .navbar a {
             color: var(--text-color);
             text-decoration: none;
         }
-        
-        .navbar a:hover {
-            color: var(--accent-primary);
-        }
-        
+
         .container {
-            margin: 80px auto 30px auto;
+            margin: 100px auto 50px auto;
             max-width: 1000px;
             padding: 0 20px;
         }
-        
-        .resume-header {
+
+        .frosted-glass {
             background: var(--frosted-bg);
             border-radius: 18px;
-            padding: 40px 30px;
+            box-shadow: 0 4px 32px 0 var(--shadow-color);
+            backdrop-filter: blur(12px) saturate(1.5);
+            -webkit-backdrop-filter: blur(12px) saturate(1.5);
+            padding: 40px;
             margin-bottom: 30px;
+        }
+
+        .header {
             text-align: center;
-            box-shadow: 0 4px 32px 0 var(--shadow-color);
-            backdrop-filter: blur(12px) saturate(1.5);
-            -webkit-backdrop-filter: blur(12px) saturate(1.5);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .resume-header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary), var(--accent-primary));
-        }
-        
-        .profile-info h1 {
-            color: var(--accent-primary);
-            margin-bottom: 10px;
-            font-size: 2.5em;
-        }
-        
-        .profile-subtitle {
-            color: var(--accent-secondary);
-            font-size: 1.3em;
-            margin-bottom: 20px;
-        }
-        
-        .contact-info {
-            display: flex;
-            justify-content: center;
-            gap: 30px;
-            flex-wrap: wrap;
-            margin-top: 20px;
-        }
-        
-        .contact-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            color: var(--text-color);
-            text-decoration: none;
-            transition: color 0.3s ease;
-        }
-        
-        .contact-item:hover {
-            color: var(--accent-primary);
-        }
-        
-        .resume-section {
-            background: var(--frosted-bg);
-            border-radius: 18px;
-            padding: 30px;
-            margin-bottom: 25px;
-            box-shadow: 0 4px 32px 0 var(--shadow-color);
-            backdrop-filter: blur(12px) saturate(1.5);
-            -webkit-backdrop-filter: blur(12px) saturate(1.5);
-            border: 1px solid var(--border-color);
-        }
-        
-        .section-title {
-            color: var(--accent-primary);
-            font-size: 1.8em;
-            margin-bottom: 25px;
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-        
-        .section-icon {
-            font-size: 1.2em;
-        }
-        
-        .experience-item, .education-item, .project-item {
-            margin-bottom: 25px;
-            padding-bottom: 20px;
+            margin-bottom: 32px;
+            padding-bottom: 24px;
             border-bottom: 1px solid var(--border-color);
         }
-        
-        .experience-item:last-child,
-        .education-item:last-child,
-        .project-item:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-        }
-        
-        .item-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 15px;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .item-title {
-            font-size: 1.3em;
-            font-weight: bold;
+
+        .header h1 {
             color: var(--accent-primary);
-            margin-bottom: 5px;
+            margin: 0 0 8px 0;
+            font-size: 2.2em;
         }
-        
-        .item-company {
+
+        .header .subtitle {
+            color: var(--accent-secondary);
             font-size: 1.1em;
-            color: var(--accent-secondary);
-            margin-bottom: 8px;
+            margin-bottom: 16px;
         }
-        
-        .item-date {
-            color: var(--accent-secondary);
-            font-size: 0.95em;
-            white-space: nowrap;
-        }
-        
-        .item-description {
-            color: var(--text-color);
-            margin-top: 10px;
-        }
-        
-        .item-description ul {
-            margin: 10px 0;
-            padding-left: 20px;
-        }
-        
-        .item-description li {
-            margin-bottom: 8px;
-        }
-        
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 25px;
-        }
-        
-        .skill-category {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 20px;
-        }
-        
-        .skill-category h4 {
-            color: var(--accent-primary);
-            margin-bottom: 15px;
-            font-size: 1.1em;
-        }
-        
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-        }
-        
-        .skill-tag {
-            background: var(--accent-primary);
-            color: white;
-            padding: 6px 12px;
-            border-radius: 20px;
-            font-size: 0.9em;
-            transition: all 0.3s ease;
-        }
-        
-        .skill-tag:hover {
-            background: var(--accent-hover);
-            transform: translateY(-2px);
-        }
-        
-        .achievements-list {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 20px;
-        }
-        
-        .achievement-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 12px;
-            padding: 20px;
-            text-align: center;
-            transition: transform 0.3s ease;
-        }
-        
-        .achievement-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .achievement-icon {
-            font-size: 2.5em;
-            color: var(--accent-primary);
-            margin-bottom: 15px;
-        }
-        
-        .achievement-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: var(--accent-secondary);
-        }
-        
-        .download-section {
-            text-align: center;
-            margin-top: 40px;
-        }
-        
-        .download-buttons {
+
+        .contact-links {
             display: flex;
             justify-content: center;
-            gap: 20px;
+            gap: 24px;
             flex-wrap: wrap;
-            margin-bottom: 30px;
         }
-        
-        .download-btn {
-            background: var(--accent-primary);
-            color: white;
-            padding: 15px 30px;
-            border-radius: 12px;
+
+        .contact-links a {
+            color: var(--text-color);
             text-decoration: none;
-            font-size: 1.1em;
+            font-size: 0.95em;
             display: flex;
             align-items: center;
-            gap: 10px;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
+            gap: 6px;
         }
-        
+
+        .contact-links a:hover {
+            color: var(--accent-primary);
+        }
+
+        .experience-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .experience-list li {
+            display: flex;
+            justify-content: space-between;
+            align-items: baseline;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .experience-list li:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .exp-info {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .exp-title {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .exp-company {
+            color: var(--accent-secondary);
+            font-size: 0.95em;
+        }
+
+        .exp-date {
+            color: var(--accent-secondary);
+            font-size: 0.9em;
+            white-space: nowrap;
+            text-align: right;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-primary);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-size: 1em;
+            margin-top: 28px;
+            transition: background 0.2s ease;
+        }
+
         .download-btn:hover {
             background: var(--accent-hover);
-            transform: translateY(-3px);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
         }
-        
-        .download-btn.secondary {
-            background: var(--accent-secondary);
-        }
-        
-        .back-links {
+
+        .footer-links {
             text-align: center;
-            margin-top: 30px;
         }
-        
-        .back-links a {
+
+        .footer-links a {
             color: var(--accent-primary);
             text-decoration: none;
-            margin: 0 15px;
-            font-size: 1.1em;
         }
-        
-        .back-links a:hover {
+
+        .footer-links a:hover {
             text-decoration: underline;
         }
-        
-        @media (max-width: 768px) {
-            .container {
-                padding: 0 15px;
-            }
-            
-            .resume-header {
-                padding: 30px 20px;
-            }
-            
-            .profile-info h1 {
-                font-size: 2em;
-            }
-            
-            .contact-info {
+
+        @media (max-width: 600px) {
+            .experience-list li {
                 flex-direction: column;
-                gap: 15px;
-                align-items: center;
+                gap: 4px;
             }
-            
-            .item-header {
+
+            .exp-date {
+                text-align: left;
+            }
+
+            .contact-links {
                 flex-direction: column;
-                align-items: flex-start;
-            }
-            
-            .skills-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .download-buttons {
-                flex-direction: column;
-                align-items: center;
-            }
-        }
-        
-        /* Print styles */
-        @media print {
-            .navbar, .download-section, .back-links {
-                display: none !important;
-            }
-            
-            .container {
-                margin: 0;
-                max-width: none;
-            }
-            
-            .resume-section {
-                break-inside: avoid;
-                margin-bottom: 20px;
+                gap: 12px;
             }
         }
     </style>
@@ -389,80 +186,45 @@
     <nav class="navbar">
         <h1><a href="index.html">Devan Velji</a></h1>
     </nav>
-    
+
     <div class="container">
-        <!-- Header Section -->
-        <div class="resume-header">
-            <div class="profile-info">
+        <div class="frosted-glass">
+            <div class="header">
                 <h1>Devan Velji</h1>
-                <div class="profile-subtitle">Young Professional</div>
-                <div class="contact-info">
-                    <a href="mailto:devanvelji@gmail.com" class="contact-item">
-                        <i class="fas fa-envelope"></i>
-                        devanvelji@gmail.com
-                    </a>
-                    <a href="https://www.linkedin.com/in/devanvelji/" target="_blank" class="contact-item">
-                        <i class="fab fa-linkedin"></i>
-                        LinkedIn
-                    </a>
-                    <a href="https://devanvelji.com" class="contact-item">
-                        <i class="fas fa-globe"></i>
-                        devanvelji.com
-                    </a>
+                <div class="subtitle">B.S. Mathematics & Economics | Minor: Marine Sciences</div>
+                <div class="contact-links">
+                    <a href="mailto:devanvelji@gmail.com"><i class="fas fa-envelope"></i> devanvelji@gmail.com</a>
+                    <a href="https://www.linkedin.com/in/devanvelji/" target="_blank"><i class="fab fa-linkedin"></i> LinkedIn</a>
                 </div>
             </div>
-        </div>
-        <!-- Download Section -->
-        <div class="download-section">
-            <div class="download-buttons">
-                <a href="resume/resume.pdf" target="_blank" class="download-btn" onclick="trackDownload('resume', 'pdf')">
-                    <i class="fas fa-download"></i>
-                    Download PDF Resume
+
+            <ul class="experience-list">
+                <li>
+                    <div class="exp-info">
+                        <span class="exp-title">Data Analytics Intern</span>
+                        <span class="exp-company">ButterflyMX</span>
+                    </div>
+                    <span class="exp-date">Jul – Sep 2025</span>
+                </li>
+                <li>
+                    <div class="exp-info">
+                        <span class="exp-title">Business Operations Intern</span>
+                        <span class="exp-company">Tequila Fortaleza</span>
+                    </div>
+                    <span class="exp-date">Aug 2024 – Oct 2025</span>
+                </li>
+            </ul>
+
+            <div style="text-align: center;">
+                <a href="resume/resume.pdf" target="_blank" class="download-btn">
+                    <i class="fas fa-download"></i> Download Resume
                 </a>
             </div>
         </div>
+
+        <div class="footer-links">
+            <a href="index.html"><i class="fas fa-arrow-left"></i> Back to Home</a>
+        </div>
     </div>
-    
-    <script>
-        // Track resume interactions
-        function trackDownload(fileName, fileType) {
-            if (typeof trackDownload !== 'undefined') {
-                trackDownload(fileName, fileType);
-            }
-        }
-        
-        // Track page engagement
-        document.addEventListener('DOMContentLoaded', () => {
-            if (typeof trackEvent !== 'undefined') {
-                trackEvent('resume_viewed', 'Resume', 'page_load');
-            }
-            
-            // Track section views
-            const sections = document.querySelectorAll('.resume-section');
-            const observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        const sectionTitle = entry.target.querySelector('.section-title').textContent.trim();
-                        if (typeof trackEvent !== 'undefined') {
-                            trackEvent('resume_section_viewed', 'Resume', sectionTitle);
-                        }
-                    }
-                });
-            }, { threshold: 0.5 });
-            
-            sections.forEach(section => observer.observe(section));
-            
-            // Track contact clicks
-            document.querySelectorAll('.contact-item').forEach(item => {
-                item.addEventListener('click', (e) => {
-                    const contactType = e.currentTarget.href.includes('mailto') ? 'email' : 
-                                       e.currentTarget.href.includes('linkedin') ? 'linkedin' : 'website';
-                    if (typeof trackEvent !== 'undefined') {
-                        trackEvent('resume_contact_click', 'Resume', contactType);
-                    }
-                });
-            });
-        });
-    </script>
 </body>
 </html>
