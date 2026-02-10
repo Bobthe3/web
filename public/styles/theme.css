@@ -662,14 +662,6 @@ a:hover {
   margin: 0 auto 16px auto;
 }
 
-.companies-label {
-  font-size: 0.75em;
-  color: var(--nord3);
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  margin: 0 0 8px 0;
-}
-
 .companies-links {
   display: flex;
   justify-content: center;
@@ -681,11 +673,10 @@ a:hover {
 .company-link {
   color: var(--text-color);
   text-decoration: none;
-  font-size: 0.95em;
-  padding: 6px 12px;
-  border-radius: 6px;
+  font-size: 1.1em;
+  padding: 8px 12px;
+  border-radius: 8px;
   transition: all 0.3s ease;
-  border: 1px solid transparent;
 }
 
 .company-link:hover {
