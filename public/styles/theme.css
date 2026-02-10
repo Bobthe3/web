@@ -638,6 +638,88 @@ a:hover {
   background: var(--accent-hover);
 }
 
+/* Companies section */
+.companies-section {
+  margin-top: 20px;
+  text-align: center;
+  opacity: 0;
+  transform: translateY(20px);
+  animation: fadeInUp 0.6s ease forwards;
+  animation-delay: 0.8s;
+}
+
+@keyframes fadeInUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.companies-divider {
+  width: 40px;
+  height: 1px;
+  background: var(--border-color);
+  margin: 0 auto 16px auto;
+}
+
+.companies-label {
+  font-size: 0.75em;
+  color: var(--nord3);
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
+  margin: 0 0 8px 0;
+}
+
+.companies-links {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.company-link {
+  color: var(--text-color);
+  text-decoration: none;
+  font-size: 0.95em;
+  padding: 6px 12px;
+  border-radius: 6px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.company-link:hover {
+  color: var(--accent-hover);
+  background: var(--hover-bg);
+  border-color: var(--border-color);
+}
+
+.company-separator {
+  color: var(--nord3);
+  font-size: 0.85em;
+}
+
+/* Mobile adjustments for companies section */
+@media (max-width: 768px) {
+  .companies-section {
+    margin-top: 15px;
+  }
+  
+  .companies-links {
+    flex-direction: column;
+    gap: 8px;
+  }
+  
+  .company-separator {
+    display: none;
+  }
+  
+  .company-link {
+    font-size: 0.9em;
+    padding: 8px 16px;
+  }
+}
+
 /* Reduce motion preference */
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
