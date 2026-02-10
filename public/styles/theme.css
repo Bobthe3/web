@@ -664,10 +664,10 @@ a:hover {
 
 .companies-links {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
+  gap: 4px;
 }
 
 .company-link {
@@ -682,27 +682,12 @@ a:hover {
 .company-link:hover {
   color: var(--accent-hover);
   background: var(--hover-bg);
-  border-color: var(--border-color);
-}
-
-.company-separator {
-  color: var(--nord3);
-  font-size: 0.85em;
 }
 
 /* Mobile adjustments for companies section */
 @media (max-width: 768px) {
   .companies-section {
     margin-top: 15px;
-  }
-  
-  .companies-links {
-    flex-direction: column;
-    gap: 8px;
-  }
-  
-  .company-separator {
-    display: none;
   }
   
   .company-link {
