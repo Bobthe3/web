@@ -2,7 +2,6 @@ const fs = require('fs');
 const path = require('path');
 const sharp = require('sharp');
 const { exiftool } = require('exiftool-vendored');
-const { MathpixMarkdownModel } = require('mathpix-markdown-it');
 const { JSDOM } = require('jsdom');
 
 const imageDirectory = './images';
@@ -140,20 +139,21 @@ async function generateBlogPosts() {
             markdownContent = frontMatterMatch[2];
             
             frontMatterText.split('\n').forEach(line => {
-                const match = line.match(/^(\w+):\s*"?([^"]*)"?$/);
+                const match = line.match(/^(\w+):\s*(.+)$/);
                 if (match) {
-                    frontMatter[match[1]] = match[2];
+                    let value = match[2].trim();
+                    // Strip surrounding quotes
+                    if ((value.startsWith('"') && value.endsWith('"')) ||
+                        (value.startsWith("'") && value.endsWith("'"))) {
+                        value = value.slice(1, -1);
+                    }
+                    frontMatter[match[1]] = value;
                 }
             });
         }
         
-        const html = MathpixMarkdownModel.markdownToHTML(markdownContent, {
-            htmlTags: true,
-            linkify: true,
-            typographer: true
-        });
         const slug = path.basename(file, '.md');
-        
+
         // Create clean excerpt by stripping markdown and LaTeX
         const cleanExcerpt = markdownContent
             .replace(/\$\$[\s\S]*?\$\$/g, '') // Remove display math
@@ -172,12 +172,24 @@ async function generateBlogPosts() {
         const wordCount = cleanExcerpt.split(/\s+/).length;
         const readingTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute
 
+        // Parse tags - handle both JSON array and comma-separated formats
+        let tags = [];
+        if (frontMatter.tags) {
+            const tagsRaw = frontMatter.tags.trim();
+            if (tagsRaw.startsWith('[')) {
+                try { tags = JSON.parse(tagsRaw); } catch (e) {
+                    tags = tagsRaw.replace(/[\[\]"]/g, '').split(',').map(t => t.trim()).filter(Boolean);
+                }
+            } else {
+                tags = tagsRaw.split(',').map(t => t.trim()).filter(Boolean);
+            }
+        }
+
         const post = {
             slug,
             title: frontMatter.title || slug,
             date: frontMatter.date || new Date().toISOString().split('T')[0],
-            tags: frontMatter.tags ? frontMatter.tags.split(',').map(t => t.trim()) : [],
-            content: html,
+            tags,
             excerpt: cleanExcerpt.substring(0, 200) + (cleanExcerpt.length > 200 ? '...' : ''),
             readingTime: readingTime
         };
@@ -190,9 +202,16 @@ async function generateBlogPosts() {
     }
     
     posts.sort((a, b) => new Date(b.date) - new Date(a.date));
-    
+
+    // Load books data
+    const booksFile = path.join(blogDir, 'books.json');
+    let books = [];
+    if (fs.existsSync(booksFile)) {
+        try { books = JSON.parse(fs.readFileSync(booksFile, 'utf8')); } catch (e) { books = []; }
+    }
+
     // Generate blog index
-    const indexHtml = generateBlogIndexHtml(posts);
+    const indexHtml = generateBlogIndexHtml(posts, books);
     fs.writeFileSync(path.join(blogDir, 'index.html'), indexHtml);
     
     fs.writeFileSync(path.join(outputDir, 'posts.json'), JSON.stringify(posts, null, 2));
@@ -201,54 +220,53 @@ async function generateBlogPosts() {
 }
 
 function generatePostHtml(post) {
+    const tagsStr = post.tags.join(', ');
+    const escapedExcerpt = post.excerpt.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+    const escapedTitle = post.title.replace(/"/g, '&quot;').replace(/'/g, '&#39;');
+
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="${post.excerpt}">
-    <meta name="keywords" content="${post.tags ? post.tags.join(', ') : ''}">
+    <meta name="description" content="${escapedExcerpt}">
+    <meta name="keywords" content="${tagsStr}">
     <meta name="author" content="Devan Velji">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://devanvelji.com/blog/generated/${post.slug}.html">
-    
-    <!-- Open Graph / Facebook -->
+
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://devanvelji.com/blog/generated/${post.slug}.html">
-    <meta property="og:title" content="${post.title}">
-    <meta property="og:description" content="${post.excerpt}">
+    <meta property="og:title" content="${escapedTitle}">
+    <meta property="og:description" content="${escapedExcerpt}">
     <meta property="og:image" content="https://devanvelji.com/images/blog-og-image.jpg">
     <meta property="og:site_name" content="Devan Velji">
     <meta property="article:author" content="Devan Velji">
     <meta property="article:published_time" content="${post.date}T00:00:00Z">
-    ${post.tags ? post.tags.map(tag => `<meta property="article:tag" content="${tag}">`).join('\n    ') : ''}
-    
-    <!-- Twitter -->
+    ${post.tags.map(tag => `<meta property="article:tag" content="${tag}">`).join('\n    ')}
+
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://devanvelji.com/blog/generated/${post.slug}.html">
-    <meta property="twitter:title" content="${post.title}">
-    <meta property="twitter:description" content="${post.excerpt}">
-    <meta property="twitter:image" content="https://devanvelji.com/images/blog-og-image.jpg">
-    
+    <meta property="twitter:title" content="${escapedTitle}">
+    <meta property="twitter:description" content="${escapedExcerpt}">
+
     <title>${post.title} - Devan Velji</title>
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/theme.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-    
-    <!-- Analytics -->
+
     <script src="../scripts/analytics.js"></script>
     <style>
         body {
             margin: 0;
-            font-family: Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
             min-height: 100vh;
+            line-height: 1.6;
         }
-        
         .navbar {
             background-color: var(--navbar-bg);
-            padding: 10px 0px;
+            padding: 10px 0;
             color: var(--text-color);
             text-align: center;
             position: fixed;
@@ -259,157 +277,254 @@ function generatePostHtml(post) {
             justify-content: center;
             align-items: center;
         }
-        
-        .navbar h1 {
-            margin: 0;
-            font-size: 1.5em;
-        }
-        
+        .navbar h1 { margin: 0; font-size: 1.5em; }
+        .navbar a { color: var(--text-color); text-decoration: none; }
+        .navbar a:hover { color: var(--accent-hover); }
         .container {
             margin: 100px auto 50px auto;
             max-width: 800px;
             padding: 0 20px;
         }
-        
         .frosted-glass {
             background: var(--frosted-bg);
             border-radius: 18px;
             box-shadow: 0 4px 32px 0 var(--shadow-color);
             backdrop-filter: blur(12px) saturate(1.5);
             -webkit-backdrop-filter: blur(12px) saturate(1.5);
-            padding: 32px 24px 24px 24px;
+            padding: 32px 28px;
             margin: 0 auto 30px auto;
         }
-        
+        .post-header { margin-bottom: 24px; }
+        .post-title {
+            color: var(--accent-primary);
+            font-size: 2em;
+            margin: 0 0 12px 0;
+            line-height: 1.2;
+        }
         .post-meta {
             color: var(--accent-secondary);
-            margin-bottom: 20px;
+            font-size: 0.9em;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 16px;
+        }
+        .post-meta svg { width: 14px; height: 14px; vertical-align: -1px; fill: currentColor; margin-right: 4px; }
+        .post-content { line-height: 1.75; font-size: 1.05em; }
+
+        /* Headings */
+        .post-content h1, .post-content h2, .post-content h3, .post-content h4 {
+            color: var(--accent-primary);
+            margin-top: 1.8em;
+            margin-bottom: 0.5em;
+            line-height: 1.3;
+        }
+        .post-content h1 { font-size: 1.7em; }
+        .post-content h2 { font-size: 1.4em; }
+        .post-content h3 { font-size: 1.2em; }
+        .post-content h4 { font-size: 1.05em; }
+
+        /* Code */
+        .post-content pre {
+            background: rgba(0,0,0,0.2);
+            padding: 16px;
+            border-radius: 10px;
+            overflow-x: auto;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        .post-content code {
+            background: rgba(0,0,0,0.15);
+            padding: 2px 6px;
+            border-radius: 4px;
             font-size: 0.9em;
         }
-        
-        .post-content {
-            line-height: 1.6;
+        .post-content pre code { background: none; padding: 0; }
+
+        /* Blockquotes */
+        .post-content blockquote {
+            border-left: 4px solid var(--accent-primary);
+            margin: 1.5em 0;
+            padding: 0.5em 1em;
+            background: rgba(0,0,0,0.1);
+            border-radius: 0 8px 8px 0;
         }
-        
-        .post-content h1, .post-content h2, .post-content h3 {
+        .post-content blockquote p { margin: 0.5em 0; }
+
+        /* Images */
+        .post-content img {
+            max-width: 100%;
+            border-radius: 10px;
+            margin: 1.5em auto;
+            display: block;
+        }
+
+        /* Links */
+        .post-content a {
             color: var(--accent-primary);
+            text-decoration: none;
+            border-bottom: 1px solid transparent;
+            transition: border-color 0.2s;
         }
-        
+        .post-content a:hover { border-bottom-color: var(--accent-primary); }
+
+        /* Tables */
+        .post-content table {
+            border-collapse: collapse;
+            width: 100%;
+            margin: 1.5em 0;
+        }
+        .post-content th, .post-content td {
+            border: 1px solid rgba(76, 86, 106, 0.4);
+            padding: 8px 12px;
+            text-align: left;
+        }
+        .post-content th { background: rgba(0,0,0,0.15); color: var(--accent-primary); }
+
+        /* Lists */
+        .post-content ul, .post-content ol { padding-left: 1.5em; }
+        .post-content li { margin-bottom: 0.4em; }
+
+        /* Horizontal rule */
+        .post-content hr {
+            border: none;
+            border-top: 1px solid rgba(76, 86, 106, 0.4);
+            margin: 2em 0;
+        }
+
+        /* TOC */
+        .toc-nav {
+            background: var(--frosted-bg);
+            border-radius: 12px;
+            padding: 16px 20px;
+            margin: 0 0 24px 0;
+            border-left: 4px solid var(--accent-primary);
+        }
+        .toc-nav h4 { margin: 0 0 10px; color: var(--accent-primary); font-size: 0.95em; font-weight: 600; }
+        .toc-nav ul { list-style: none; padding: 0; margin: 0; }
+        .toc-nav li { margin: 6px 0; }
+        .toc-nav a { color: var(--text-color); text-decoration: none; font-size: 0.9em; transition: color 0.2s; }
+        .toc-nav a:hover { color: var(--accent-primary); }
+
+        /* Math */
+        .math-display { text-align: center; margin: 1.5em 0; overflow-x: auto; }
+        .math-inline { display: inline; }
+
+        /* Loading */
+        .loading { text-align: center; color: var(--accent-secondary); padding: 40px 0; }
+
+        /* Private form */
+        .private-form { text-align: center; padding: 20px 0; }
+        .private-form h2 { color: var(--accent-primary); }
+
+        /* Back links */
+        .back-links { text-align: center; margin-top: 30px; }
         .back-link {
             color: var(--accent-primary);
             text-decoration: none;
-            font-size: 1.1em;
+            font-size: 1em;
+            font-weight: 500;
+            transition: color 0.2s;
         }
-        
-        .back-link:hover {
-            text-decoration: underline;
-        }
-        
-        .post-content pre {
-            background: rgba(0,0,0,0.1);
-            padding: 15px;
-            border-radius: 8px;
-            overflow-x: auto;
-        }
-        
-        .post-content code {
-            background: rgba(0,0,0,0.1);
-            padding: 2px 4px;
-            border-radius: 4px;
+        .back-link:hover { color: var(--accent-hover); }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .post-title { font-size: 1.5em; }
+            .post-content { font-size: 1em; }
+            .frosted-glass { padding: 24px 18px; }
+            .post-meta { gap: 10px; }
         }
     </style>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
-    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
-    <script>
-        window.MathJax = {
-            tex: {
-                inlineMath: [['$', '$'], ['\\\\(', '\\\\)']],
-                displayMath: [['$$', '$$'], ['\\\\[', '\\\\]']]
-            }
-        };
-    </script>
-    
-    <!-- Structured Data for Blog Post -->
+
     <script type="application/ld+json">
     {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
-        "headline": "${post.title}",
-        "description": "${post.excerpt}",
-        "image": "https://devanvelji.com/images/blog-og-image.jpg",
-        "author": {
-            "@type": "Person",
-            "name": "Devan Velji",
-            "url": "https://devanvelji.com"
-        },
-        "publisher": {
-            "@type": "Person",
-            "name": "Devan Velji",
-            "url": "https://devanvelji.com"
-        },
+        "headline": "${escapedTitle}",
+        "description": "${escapedExcerpt}",
+        "author": { "@type": "Person", "name": "Devan Velji", "url": "https://devanvelji.com" },
+        "publisher": { "@type": "Person", "name": "Devan Velji" },
         "datePublished": "${post.date}T00:00:00Z",
         "dateModified": "${post.date}T00:00:00Z",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://devanvelji.com/blog/generated/${post.slug}.html"
-        },
-        "keywords": "${post.tags ? post.tags.join(', ') : ''}",
-        "wordCount": "${post.content.split(' ').length}",
+        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://devanvelji.com/blog/generated/${post.slug}.html" },
+        "keywords": "${tagsStr}",
         "url": "https://devanvelji.com/blog/generated/${post.slug}.html"
     }
     </script>
-    
-    <!-- Blog Enhancements -->
-    <script src="../scripts/blog-enhancements.js"></script>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script defer src="../scripts/blog-renderer.js"></script>
+    <script defer src="../scripts/blog-enhancements.js"></script>
 </head>
 <body>
     <nav class="navbar">
         <h1><a href="../index.html">Devan Velji</a></h1>
     </nav>
-    
+
     <div class="container">
         <div class="frosted-glass">
-            <div class="post-meta">
-                <i class="fas fa-calendar"></i> ${post.date}
-                ${post.tags.length > 0 ? `<span style="margin-left: 20px;"><i class="fas fa-tags"></i> ${post.tags.join(', ')}</span>` : ''}
+            <div class="post-header">
+                <h1 class="post-title">${post.title}</h1>
+                <div class="post-meta">
+                    <span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24v40H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64h-40V24c0-13.3-10.7-24-24-24s-24 10.7-24 24v40H152V24zM48 192h352V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z"/></svg> ${post.date}</span>
+                    ${post.readingTime ? `<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120v136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg> ${post.readingTime} min read</span>` : ''}
+                    ${post.tags.length > 0 ? `<span><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 80v150.6c0 12.7 5.1 24.9 14.1 33.9L174.1 424.5c25 25 65.5 25 90.5 0l150.6-150.6c25-25 25-65.5 0-90.5L255.3 23.4C246.3 14.4 234.1 9.3 221.4 9.3H80C35.8 9.3 0 45.1 0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg> ${tagsStr}</span>` : ''}
+                </div>
             </div>
-            <div class="post-content">
-                ${post.content}
+            <div class="post-content" data-slug="${post.slug}">
+                <p class="loading">Loading post...</p>
             </div>
+            <noscript><p>${post.excerpt}</p></noscript>
         </div>
-        
-        <div style="text-align: center; margin-top: 30px;">
-            <a href="../blog/index.html" class="back-link">← Back to Blog</a>
-            <span style="margin: 0 20px;">|</span>
+
+        <div class="back-links">
+            <a href="../blog/index.html" class="back-link">&larr; Back to Blog</a>
+            <span style="margin: 0 16px; color: var(--accent-secondary);">|</span>
             <a href="../index.html" class="back-link">Home</a>
         </div>
     </div>
-    
-    
 </body>
 </html>`;
 }
 
-function generateBlogIndexHtml(posts) {
-    // Collect all unique tags
+function generateBlogIndexHtml(posts, books) {
+    books = books || [];
     const allTags = [...new Set(posts.flatMap(post => post.tags))].sort();
+
+    // SVG icons (inline, no CDN)
+    const svgCalendar = '<svg style="width:14px;height:14px;vertical-align:-1px;fill:currentColor;margin-right:4px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M152 24c0-13.3-10.7-24-24-24s-24 10.7-24 24v40H64C28.7 64 0 92.7 0 128v16 48V448c0 35.3 28.7 64 64 64h320c35.3 0 64-28.7 64-64V192 144 128c0-35.3-28.7-64-64-64h-40V24c0-13.3-10.7-24-24-24s-24 10.7-24 24v40H152V24zM48 192h352V448c0 8.8-7.2 16-16 16H64c-8.8 0-16-7.2-16-16V192z"/></svg>';
+    const svgClock = '<svg style="width:14px;height:14px;vertical-align:-1px;fill:currentColor;margin-right:4px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M256 0a256 256 0 1 1 0 512A256 256 0 1 1 256 0zM232 120v136c0 8 4 15.5 10.7 20l96 64c11 7.4 25.9 4.4 33.3-6.7s4.4-25.9-6.7-33.3L280 243.2V120c0-13.3-10.7-24-24-24s-24 10.7-24 24z"/></svg>';
+    const svgTags = '<svg style="width:14px;height:14px;vertical-align:-1px;fill:currentColor;margin-right:4px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path d="M0 80v150.6c0 12.7 5.1 24.9 14.1 33.9L174.1 424.5c25 25 65.5 25 90.5 0l150.6-150.6c25-25 25-65.5 0-90.5L255.3 23.4C246.3 14.4 234.1 9.3 221.4 9.3H80C35.8 9.3 0 45.1 0 80zm112 32a32 32 0 1 1 0 64 32 32 0 1 1 0-64z"/></svg>';
 
     const postsHtml = posts.map(post => `
         <div class="frosted-glass post-preview" data-tags="${post.tags.join(',')}" data-title="${post.title.toLowerCase()}" data-excerpt="${post.excerpt.toLowerCase()}">
-            <h2><a href="generated/${post.slug}.html" style="color: var(--accent-primary); text-decoration: none; font-size: 1.75rem; font-weight: 600;">${post.title}</a></h2>
+            <h2 class="post-preview-title"><a href="generated/${post.slug}.html">${post.title}</a></h2>
             <div class="post-meta">
-                <i class="fas fa-calendar"></i> ${post.date}
-                ${post.readingTime ? `<span style="margin-left: 20px;"><i class="fas fa-clock"></i> ${post.readingTime} min read</span>` : ''}
-                ${post.tags.length > 0 ? `<span style="margin-left: 20px;"><i class="fas fa-tags"></i> ${post.tags.join(', ')}</span>` : ''}
+                <span>${svgCalendar} ${post.date}</span>
+                ${post.readingTime ? `<span>${svgClock} ${post.readingTime} min read</span>` : ''}
+                ${post.tags.length > 0 ? `<span>${svgTags} ${post.tags.join(', ')}</span>` : ''}
             </div>
-            <p style="color: var(--text-color); line-height: 1.6; margin-bottom: 16px;">${post.excerpt}</p>
-            <a href="generated/${post.slug}.html" style="color: var(--accent-primary); font-weight: 500;">Read more →</a>
+            <p class="post-excerpt">${post.excerpt}</p>
+            <a href="generated/${post.slug}.html" class="read-more">Read more &rarr;</a>
         </div>
     `).join('');
 
     const tagButtons = allTags.map(tag =>
         `<button class="tag-filter" data-tag="${tag}">${tag}</button>`
     ).join('');
+
+    // Books section HTML
+    const booksHtml = books.length > 0 ? `
+        <div class="frosted-glass books-section">
+            <h2 class="books-title">
+                <svg style="width:20px;height:20px;vertical-align:-3px;fill:currentColor;margin-right:8px" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512"><path d="M96 0C43 0 0 43 0 96v320c0 53 43 96 96 96h320c17.7 0 32-14.3 32-32s-14.3-32-32-32v-64c17.7 0 32-14.3 32-32V32c0-17.7-14.3-32-32-32H96zm0 384h256v64H96c-17.7 0-32-14.3-32-32s14.3-32 32-32zm32-304a16 16 0 0 1 16-16h192a16 16 0 0 1 0 32H144a16 16 0 0 1-16-16zm16 48h192a16 16 0 0 1 0 32H144a16 16 0 0 1 0-32z"/></svg>
+                Books
+            </h2>
+            <ul class="books-list">
+                ${books.map(b => `<li><strong>${b.title}</strong> <span class="book-author">by ${b.author}</span>${b.note ? `<span class="book-note"> &mdash; ${b.note}</span>` : ''}</li>`).join('\n                ')}
+            </ul>
+        </div>` : '';
 
     return `<!DOCTYPE html>
 <html lang="en">
@@ -420,7 +535,7 @@ function generateBlogIndexHtml(posts) {
     <title>Blog - Devan Velji</title>
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/theme.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="../scripts/analytics.js"></script>
     <style>
         body {
             margin: 0;
@@ -429,10 +544,9 @@ function generateBlogIndexHtml(posts) {
             color: var(--text-color);
             min-height: 100vh;
         }
-
         .navbar {
             background-color: var(--navbar-bg);
-            padding: 10px 0px;
+            padding: 10px 0;
             color: var(--text-color);
             text-align: center;
             position: fixed;
@@ -443,97 +557,75 @@ function generateBlogIndexHtml(posts) {
             justify-content: center;
             align-items: center;
         }
-
-        .navbar h1 {
-            margin: 0;
-            font-size: 1.5em;
-        }
-
-        .navbar a {
-            color: var(--text-color);
-            text-decoration: none;
-        }
-
+        .navbar h1 { margin: 0; font-size: 1.5em; }
+        .navbar a { color: var(--text-color); text-decoration: none; }
+        .navbar a:hover { color: var(--accent-hover); }
         .container {
             margin: 100px auto 50px auto;
             max-width: 800px;
             padding: 0 20px;
         }
-
         .frosted-glass {
             background: var(--frosted-bg);
             border-radius: 18px;
             box-shadow: 0 4px 32px 0 var(--shadow-color);
             backdrop-filter: blur(12px) saturate(1.5);
             -webkit-backdrop-filter: blur(12px) saturate(1.5);
-            padding: 32px 28px 28px 28px;
-            margin: 0 auto 30px auto;
+            padding: 32px 28px;
+            margin: 0 auto 24px auto;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
 
-        .post-preview {
-            margin-bottom: 30px;
-        }
+        /* Page header */
+        .page-title { text-align: center; margin: 0 0 12px; font-size: 2.2rem; color: var(--accent-primary); }
+        .page-subtitle { text-align: center; margin: 0; color: var(--accent-secondary); font-size: 1.05rem; }
 
-        .post-preview:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 40px 0 var(--shadow-color);
-        }
+        /* Books section */
+        .books-section { border-left: 4px solid var(--accent-primary); }
+        .books-title { margin: 0 0 16px; font-size: 1.2em; color: var(--accent-primary); }
+        .books-list { list-style: none; padding: 0; margin: 0; }
+        .books-list li { padding: 8px 0; border-bottom: 1px solid rgba(76, 86, 106, 0.2); line-height: 1.5; }
+        .books-list li:last-child { border-bottom: none; }
+        .book-author { color: var(--accent-secondary); }
+        .book-note { color: var(--accent-secondary); font-size: 0.9em; font-style: italic; }
 
-        .post-preview h2 {
-            margin-top: 0;
-            margin-bottom: 12px;
-            line-height: 1.3;
-        }
-
+        /* Post previews */
+        .post-preview { margin-bottom: 0; }
+        .post-preview:hover { transform: translateY(-2px); box-shadow: 0 6px 40px 0 var(--shadow-color); }
+        .post-preview-title { margin: 0 0 12px; line-height: 1.3; }
+        .post-preview-title a { color: var(--accent-primary); text-decoration: none; font-size: 1.5rem; font-weight: 600; }
+        .post-preview-title a:hover { color: var(--accent-hover); }
         .post-meta {
             color: var(--accent-secondary);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             font-size: 0.9em;
             display: flex;
             flex-wrap: wrap;
-            gap: 4px;
+            gap: 14px;
         }
+        .post-excerpt { color: var(--text-color); line-height: 1.6; margin: 0 0 14px; }
+        .read-more { color: var(--accent-primary); font-weight: 500; text-decoration: none; }
+        .read-more:hover { color: var(--accent-hover); }
 
-        .post-meta span {
-            display: inline-block;
-        }
-
-        .search-filter-container {
-            margin-bottom: 24px;
-        }
-
+        /* Search & filters */
+        .search-filter-container { margin-bottom: 0; }
         .search-box {
             width: 100%;
-            padding: 14px 16px;
+            padding: 12px 16px;
             font-size: 1rem;
             border: 2px solid var(--accent-primary);
             border-radius: 12px;
             background: var(--frosted-bg);
             color: var(--text-color);
-            margin-bottom: 16px;
+            margin-bottom: 14px;
             box-sizing: border-box;
-            transition: border-color 0.3s ease;
+            transition: border-color 0.2s;
         }
-
-        .search-box:focus {
-            outline: none;
-            border-color: var(--accent-hover);
-        }
-
-        .search-box::placeholder {
-            color: var(--accent-secondary);
-        }
-
-        .tag-filters {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-            margin-top: 16px;
-        }
-
+        .search-box:focus { outline: none; border-color: var(--accent-hover); }
+        .search-box::placeholder { color: var(--accent-secondary); }
+        .tag-filters { display: flex; flex-wrap: wrap; gap: 8px; }
         .tag-filter {
-            padding: 8px 16px;
+            padding: 6px 14px;
             border: 2px solid var(--accent-primary);
             border-radius: 20px;
             background: transparent;
@@ -541,21 +633,11 @@ function generateBlogIndexHtml(posts) {
             cursor: pointer;
             font-size: 0.9rem;
             font-weight: 500;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
         }
-
-        .tag-filter:hover {
-            background: var(--accent-primary);
-            color: white;
-        }
-
-        .tag-filter.active {
-            background: var(--accent-primary);
-            color: white;
-        }
-
+        .tag-filter:hover, .tag-filter.active { background: var(--accent-primary); color: #fff; }
         .clear-filters {
-            padding: 8px 16px;
+            padding: 6px 14px;
             border: 2px solid var(--accent-secondary);
             border-radius: 20px;
             background: transparent;
@@ -563,55 +645,27 @@ function generateBlogIndexHtml(posts) {
             cursor: pointer;
             font-size: 0.9rem;
             font-weight: 500;
-            transition: all 0.3s ease;
+            transition: all 0.2s;
         }
+        .clear-filters:hover { background: var(--accent-secondary); color: #fff; }
+        .no-results { text-align: center; padding: 40px 20px; color: var(--accent-secondary); font-size: 1.1rem; display: none; }
+        .post-preview.hidden { display: none; }
 
-        .clear-filters:hover {
-            background: var(--accent-secondary);
-            color: white;
-        }
+        /* Feed links */
+        .feed-links { text-align: center; margin: 8px 0 0; }
+        .feed-links a { color: var(--accent-secondary); text-decoration: none; font-size: 0.85em; margin: 0 8px; }
+        .feed-links a:hover { color: var(--accent-primary); }
 
-        .no-results {
-            text-align: center;
-            padding: 40px 20px;
-            color: var(--accent-secondary);
-            font-size: 1.1rem;
-            display: none;
-        }
-
-        .post-preview.hidden {
-            display: none;
-        }
-
-        .back-link {
-            color: var(--accent-primary);
-            text-decoration: none;
-            font-size: 1.1em;
-            font-weight: 500;
-        }
-
-        .back-link:hover {
-            text-decoration: underline;
-        }
+        /* Back link */
+        .back-link { color: var(--accent-primary); text-decoration: none; font-size: 1em; font-weight: 500; }
+        .back-link:hover { color: var(--accent-hover); }
 
         @media (max-width: 768px) {
-            .post-meta {
-                flex-direction: column;
-                gap: 8px;
-            }
-
-            .post-meta span {
-                margin-left: 0 !important;
-            }
-
-            .tag-filters {
-                gap: 8px;
-            }
-
-            .tag-filter, .clear-filters {
-                font-size: 0.85rem;
-                padding: 6px 12px;
-            }
+            .page-title { font-size: 1.8rem; }
+            .post-meta { flex-direction: column; gap: 6px; }
+            .tag-filters { gap: 6px; }
+            .tag-filter, .clear-filters { font-size: 0.85rem; padding: 5px 10px; }
+            .frosted-glass { padding: 24px 18px; }
         }
     </style>
 </head>
@@ -622,12 +676,17 @@ function generateBlogIndexHtml(posts) {
 
     <div class="container">
         <div class="frosted-glass">
-            <h1 class="page-title" style="text-align: center; margin-bottom: 16px; font-size: 2.5rem;">Blog</h1>
-            <p style="text-align: center; margin-bottom: 0; color: var(--accent-secondary); font-size: 1.1rem;">Thoughts on technology, photography, fitness, and life.</p>
+            <h1 class="page-title">Blog</h1>
+            <p class="page-subtitle">Thoughts on technology, photography, fitness, and life.</p>
+            <div class="feed-links">
+                <a href="../rss.xml">RSS</a> &middot; <a href="../atom.xml">Atom</a>
+            </div>
         </div>
 
+        ${booksHtml}
+
         <div class="frosted-glass search-filter-container">
-            <input type="text" id="searchBox" class="search-box" placeholder="🔍 Search posts by title, content, or tags...">
+            <input type="text" id="searchBox" class="search-box" placeholder="Search posts by title, content, or tags...">
             <div class="tag-filters">
                 <button class="clear-filters" id="clearFilters">Clear Filters</button>
                 ${tagButtons}
@@ -639,40 +698,34 @@ function generateBlogIndexHtml(posts) {
         </div>
 
         <div class="frosted-glass no-results" id="noResults">
-            <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 16px; opacity: 0.5;"></i>
             <p>No posts found matching your search.</p>
         </div>
 
         <div style="text-align: center; margin-top: 30px;">
-            <a href="../index.html" class="back-link">← Back to Home</a>
+            <a href="../index.html" class="back-link">&larr; Back to Home</a>
         </div>
     </div>
 
     <script>
-        // Blog filtering and search functionality
-        const searchBox = document.getElementById('searchBox');
-        const tagFilters = document.querySelectorAll('.tag-filter');
-        const clearFiltersBtn = document.getElementById('clearFilters');
-        const posts = document.querySelectorAll('.post-preview');
-        const noResults = document.getElementById('noResults');
-
-        let activeTag = null;
-        let searchTerm = '';
+        var searchBox = document.getElementById('searchBox');
+        var tagFilters = document.querySelectorAll('.tag-filter');
+        var clearFiltersBtn = document.getElementById('clearFilters');
+        var posts = document.querySelectorAll('.post-preview');
+        var noResults = document.getElementById('noResults');
+        var activeTag = null;
+        var searchTerm = '';
 
         function filterPosts() {
-            let visibleCount = 0;
-
-            posts.forEach(post => {
-                const postTags = post.dataset.tags.split(',');
-                const postTitle = post.dataset.title;
-                const postExcerpt = post.dataset.excerpt;
-
-                const matchesTag = !activeTag || postTags.includes(activeTag);
-                const matchesSearch = !searchTerm ||
-                    postTitle.includes(searchTerm) ||
-                    postExcerpt.includes(searchTerm) ||
-                    postTags.some(tag => tag.toLowerCase().includes(searchTerm));
-
+            var visibleCount = 0;
+            posts.forEach(function(post) {
+                var postTags = post.dataset.tags.split(',');
+                var postTitle = post.dataset.title;
+                var postExcerpt = post.dataset.excerpt;
+                var matchesTag = !activeTag || postTags.indexOf(activeTag) !== -1;
+                var matchesSearch = !searchTerm ||
+                    postTitle.indexOf(searchTerm) !== -1 ||
+                    postExcerpt.indexOf(searchTerm) !== -1 ||
+                    postTags.some(function(tag) { return tag.toLowerCase().indexOf(searchTerm) !== -1; });
                 if (matchesTag && matchesSearch) {
                     post.classList.remove('hidden');
                     visibleCount++;
@@ -680,41 +733,37 @@ function generateBlogIndexHtml(posts) {
                     post.classList.add('hidden');
                 }
             });
-
             noResults.style.display = visibleCount === 0 ? 'block' : 'none';
         }
 
-        searchBox.addEventListener('input', (e) => {
+        searchBox.addEventListener('input', function(e) {
             searchTerm = e.target.value.toLowerCase().trim();
             filterPosts();
         });
 
-        tagFilters.forEach(filter => {
-            filter.addEventListener('click', (e) => {
-                const tag = e.target.dataset.tag;
-
+        tagFilters.forEach(function(filter) {
+            filter.addEventListener('click', function(e) {
+                var tag = e.target.dataset.tag;
                 if (activeTag === tag) {
                     activeTag = null;
                     e.target.classList.remove('active');
                 } else {
-                    tagFilters.forEach(f => f.classList.remove('active'));
+                    tagFilters.forEach(function(f) { f.classList.remove('active'); });
                     activeTag = tag;
                     e.target.classList.add('active');
                 }
-
                 filterPosts();
             });
         });
 
-        clearFiltersBtn.addEventListener('click', () => {
+        clearFiltersBtn.addEventListener('click', function() {
             activeTag = null;
             searchTerm = '';
             searchBox.value = '';
-            tagFilters.forEach(f => f.classList.remove('active'));
+            tagFilters.forEach(function(f) { f.classList.remove('active'); });
             filterPosts();
         });
     </script>
-
 </body>
 </html>`;
 }

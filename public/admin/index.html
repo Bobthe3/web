@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Admin - Devan Velji</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/theme.css">
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: var(--navbar-bg);
+            padding: 10px 0;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 24px;
+        }
+        .navbar h1 { margin: 0; font-size: 1.5em; }
+        .navbar a { color: var(--text-color); text-decoration: none; }
+        .navbar a:hover { color: var(--accent-hover); }
+        .nav-tabs { display: flex; gap: 8px; }
+        .nav-tab {
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: transparent;
+            color: var(--text-color);
+            border: 1px solid transparent;
+            font-size: 0.9em;
+            transition: all 0.2s;
+        }
+        .nav-tab:hover { background: rgba(255,255,255,0.08); }
+        .nav-tab.active { background: var(--accent-primary); color: #fff; }
+        #logout-btn {
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            background: var(--accent-hover);
+            color: #fff;
+            border: none;
+            font-size: 0.85em;
+        }
+        .container {
+            margin: 80px auto 50px;
+            max-width: 1000px;
+            padding: 0 20px;
+        }
+        .frosted-glass {
+            background: var(--frosted-bg);
+            border-radius: 18px;
+            box-shadow: 0 4px 32px 0 var(--shadow-color);
+            backdrop-filter: blur(12px) saturate(1.5);
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        .section { display: none; }
+        .section.active { display: block; }
+
+        /* Login */
+        #login-section { text-align: center; margin-top: 100px; }
+        #login-section input {
+            display: block;
+            width: 100%;
+            max-width: 360px;
+            margin: 10px auto;
+            padding: 12px 16px;
+            border: 2px solid var(--accent-primary);
+            border-radius: 10px;
+            background: var(--frosted-bg);
+            color: var(--text-color);
+            font-size: 1em;
+        }
+        #login-section button {
+            margin-top: 12px;
+            padding: 12px 32px;
+            background: var(--accent-primary);
+            color: #fff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+        }
+        #login-error { color: var(--accent-hover); margin-top: 12px; display: none; }
+
+        /* Table */
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 10px 12px; text-align: left; border-bottom: 1px solid rgba(76,86,106,0.3); }
+        th { color: var(--accent-primary); font-size: 0.9em; }
+        td { font-size: 0.95em; }
+
+        /* Buttons */
+        .btn {
+            padding: 6px 14px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: none;
+            font-size: 0.85em;
+            transition: background 0.2s;
+        }
+        .btn-primary { background: var(--accent-primary); color: #fff; }
+        .btn-danger { background: var(--accent-hover); color: #fff; }
+        .btn-secondary { background: rgba(255,255,255,0.1); color: var(--text-color); border: 1px solid rgba(76,86,106,0.4); }
+        .btn:hover { opacity: 0.85; }
+        .btn-group { display: flex; gap: 6px; flex-wrap: wrap; }
+
+        /* Editor */
+        .editor-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-top: 16px; }
+        @media (max-width: 768px) { .editor-grid { grid-template-columns: 1fr; } }
+        .editor-grid textarea {
+            width: 100%;
+            min-height: 400px;
+            padding: 16px;
+            border: 2px solid var(--accent-primary);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.2);
+            color: var(--text-color);
+            font-family: 'Fira Code', 'Consolas', monospace;
+            font-size: 0.9em;
+            resize: vertical;
+        }
+        .preview-pane {
+            padding: 16px;
+            border: 2px solid rgba(76,86,106,0.4);
+            border-radius: 10px;
+            background: rgba(0,0,0,0.1);
+            overflow-y: auto;
+            max-height: 500px;
+            line-height: 1.6;
+        }
+        .preview-pane h1, .preview-pane h2, .preview-pane h3 { color: var(--accent-primary); }
+
+        /* Form fields */
+        .form-row { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+        .form-row input, .form-row select {
+            flex: 1;
+            min-width: 150px;
+            padding: 10px 14px;
+            border: 2px solid var(--accent-primary);
+            border-radius: 8px;
+            background: var(--frosted-bg);
+            color: var(--text-color);
+            font-size: 0.95em;
+        }
+        .form-row label { display: flex; align-items: center; gap: 6px; cursor: pointer; font-size: 0.9em; }
+        .form-row input[type="checkbox"] { width: auto; min-width: auto; }
+
+        /* Status badges */
+        .badge {
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 0.75em;
+            font-weight: 600;
+        }
+        .badge-published { background: rgba(163,190,140,0.3); color: #a3be8c; }
+        .badge-draft { background: rgba(136,192,208,0.3); color: #88c0d0; }
+        .badge-private { background: rgba(208,135,112,0.3); color: #d08770; }
+
+        /* Books list */
+        .book-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(76,86,106,0.2);
+        }
+        .book-item:last-child { border-bottom: none; }
+        .book-item input {
+            flex: 1;
+            padding: 8px 12px;
+            border: 1px solid rgba(76,86,106,0.4);
+            border-radius: 6px;
+            background: rgba(0,0,0,0.1);
+            color: var(--text-color);
+            font-size: 0.9em;
+        }
+
+        /* Links */
+        .link-row { display: flex; align-items: center; gap: 12px; padding: 8px 0; border-bottom: 1px solid rgba(76,86,106,0.2); flex-wrap: wrap; }
+        .link-url { font-family: monospace; font-size: 0.85em; color: var(--accent-primary); word-break: break-all; }
+        .link-info { font-size: 0.85em; color: var(--accent-secondary); }
+    </style>
+</head>
+<body>
+    <!-- Login Section -->
+    <div id="login-section" class="section active">
+        <div class="frosted-glass" style="max-width:420px;margin:0 auto;">
+            <h2 style="color:var(--accent-primary);margin-top:0;">Admin Login</h2>
+            <form id="login-form">
+                <input type="email" id="login-email" placeholder="Email" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <button type="submit">Login</button>
+            </form>
+            <p id="login-error">Invalid credentials.</p>
+        </div>
+    </div>
+
+    <!-- Admin Section -->
+    <div id="admin-section" class="section">
+        <nav class="navbar">
+            <h1><a href="../index.html">Admin</a></h1>
+            <div class="nav-tabs">
+                <button class="nav-tab active" data-tab="posts">Posts</button>
+                <button class="nav-tab" data-tab="editor">Editor</button>
+                <button class="nav-tab" data-tab="books">Books</button>
+                <button class="nav-tab" data-tab="links">Access Links</button>
+            </div>
+            <button id="logout-btn">Logout</button>
+        </nav>
+
+        <div class="container">
+            <!-- Posts Tab -->
+            <div id="tab-posts" class="tab-content active">
+                <div class="frosted-glass">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                        <h2 style="margin:0;color:var(--accent-primary);">Posts</h2>
+                        <button class="btn btn-primary" id="new-post-btn">+ New Post</button>
+                    </div>
+                    <table>
+                        <thead><tr><th>Title</th><th>Date</th><th>Status</th><th>Actions</th></tr></thead>
+                        <tbody id="posts-table"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Editor Tab -->
+            <div id="tab-editor" class="tab-content" style="display:none;">
+                <div class="frosted-glass">
+                    <h2 style="margin-top:0;color:var(--accent-primary);" id="editor-title">New Post</h2>
+                    <div class="form-row">
+                        <input type="text" id="post-title" placeholder="Post title">
+                        <input type="date" id="post-date">
+                        <input type="text" id="post-tags" placeholder="Tags (comma separated)">
+                    </div>
+                    <div class="form-row">
+                        <label><input type="checkbox" id="post-private"> Private</label>
+                        <input type="password" id="post-password" placeholder="Password (for private posts)" style="display:none;">
+                        <label><input type="checkbox" id="post-published" checked> Published</label>
+                    </div>
+                    <div class="editor-grid">
+                        <textarea id="post-markdown" placeholder="Write your markdown here..."></textarea>
+                        <div class="preview-pane" id="post-preview">Preview will appear here...</div>
+                    </div>
+                    <div style="margin-top:16px;display:flex;gap:10px;">
+                        <button class="btn btn-primary" id="save-post-btn">Save Post</button>
+                        <button class="btn btn-secondary" id="cancel-edit-btn">Cancel</button>
+                    </div>
+                    <input type="hidden" id="editing-post-id">
+                </div>
+            </div>
+
+            <!-- Books Tab -->
+            <div id="tab-books" class="tab-content" style="display:none;">
+                <div class="frosted-glass">
+                    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+                        <h2 style="margin:0;color:var(--accent-primary);">Books</h2>
+                        <button class="btn btn-primary" id="add-book-btn">+ Add Book</button>
+                    </div>
+                    <div id="books-list"></div>
+                </div>
+            </div>
+
+            <!-- Access Links Tab -->
+            <div id="tab-links" class="tab-content" style="display:none;">
+                <div class="frosted-glass">
+                    <h2 style="margin-top:0;color:var(--accent-primary);">Access Links</h2>
+                    <div class="form-row" style="margin-bottom:16px;">
+                        <select id="link-post-select"><option value="">Select a post...</option></select>
+                        <input type="number" id="link-max-views" placeholder="Max views" min="1" value="1" style="max-width:120px;">
+                        <button class="btn btn-primary" id="generate-link-btn">Generate Link</button>
+                    </div>
+                    <div id="links-list"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Firebase SDK (only loaded on admin page) -->
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore-compat.js"></script>
+    <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="robots" content="noindex, nofollow">
+    <title>Shared Post - Devan Velji</title>
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/theme.css">
+    <style>
+        body {
+            margin: 0;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        .navbar {
+            background-color: var(--navbar-bg);
+            padding: 10px 0;
+            color: var(--text-color);
+            text-align: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .navbar h1 { margin: 0; font-size: 1.5em; }
+        .navbar a { color: var(--text-color); text-decoration: none; }
+        .container {
+            margin: 100px auto 50px auto;
+            max-width: 800px;
+            padding: 0 20px;
+        }
+        .frosted-glass {
+            background: var(--frosted-bg);
+            border-radius: 18px;
+            box-shadow: 0 4px 32px 0 var(--shadow-color);
+            backdrop-filter: blur(12px) saturate(1.5);
+            -webkit-backdrop-filter: blur(12px) saturate(1.5);
+            padding: 32px 28px;
+            margin: 0 auto 30px auto;
+        }
+        .post-content { line-height: 1.75; font-size: 1.05em; }
+        .post-content h1, .post-content h2, .post-content h3, .post-content h4 { color: var(--accent-primary); margin-top: 1.8em; margin-bottom: 0.5em; }
+        .post-content pre { background: rgba(0,0,0,0.2); padding: 16px; border-radius: 10px; overflow-x: auto; }
+        .post-content code { background: rgba(0,0,0,0.15); padding: 2px 6px; border-radius: 4px; font-size: 0.9em; }
+        .post-content pre code { background: none; padding: 0; }
+        .post-content blockquote { border-left: 4px solid var(--accent-primary); margin: 1.5em 0; padding: 0.5em 1em; background: rgba(0,0,0,0.1); border-radius: 0 8px 8px 0; }
+        .post-content img { max-width: 100%; border-radius: 10px; margin: 1.5em auto; display: block; }
+        .post-content a { color: var(--accent-primary); text-decoration: none; }
+        .post-content a:hover { border-bottom: 1px solid var(--accent-primary); }
+        .math-display { text-align: center; margin: 1.5em 0; overflow-x: auto; }
+        .expired-msg { text-align: center; padding: 40px 0; }
+        .expired-msg h2 { color: var(--accent-hover); margin-bottom: 16px; }
+        .expired-msg p { color: var(--accent-secondary); }
+        .loading { text-align: center; color: var(--accent-secondary); padding: 40px 0; }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1><a href="../index.html">Devan Velji</a></h1>
+    </nav>
+    <div class="container">
+        <div class="frosted-glass">
+            <div id="content">
+                <p class="loading">Loading...</p>
+            </div>
+        </div>
+    </div>
+
+    <script defer src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <script>
+    (function () {
+        var KATEX_CSS = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css';
+        var KATEX_JS = 'https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js';
+
+        function protectLatex(md) {
+            var ph = [], idx = 0;
+            md = md.replace(/\$\$([\s\S]*?)\$\$/g, function (m) { var id = '%%LD' + idx++ + '%%'; ph.push({ id: id, c: m, d: true }); return id; });
+            md = md.replace(/(?<!\$)\$(?!\$)(?!\s)((?:[^$\n\\]|\\.)+?)(?<!\s)\$(?!\$)/g, function (m) { var id = '%%LI' + idx++ + '%%'; ph.push({ id: id, c: m, d: false }); return id; });
+            return { md: md, ph: ph };
+        }
+
+        function restoreLatex(html, ph) {
+            ph.forEach(function (p) {
+                var latex = p.d ? p.c.replace(/^\$\$([\s\S]*?)\$\$$/, '$1').trim() : p.c.replace(/^\$(.*?)\$$/, '$1').trim();
+                var tag = p.d ? 'div' : 'span';
+                var cls = p.d ? 'math-display' : 'math-inline';
+                var r = '<' + tag + ' class="' + cls + '" data-latex="' + encodeURIComponent(latex) + '">' + latex.replace(/&/g,'&amp;').replace(/</g,'&lt;') + '</' + tag + '>';
+                html = html.replace(p.id, r).replace('<p>' + p.id + '</p>', r);
+            });
+            return html;
+        }
+
+        function renderLatex(container) {
+            var els = container.querySelectorAll('.math-display, .math-inline');
+            if (els.length === 0) return;
+            var link = document.createElement('link'); link.rel = 'stylesheet'; link.href = KATEX_CSS; document.head.appendChild(link);
+            var s = document.createElement('script'); s.src = KATEX_JS;
+            s.onload = function () {
+                els.forEach(function (el) {
+                    try { katex.render(decodeURIComponent(el.getAttribute('data-latex')), el, { displayMode: el.classList.contains('math-display'), throwOnError: false }); } catch (e) {}
+                });
+            };
+            document.head.appendChild(s);
+        }
+
+        function init() {
+            var params = new URLSearchParams(location.search);
+            var linkId = params.get('id');
+            var el = document.getElementById('content');
+            if (!linkId) { showExpired(el, 'Invalid link.'); return; }
+
+            fetch('/api/access', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ linkId: linkId })
+            })
+            .then(function (r) { return r.json(); })
+            .then(function (data) {
+                if (data.expired) {
+                    showExpired(el, data.reason || 'This post has expired. If this is a mistake, please contact the admin.');
+                } else if (data.markdown) {
+                    if (data.title) document.title = data.title + ' - Devan Velji';
+                    renderPost(el, data.markdown);
+                } else {
+                    showExpired(el, 'Post not found.');
+                }
+            })
+            .catch(function () { showExpired(el, 'Something went wrong. Please try again later.'); });
+        }
+
+        function showExpired(el, msg) {
+            el.innerHTML = '<div class="expired-msg"><h2>404</h2><p>' + msg + '</p></div>';
+        }
+
+        function renderPost(el, md) {
+            md = md.replace(/^---\r?\n[\s\S]*?\r?\n---\r?\n/, '');
+            var p = protectLatex(md);
+            var waitForMarked = setInterval(function () {
+                if (window.marked) {
+                    clearInterval(waitForMarked);
+                    var html = marked.parse(p.md);
+                    html = restoreLatex(html, p.ph);
+                    el.className = 'post-content';
+                    el.innerHTML = html;
+                    renderLatex(el);
+                }
+            }, 50);
+        }
+
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
+        else init();
+    })();
+    </script>
+</body>
+</html>
