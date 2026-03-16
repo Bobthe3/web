@@ -4,25 +4,25 @@ service cloud.firestore {
     // Posts: public read for published non-private posts, admin write
     match /posts/{postId} {
       allow read: if resource.data.isPublished == true && resource.data.isPrivate == false;
-      allow write: if request.auth != null && request.auth.token.email == 'OWNER_EMAIL';
+      allow write: if request.auth != null && request.auth.token.email == 'devanvelji@gmail.com';
     }
 
     // Books: public read, admin write
     match /books/{bookId} {
       allow read: if true;
-      allow write: if request.auth != null && request.auth.token.email == 'OWNER_EMAIL';
+      allow write: if request.auth != null && request.auth.token.email == 'devanvelji@gmail.com';
     }
 
     // Access links: no public read (only via Cloud Functions), admin write
     match /access_links/{linkId} {
       allow read: if false;
-      allow write: if request.auth != null && request.auth.token.email == 'OWNER_EMAIL';
+      allow write: if request.auth != null && request.auth.token.email == 'devanvelji@gmail.com';
     }
 
     // Link events: anyone can create (tracking), admin can read
     match /link_events/{eventId} {
       allow create: if true;
-      allow read: if request.auth != null && request.auth.token.email == 'OWNER_EMAIL';
+      allow read: if request.auth != null && request.auth.token.email == 'devanvelji@gmail.com';
       allow update, delete: if false;
     }
   }

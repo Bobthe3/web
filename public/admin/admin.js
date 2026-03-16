@@ -4,12 +4,13 @@
 
   // Firebase config — update these values from your Firebase console
   var firebaseConfig = {
-    apiKey: 'YOUR_API_KEY',
+    apiKey: 'AIzaSyCPWa2nWX_WzWNr2l-AGsS98bs54TSmJ6w',
     authDomain: 'devanveljiwebsite.firebaseapp.com',
     projectId: 'devanveljiwebsite',
-    storageBucket: 'devanveljiwebsite.appspot.com',
-    messagingSenderId: '',
-    appId: ''
+    storageBucket: 'devanveljiwebsite.firebasestorage.app',
+    messagingSenderId: '488893809868',
+    appId: '1:488893809868:web:14ec183f29991571cf6e69',
+    measurementId: 'G-QPV9RZS5C3'
   };
 
   firebase.initializeApp(firebaseConfig);
