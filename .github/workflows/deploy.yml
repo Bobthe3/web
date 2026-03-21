@@ -1,0 +1,36 @@
+# .github/workflows/firebase.yml
+name: Build and Deploy to Firebase
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18' # or your preferred version
+
+      - name: Install dependencies
+        run: npm install
+        working-directory: public
+
+      - name: Generate images.json and blog posts
+        run: node generate-json.js
+        working-directory: public
+
+      - name: Build (generate images, feeds, sitemap)
+        run: npm run build
+        working-directory: public
+
+      - name: Deploy to Firebase Hosting
+        run: npx firebase-tools deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
+        working-directory: public

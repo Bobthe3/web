@@ -1,0 +1,423 @@
+// Interactive Photo Map
+// Displays photos on a world map using GPS coordinates from EXIF data
+
+class PhotoMap {
+    constructor() {
+        this.map = null;
+        this.photos = [];
+        this.markers = [];
+        this.markerGroup = null;
+        this.currentFilter = 'all';
+        
+        // Predefined locations for photos without GPS
+        this.locationMappings = {
+            'Amsterdam Canal': [52.3676, 4.9041],
+            'Barcelona, Spain': [41.3851, 2.1734],
+            'Big Ben': [51.4994, -0.1245],
+            'Piccadilly Circus': [51.5100, -0.1347],
+            'Hyde Park Sunset': [51.5074, -0.1278],
+            'Palau Nacional': [41.3683, 2.1537],
+            'Death Valley': [36.5054, -117.0794],
+            'Lassen National Park': [40.4977, -121.4207],
+            'Golden Gate Bridge (Foggy)': [37.8199, -122.4783],
+            'Black n White Bridge': [37.8199, -122.4783] // Golden Gate Bridge
+        };
+        
+        this.init();
+    }
+    
+    async init() {
+        try {
+            console.log('Initializing PhotoMap...');
+            await this.loadPhotos();
+            console.log('Photos loaded:', this.photos.length);
+            this.initMap();
+            console.log('Map initialized');
+            this.addPhotosToMap();
+            console.log('Photos added to map');
+            this.setupControls();
+            this.updateStats();
+            this.trackMapUsage();
+            console.log('PhotoMap initialization complete');
+        } catch (error) {
+            console.error('Error initializing photo map:', error);
+            // Show user-friendly error
+            const mapContainer = document.getElementById('photo-map');
+            if (mapContainer) {
+                mapContainer.innerHTML = `
+                    <div style="display: flex; align-items: center; justify-content: center; height: 400px; color: var(--text-color); text-align: center; flex-direction: column;">
+                        <i class="fas fa-exclamation-triangle" style="font-size: 3em; margin-bottom: 20px; color: var(--accent-secondary);"></i>
+                        <h3>Map temporarily unavailable</h3>
+                        <p>Please check back later or visit the <a href="gallery.html" style="color: var(--accent-primary);">gallery</a> to view photos.</p>
+                    </div>
+                `;
+            }
+        }
+    }
+    
+    async loadPhotos() {
+        try {
+            const response = await fetch('images.json');
+            const data = await response.json();
+            
+            // Process photos and add coordinates
+            this.photos = data.map(photo => {
+                let coordinates = null;
+                
+                // Try to extract GPS from EXIF data
+                if (photo.gpsLatitude && photo.gpsLongitude) {
+                    coordinates = [photo.gpsLatitude, photo.gpsLongitude];
+                } else if (this.locationMappings[photo.title]) {
+                    coordinates = this.locationMappings[photo.title];
+                }
+                
+                // Determine location category
+                let category = 'other';
+                if (photo.tags && photo.tags.includes('Europe')) {
+                    category = 'europe';
+                } else if (photo.tags && photo.tags.includes('National Parks')) {
+                    category = 'nationalparks';
+                } else if (photo.tags && photo.tags.includes('SF')) {
+                    category = 'usa';
+                }
+                
+                return {
+                    ...photo,
+                    coordinates,
+                    category,
+                    hasLocation: coordinates !== null
+                };
+            }).filter(photo => photo.hasLocation);
+            
+            console.log(`Loaded ${this.photos.length} photos with location data`);
+        } catch (error) {
+            console.error('Error loading photos:', error);
+            this.photos = [];
+        }
+    }
+    
+    initMap() {
+        // Initialize the map
+        this.map = L.map('photo-map').setView([40.0, 0.0], 2);
+        
+        // Add tile layer with dark theme to match site
+        L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://carto.com/attributions">CARTO</a>',
+            subdomains: 'abcd',
+            maxZoom: 19
+        }).addTo(this.map);
+        
+        // Create marker group
+        this.markerGroup = L.featureGroup().addTo(this.map);
+        
+        // Custom marker icons
+        this.createCustomIcons();
+    }
+    
+    createCustomIcons() {
+        this.icons = {
+            europe: L.divIcon({
+                className: 'custom-marker europe-marker',
+                html: '<i class="fas fa-camera" style="color: #88c0d0; font-size: 16px;"></i>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            }),
+            usa: L.divIcon({
+                className: 'custom-marker usa-marker',
+                html: '<i class="fas fa-camera" style="color: #bf616a; font-size: 16px;"></i>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            }),
+            nationalparks: L.divIcon({
+                className: 'custom-marker parks-marker',
+                html: '<i class="fas fa-mountain" style="color: #a3be8c; font-size: 16px;"></i>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            }),
+            other: L.divIcon({
+                className: 'custom-marker other-marker',
+                html: '<i class="fas fa-camera" style="color: #d08770; font-size: 16px;"></i>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 15]
+            })
+        };
+        
+        // Add CSS for custom markers
+        const style = document.createElement('style');
+        style.textContent = `
+            .custom-marker {
+                background: rgba(46, 52, 64, 0.9);
+                border: 2px solid #88c0d0;
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                backdrop-filter: blur(10px);
+                -webkit-backdrop-filter: blur(10px);
+                box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+                transition: all 0.3s ease;
+            }
+            .custom-marker:hover {
+                transform: scale(1.2);
+                box-shadow: 0 4px 16px rgba(0,0,0,0.5);
+            }
+            .leaflet-popup-content-wrapper {
+                background: rgba(59, 66, 82, 0.95);
+                color: #d8dee9;
+                border-radius: 12px;
+                backdrop-filter: blur(12px);
+                -webkit-backdrop-filter: blur(12px);
+            }
+            .leaflet-popup-tip {
+                background: rgba(59, 66, 82, 0.95);
+            }
+            @keyframes bounce {
+                0%, 20%, 60%, 100% { transform: translateY(0) scale(1); }
+                40% { transform: translateY(-20px) scale(1.1); }
+                80% { transform: translateY(-10px) scale(1.05); }
+            }
+        `;
+        document.head.appendChild(style);
+    }
+    
+    addPhotosToMap() {
+        this.markers = [];
+        
+        this.photos.forEach(photo => {
+            if (!photo.coordinates) return;
+            
+            const [lat, lng] = photo.coordinates;
+            const icon = this.icons[photo.category] || this.icons.other;
+            
+            const marker = L.marker([lat, lng], { icon })
+                .bindPopup(this.createPopupContent(photo), {
+                    maxWidth: 250,
+                    className: 'photo-popup-container'
+                });
+            
+            marker.photoData = photo;
+            marker.on('click', () => this.onMarkerClick(photo));
+            
+            this.markers.push(marker);
+            this.markerGroup.addLayer(marker);
+        });
+        
+        // Fit map to show all markers
+        if (this.markers.length > 0) {
+            this.map.fitBounds(this.markerGroup.getBounds(), { padding: [20, 20] });
+        }
+    }
+    
+    createPopupContent(photo) {
+        const year = this.getYearFromDate(photo.dateTaken);
+        return `
+            <div class="photo-popup">
+                <img src="${photo.preview}" alt="${photo.title}" onclick="window.open('gallery.html', '_blank')">
+                <h4>${photo.title}</h4>
+                <p><i class="fas fa-calendar"></i> ${year || 'Unknown'}</p>
+                <p><i class="fas fa-camera"></i> ${photo.deviceModel || 'Unknown camera'}</p>
+                <p><i class="fas fa-tags"></i> ${photo.tags ? photo.tags.join(', ') : 'No tags'}</p>
+                <a href="gallery.html" class="view-full">View in Gallery</a>
+            </div>
+        `;
+    }
+    
+    setupControls() {
+        const showAllBtn = document.getElementById('showAllBtn');
+        const europeBtn = document.getElementById('europeBtn');
+        const usaBtn = document.getElementById('usaBtn');
+        const nationalParksBtn = document.getElementById('nationalParksBtn');
+        const randomLocationBtn = document.getElementById('randomLocationBtn');
+        
+        if (showAllBtn) showAllBtn.addEventListener('click', () => this.filterPhotos('all'));
+        if (europeBtn) europeBtn.addEventListener('click', () => this.filterPhotos('europe'));
+        if (usaBtn) usaBtn.addEventListener('click', () => this.filterPhotos('usa'));
+        if (nationalParksBtn) nationalParksBtn.addEventListener('click', () => this.filterPhotos('nationalparks'));
+        if (randomLocationBtn) randomLocationBtn.addEventListener('click', () => this.goToRandomLocation());
+    }
+    
+    filterPhotos(category) {
+        this.currentFilter = category;
+        
+        // Update button states
+        document.querySelectorAll('.map-control-btn').forEach(btn => {
+            btn.classList.remove('active');
+        });
+        
+        let activeBtn;
+        switch(category) {
+            case 'all':
+                activeBtn = document.getElementById('showAllBtn');
+                break;
+            case 'europe':
+                activeBtn = document.getElementById('europeBtn');
+                break;
+            case 'usa':
+                activeBtn = document.getElementById('usaBtn');
+                break;
+            case 'nationalparks':
+                activeBtn = document.getElementById('nationalParksBtn');
+                break;
+        }
+        if (activeBtn) activeBtn.classList.add('active');
+        
+        // Filter markers
+        this.markerGroup.clearLayers();
+        
+        const filteredMarkers = this.markers.filter(marker => {
+            if (category === 'all') return true;
+            return marker.photoData.category === category;
+        });
+        
+        filteredMarkers.forEach(marker => {
+            this.markerGroup.addLayer(marker);
+        });
+        
+        // Fit map to filtered markers
+        if (filteredMarkers.length > 0) {
+            this.map.fitBounds(this.markerGroup.getBounds(), { padding: [20, 20] });
+        }
+        
+        // Update stats
+        this.updateStats();
+        
+        // Track filter usage
+        if (typeof trackEvent !== 'undefined') {
+            trackEvent('map_filter', 'PhotoMap', category, filteredMarkers.length);
+        }
+    }
+    
+    updateStats() {
+        const totalPhotos = this.photos.length;
+        const countries = new Set();
+        const cameras = new Set();
+        
+        this.photos.forEach(photo => {
+            if (photo.tags) {
+                if (photo.tags.includes('Europe')) {
+                    if (photo.title.includes('Amsterdam')) countries.add('Netherlands');
+                    if (photo.title.includes('Barcelona')) countries.add('Spain');
+                    if (photo.title.includes('Big Ben') || photo.title.includes('Hyde Park') || photo.title.includes('Piccadilly')) countries.add('United Kingdom');
+                }
+                if (photo.tags.includes('SF') || photo.tags.includes('National Parks')) {
+                    countries.add('United States');
+                }
+            }
+            if (photo.deviceModel) {
+                cameras.add(photo.deviceModel);
+            }
+        });
+        
+        const statsContainer = document.getElementById('mapStats');
+        statsContainer.innerHTML = `
+            <div class="stat-card">
+                <div class="stat-number">${totalPhotos}</div>
+                <div class="stat-label">Photos with Locations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${countries.size}</div>
+                <div class="stat-label">Countries Visited</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-number">${cameras.size}</div>
+                <div class="stat-label">Cameras Used</div>
+            </div>
+        `;
+    }
+    
+    onMarkerClick(photo) {
+        // Track photo view from map
+        if (typeof trackPhotoView !== 'undefined') {
+            trackPhotoView(photo.title, 'PhotoMap');
+        }
+    }
+    
+    getYearFromDate(dateObj) {
+        if (!dateObj) return null;
+        if (typeof dateObj === 'string') {
+            return new Date(dateObj).getFullYear();
+        }
+        if (dateObj.year) return dateObj.year;
+        if (dateObj._ctor === 'ExifDateTime') return dateObj.year;
+        return null;
+    }
+    
+    goToRandomLocation() {
+        if (this.photos.length === 0) return;
+        
+        // Get currently visible photos based on filter
+        let visiblePhotos = this.photos;
+        if (this.currentFilter !== 'all') {
+            visiblePhotos = this.photos.filter(photo => photo.category === this.currentFilter);
+        }
+        
+        if (visiblePhotos.length === 0) return;
+        
+        // Select random photo
+        const randomPhoto = visiblePhotos[Math.floor(Math.random() * visiblePhotos.length)];
+        const [lat, lng] = randomPhoto.coordinates;
+        
+        // Add spinning animation to button
+        const randomBtn = document.getElementById('randomLocationBtn');
+        if (randomBtn) {
+            randomBtn.classList.add('spinning');
+            setTimeout(() => randomBtn.classList.remove('spinning'), 800);
+        }
+        
+        // Fly to location with smooth animation
+        this.map.flyTo([lat, lng], 15, {
+            animate: true,
+            duration: 2.0,
+            easeLinearity: 0.25
+        });
+        
+        // Find and open the corresponding marker popup after animation
+        setTimeout(() => {
+            const targetMarker = this.markers.find(marker => 
+                marker.photoData.title === randomPhoto.title
+            );
+            if (targetMarker && this.markerGroup.hasLayer(targetMarker)) {
+                targetMarker.openPopup();
+                
+                // Add a subtle bounce effect to the marker
+                const markerElement = targetMarker.getElement();
+                if (markerElement) {
+                    markerElement.style.animation = 'bounce 0.6s ease-out';
+                    setTimeout(() => {
+                        markerElement.style.animation = '';
+                    }, 600);
+                }
+            }
+        }, 2100);
+        
+        // Track random location usage
+        if (typeof trackEvent !== 'undefined') {
+            trackEvent('random_location', 'PhotoMap', randomPhoto.category, 1);
+        }
+    }
+    
+    trackMapUsage() {
+        // Track map initialization
+        if (typeof trackEvent !== 'undefined') {
+            trackEvent('map_loaded', 'PhotoMap', 'photos_loaded', this.photos.length);
+        }
+        
+        // Track map interactions
+        this.map.on('zoomend', () => {
+            if (typeof trackEvent !== 'undefined') {
+                trackEvent('map_zoom', 'PhotoMap', 'zoom_level', this.map.getZoom());
+            }
+        });
+        
+        this.map.on('moveend', () => {
+            if (typeof trackEvent !== 'undefined') {
+                trackEvent('map_move', 'PhotoMap', 'map_moved');
+            }
+        });
+    }
+}
+
+// Initialize photo map when DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    new PhotoMap();
+});

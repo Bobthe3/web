@@ -1,0 +1,230 @@
+[
+  {
+    "fullImage": "images/Amsterdam Canal.JPG",
+    "preview": "previews/preview_Amsterdam Canal.JPG",
+    "title": "Amsterdam Canal",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/5",
+    "exposureTime": "1/180s",
+    "dateTaken": {
+      "_ctor": "ExifDateTime",
+      "year": 2023,
+      "month": 7,
+      "day": 28,
+      "hour": 4,
+      "minute": 4,
+      "second": 9,
+      "rawValue": "2023:07:28 04:04:09",
+      "inferredZone": false
+    },
+    "tags": [
+      "Europe"
+    ]
+  },
+  {
+    "fullImage": "images/Barcelona, Spain.JPG",
+    "preview": "previews/preview_Barcelona, Spain.JPG",
+    "title": "Barcelona, Spain",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/5",
+    "exposureTime": "1/500s",
+    "dateTaken": {
+      "_ctor": "ExifDateTime",
+      "year": 2023,
+      "month": 7,
+      "day": 13,
+      "hour": 7,
+      "minute": 5,
+      "second": 15,
+      "rawValue": "2023:07:13 07:05:15",
+      "inferredZone": false
+    },
+    "tags": [
+      "Europe"
+    ]
+  },
+  {
+    "fullImage": "images/Big Ben.jpeg",
+    "preview": "previews/preview_Big Ben.jpeg",
+    "title": "Big Ben",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/5",
+    "exposureTime": "1/250s",
+    "dateTaken": {
+      "_ctor": "ExifDateTime",
+      "year": 2023,
+      "month": 6,
+      "day": 25,
+      "hour": 12,
+      "minute": 7,
+      "second": 25,
+      "rawValue": "2023:06:25 12:07:25",
+      "inferredZone": false
+    },
+    "tags": [
+      "Europe"
+    ]
+  },
+  {
+    "fullImage": "images/Black n White Bridge.jpeg",
+    "preview": "previews/preview_Black n White Bridge.jpeg",
+    "title": "Black n White Bridge",
+    "deviceModel": "Canon EOS 80D",
+    "fNumber": "f/2",
+    "exposureTime": "1/1250s",
+    "dateTaken": {
+      "_ctor": "ExifDateTime",
+      "year": 2022,
+      "month": 8,
+      "day": 27,
+      "hour": 22,
+      "minute": 21,
+      "second": 0,
+      "tzoffsetMinutes": -420,
+      "rawValue": "2022:08:27 22:21:00",
+      "zoneName": "UTC-7",
+      "inferredZone": true
+    },
+    "tags": [
+      "SF"
+    ]
+  },
+  {
+    "fullImage": "images/Death Valley.jpeg",
+    "preview": "previews/preview_Death Valley.jpeg",
+    "title": "Death Valley",
+    "deviceModel": "iPhone 13",
+    "fNumber": "f/1.6",
+    "exposureTime": "1/122s",
+    "dateTaken": {
+      "_ctor": "ExifDateTime",
+      "year": 2023,
+      "month": 12,
+      "day": 17,
+      "hour": 6,
+      "minute": 44,
+      "second": 19,
+      "tzoffsetMinutes": -480,
+      "rawValue": "2023:12:17 06:44:19",
+      "zoneName": "UTC-8",
+      "inferredZone": true
+    },
+    "tags": [
+      "National Parks"
+    ]
+  },
+  {
+    "fullImage": "images/Golden Gate Bridge (Foggy).jpeg",
+    "preview": "previews/preview_Golden Gate Bridge (Foggy).jpeg",
+    "title": "Golden Gate Bridge (Foggy)",
+    "deviceModel": "Canon EOS 80D",
+    "fNumber": "f/5.6",
+    "exposureTime": "1/160s",
+    "dateTaken": {
+      "_ctor": "ExifDateTime",
+      "year": 2022,
+      "month": 8,
+      "day": 27,
+      "hour": 22,
+      "minute": 19,
+      "second": 30,
+      "tzoffsetMinutes": -420,
+      "rawValue": "2022:08:27 22:19:30",
+      "zoneName": "UTC-7",
+      "inferredZone": true
+    },
+    "tags": [
+      "SF"
+    ]
+  },
+  {
+    "fullImage": "images/Hyde Park Sunset.JPG",
+    "preview": "previews/preview_Hyde Park Sunset.JPG",
+    "title": "Hyde Park Sunset",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/3.5",
+    "exposureTime": "1/60s",
+    "dateTaken": {
+      "_ctor": "ExifDateTime",
+      "year": 2023,
+      "month": 7,
+      "day": 24,
+      "hour": 12,
+      "minute": 33,
+      "second": 30,
+      "rawValue": "2023:07:24 12:33:30",
+      "inferredZone": false
+    },
+    "tags": [
+      "Europe"
+    ]
+  },
+  {
+    "fullImage": "images/Lassen National Park.jpeg",
+    "preview": "previews/preview_Lassen National Park.jpeg",
+    "title": "Lassen National Park",
+    "deviceModel": "iPhone 13",
+    "fNumber": "f/1.6",
+    "exposureTime": "1/11905s",
+    "dateTaken": {
+      "_ctor": "ExifDateTime",
+      "year": 2024,
+      "month": 3,
+      "day": 28,
+      "hour": 14,
+      "minute": 51,
+      "second": 28,
+      "tzoffsetMinutes": -420,
+      "rawValue": "2024:03:28 14:51:28",
+      "zoneName": "UTC-7",
+      "inferredZone": true
+    },
+    "tags": [
+      "National Parks"
+    ]
+  },
+  {
+    "fullImage": "images/Palau Nacional.jpeg",
+    "preview": "previews/preview_Palau Nacional.jpeg",
+    "title": "Palau Nacional",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/8.9",
+    "exposureTime": "1/180s",
+    "dateTaken": {
+      "_ctor": "ExifDateTime",
+      "year": 2023,
+      "month": 7,
+      "day": 14,
+      "hour": 1,
+      "minute": 55,
+      "second": 27,
+      "rawValue": "2023:07:14 01:55:27",
+      "inferredZone": false
+    },
+    "tags": [
+      "Europe"
+    ]
+  },
+  {
+    "fullImage": "images/Piccadilly Circus.JPG",
+    "preview": "previews/preview_Piccadilly Circus.JPG",
+    "title": "Piccadilly Circus",
+    "deviceModel": "SAMSUNG PL150 / VLUU PL150 / SAMSUNG TL210 / SAMSUNG PL151",
+    "fNumber": "f/3.5",
+    "exposureTime": "1/500s",
+    "dateTaken": {
+      "_ctor": "ExifDateTime",
+      "year": 2023,
+      "month": 6,
+      "day": 24,
+      "hour": 23,
+      "minute": 13,
+      "second": 32,
+      "rawValue": "2023:06:24 23:13:32",
+      "inferredZone": false
+    },
+    "tags": [
+      "Europe"
+    ]
+  }
+]

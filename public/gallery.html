@@ -1,0 +1,707 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Photo gallery featuring travel photography from Europe, National Parks, and urban landscapes by Devan Velji. Browse photos by location, camera, and date with detailed EXIF information.">
+    <meta name="keywords" content="photography, travel photos, Europe, National Parks, urban landscapes, EXIF data, camera settings, Devan Velji">
+    <meta name="author" content="Devan Velji">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://devanvelji.com/gallery.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://devanvelji.com/gallery.html">
+    <meta property="og:title" content="Photo Gallery - Devan Velji">
+    <meta property="og:description" content="Travel photography from Europe, National Parks, and urban landscapes with detailed camera settings and EXIF information.">
+    <meta property="og:image" content="https://devanvelji.com/images/gallery-preview.jpg">
+    <meta property="og:site_name" content="Devan Velji">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://devanvelji.com/gallery.html">
+    <meta property="twitter:title" content="Photo Gallery - Devan Velji">
+    <meta property="twitter:description" content="Travel photography from Europe, National Parks, and urban landscapes with detailed camera settings and EXIF information.">
+    <meta property="twitter:image" content="https://devanvelji.com/images/gallery-preview.jpg">
+    
+    <title>Photo Gallery - Travel & Urban Photography | Devan Velji</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="styles/theme.css">
+    
+    <!-- Analytics -->
+    <script src="scripts/analytics.js"></script>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: var(--bg-color);
+            color: var(--text-color);
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+        .navbar {
+            background-color: var(--navbar-bg);
+            padding: 10px 0px;
+            color: var(--text-color);
+            text-align: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        .filter-container {
+            margin: 100px auto 20px auto;
+            max-width: 1000px;
+            width: 90vw;
+            display: grid;
+            grid-template-columns: 1fr auto auto auto auto auto;
+            gap: 15px;
+            align-items: center;
+        }
+        .search-input {
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--frosted-bg);
+            color: var(--text-color);
+            font-size: 1em;
+            width: 100%;
+        }
+        .search-input::placeholder {
+            color: rgba(216, 222, 233, 0.6);
+        }
+        .sort-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .sort-label {
+            font-size: 0.9em;
+            color: var(--text-color);
+            white-space: nowrap;
+        }
+        .filter-select {
+            padding: 12px 16px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: var(--frosted-bg);
+            color: var(--text-color);
+            font-size: 1em;
+            min-width: 150px;
+        }
+        .filter-button {
+            padding: 12px 20px;
+            border: 1px solid var(--accent-primary);
+            border-radius: 8px;
+            background: var(--accent-primary);
+            color: white;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .filter-button:hover {
+            background: var(--accent-hover);
+            border-color: var(--accent-hover);
+        }
+        .gallery-stats {
+            text-align: center;
+            margin: 10px auto 20px auto;
+            color: var(--text-color);
+            font-size: 0.9em;
+            opacity: 0.8;
+        }
+        .gallery-container {
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            max-width: 1400px;
+            width: 90vw;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .gallery-container.loaded {
+            opacity: 1;
+        }
+        .loading-spinner {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 200px;
+            color: var(--text-color);
+            font-size: 1.1em;
+        }
+        .no-results {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-color);
+            font-size: 1.1em;
+            opacity: 0.7;
+        }
+        .gallery-item {
+            position: relative;
+            cursor: pointer;
+            opacity: 0;
+            animation: fadeIn 0.6s forwards;
+            border-radius: 12px;
+            overflow: hidden;
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .gallery-item:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.6);
+        }
+        .gallery-image {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+            display: block;
+        }
+        .image-info {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0,0,0,0.8));
+            color: white;
+            padding: 20px 15px 15px 15px;
+            transform: translateY(100%);
+            transition: transform 0.3s ease;
+        }
+        .gallery-item:hover .image-info {
+            transform: translateY(0);
+        }
+        .image-meta {
+            font-size: 0.8em;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        .image-title {
+            font-weight: 600;
+            font-size: 1em;
+            margin-bottom: 3px;
+            line-height: 1.2;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 2000;
+            left: 0;
+            top: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0,0,0,0.8);
+            justify-content: center;
+            align-items: center;
+            animation: fadeInModal 0.3s;
+        }
+        .modal.show {
+            display: flex;
+        }
+        .modal-content {
+            background: var(--nord1);
+            padding: 30px;
+            border-radius: 10px;
+            max-width: 90vw;
+            max-height: 90vh;
+            color: #fff;
+            text-align: center;
+            position: relative;
+            animation: fadeInModal 0.3s;
+        }
+        .modal-content img {
+            max-width: 80vw;
+            max-height: 60vh;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.7);
+            animation: fadeIn 0.5s;
+        }
+        .close {
+            position: absolute;
+            top: 20px;
+            right: 40px;
+            color: #fff;
+            font-size: 2em;
+            cursor: pointer;
+        }
+        .back-link {
+            margin: 30px 0 0 0;
+            text-align: center;
+        }
+        .back-link a {
+            color: var(--accent-primary);
+            text-decoration: none;
+            font-size: 1.2em;
+        }
+        .back-link a:hover {
+            color: var(--accent-secondary);
+        }
+        @media (max-width: 768px) {
+            .filter-container {
+                grid-template-columns: 1fr;
+                gap: 10px;
+            }
+            .sort-container {
+                justify-self: center;
+            }
+            .gallery-container {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 15px;
+            }
+            .gallery-image {
+                height: 200px;
+            }
+            .modal-content img {
+                max-width: 95vw;
+                max-height: 40vh;
+            }
+            .modal-content {
+                padding: 10px;
+            }
+        }
+        @media (max-width: 480px) {
+            .gallery-container {
+                grid-template-columns: 1fr 1fr;
+                gap: 10px;
+            }
+            .gallery-image {
+                height: 180px;
+            }
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes fadeInModal {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+    </style>
+    
+    <!-- Structured Data for Gallery -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "ImageGallery",
+        "name": "Photo Gallery - Devan Velji",
+        "description": "Travel photography collection featuring Europe, National Parks, and urban landscapes",
+        "url": "https://devanvelji.com/gallery.html",
+        "author": {
+            "@type": "Person",
+            "name": "Devan Velji",
+            "url": "https://devanvelji.com"
+        },
+        "keywords": ["photography", "travel", "Europe", "National Parks", "urban landscapes"],
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://devanvelji.com/gallery.html"
+        }
+    }
+    </script>
+</head>
+<body>
+    <nav class="navbar">
+        <h1><a href="index.html">Devan Velji</a></h1>
+    </nav>
+    <div class="filter-container">
+        <input type="text" class="search-input" id="searchInput" placeholder="Search photos by title, tag, or camera..." />
+        <div class="sort-container">
+            <span class="sort-label">Sort by:</span>
+            <select class="filter-select" id="sortFilter">
+                <option value="date-desc">Date (Newest)</option>
+                <option value="date-asc">Date (Oldest)</option>
+                <option value="title-asc">Title (A-Z)</option>
+                <option value="camera">Camera</option>
+            </select>
+        </div>
+        <select class="filter-select" id="tagFilter">
+            <option value="">All Tags</option>
+        </select>
+        <select class="filter-select" id="cameraFilter">
+            <option value="">All Cameras</option>
+        </select>
+        <select class="filter-select" id="yearFilter">
+            <option value="">All Years</option>
+        </select>
+        <button class="filter-button" id="clearFilters">Clear All</button>
+    </div>
+    <div class="gallery-stats" id="galleryStats">Loading photos...</div>
+    <div class="loading-spinner" id="loadingSpinner">
+        <div>Loading gallery...</div>
+    </div>
+    <div class="gallery-container" id="galleryContainer">
+        <!-- Images will be inserted here by JS -->
+    </div>
+    <div class="no-results" id="noResults" style="display: none;">
+        No photos match your search criteria. Try adjusting your filters.
+    </div>
+    <div class="modal" id="modal">
+        <div class="modal-content" id="modalContent">
+            <span class="close" id="closeModal">&times;</span>
+            <img id="modalImg" src="" alt="" />
+            <div id="modalTitle"></div>
+            <div id="modalMeta"></div>
+        </div>
+    </div>
+    <script>
+    let images = [];
+    let currentIndex = 0;
+    const galleryContainer = document.getElementById('galleryContainer');
+    const galleryStats = document.getElementById('galleryStats');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const noResults = document.getElementById('noResults');
+    const modal = document.getElementById('modal');
+    const modalImg = document.getElementById('modalImg');
+    const modalTitle = document.getElementById('modalTitle');
+    const modalMeta = document.getElementById('modalMeta');
+    const closeModalBtn = document.getElementById('closeModal');
+    let touchStartX = 0;
+
+    let allImages = [];
+    let filteredImages = [];
+    const searchInput = document.getElementById('searchInput');
+    const sortFilter = document.getElementById('sortFilter');
+    const tagFilter = document.getElementById('tagFilter');
+    const cameraFilter = document.getElementById('cameraFilter');
+    const yearFilter = document.getElementById('yearFilter');
+    const clearFiltersBtn = document.getElementById('clearFilters');
+    
+    // Debounce helper for search
+    function debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+            const later = () => {
+                clearTimeout(timeout);
+                func(...args);
+            };
+            clearTimeout(timeout);
+            timeout = setTimeout(later, wait);
+        };
+    }
+
+    // Fetch images.json and build gallery
+    fetch('images.json')
+        .then(res => res.json())
+        .then(data => {
+            allImages = data.map((img, index) => ({ ...img, originalIndex: index }));
+            filteredImages = [...allImages];
+            images = filteredImages;
+            populateFilterOptions();
+            sortImages();
+            renderGallery();
+            setupEventListeners();
+            hideLoading();
+        })
+        .catch(error => {
+            console.error('Error loading gallery:', error);
+            loadingSpinner.innerHTML = '<div style="color: var(--accent-hover);">Error loading gallery. Please refresh the page.</div>';
+        });
+
+    function hideLoading() {
+        loadingSpinner.style.display = 'none';
+        galleryContainer.classList.add('loaded');
+    }
+
+    function updateStats() {
+        const total = allImages.length;
+        const filtered = filteredImages.length;
+        galleryStats.textContent = filtered === total ? 
+            `Showing ${total} photos` : 
+            `Showing ${filtered} of ${total} photos`;
+    }
+
+    function renderGallery() {
+        if (filteredImages.length === 0) {
+            galleryContainer.innerHTML = '';
+            noResults.style.display = 'block';
+        } else {
+            noResults.style.display = 'none';
+            galleryContainer.innerHTML = '';
+            
+            filteredImages.forEach((img, idx) => {
+                const item = document.createElement('div');
+                item.className = 'gallery-item';
+                item.tabIndex = 0;
+                item.style.animationDelay = (idx * 0.03) + 's';
+                
+                const formattedDate = formatDateShort(img.dateTaken);
+                const camera = img.deviceModel ? img.deviceModel.split(' ')[0] : 'Unknown';
+                
+                item.innerHTML = `
+                    <img src="${img.preview}" 
+                         data-full="${img.fullImage}" 
+                         alt="${img.title}" 
+                         class="gallery-image" 
+                         loading="lazy" />
+                    <div class="image-info">
+                        <div class="image-title">${img.title}</div>
+                        <div class="image-meta">${camera} • ${formattedDate}</div>
+                    </div>
+                `;
+                
+                item.addEventListener('click', () => showModal(idx));
+                item.addEventListener('keydown', (e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                        e.preventDefault();
+                        showModal(idx);
+                    }
+                });
+                
+                galleryContainer.appendChild(item);
+            });
+        }
+        
+        images = filteredImages;
+        updateStats();
+    }
+
+    // Populate filter dropdown options
+    function populateFilterOptions() {
+        const tags = new Set();
+        const cameras = new Set();
+        const years = new Set();
+        
+        allImages.forEach(img => {
+            if (img.tags) {
+                img.tags.forEach(tag => tags.add(tag));
+            }
+            if (img.deviceModel) {
+                cameras.add(img.deviceModel);
+            }
+            if (img.dateTaken) {
+                const year = getYearFromDate(img.dateTaken);
+                if (year) years.add(year);
+            }
+        });
+        
+        // Populate tag filter
+        [...tags].sort().forEach(tag => {
+            const option = document.createElement('option');
+            option.value = tag;
+            option.textContent = tag;
+            tagFilter.appendChild(option);
+        });
+        
+        // Populate camera filter
+        [...cameras].sort().forEach(camera => {
+            const option = document.createElement('option');
+            option.value = camera;
+            option.textContent = camera;
+            cameraFilter.appendChild(option);
+        });
+        
+        // Populate year filter
+        [...years].sort((a, b) => b - a).forEach(year => {
+            const option = document.createElement('option');
+            option.value = year;
+            option.textContent = year;
+            yearFilter.appendChild(option);
+        });
+    }
+    
+    // Enhanced search and filtering function
+    function filterImages() {
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        const selectedTag = tagFilter.value;
+        const selectedCamera = cameraFilter.value;
+        const selectedYear = yearFilter.value;
+        
+        filteredImages = allImages.filter(img => {
+            // Search functionality
+            let matchesSearch = true;
+            if (searchTerm) {
+                const titleMatch = img.title.toLowerCase().includes(searchTerm);
+                const cameraMatch = img.deviceModel && img.deviceModel.toLowerCase().includes(searchTerm);
+                const tagMatch = img.tags && img.tags.some(tag => tag.toLowerCase().includes(searchTerm));
+                matchesSearch = titleMatch || cameraMatch || tagMatch;
+            }
+            
+            // Filter functionality
+            const matchesTag = !selectedTag || (img.tags && img.tags.includes(selectedTag));
+            const matchesCamera = !selectedCamera || img.deviceModel === selectedCamera;
+            const matchesYear = !selectedYear || getYearFromDate(img.dateTaken) == selectedYear;
+            
+            return matchesSearch && matchesTag && matchesCamera && matchesYear;
+        });
+        
+        sortImages();
+        renderGallery();
+        
+        // Track filtering analytics
+        if (typeof trackEvent !== 'undefined') {
+            const filterType = searchTerm ? 'search' : 'filter';
+            trackEvent('filter_applied', 'Gallery', `${filterType}: ${filteredImages.length} results`);
+        }
+    }
+    
+    // Sorting function
+    function sortImages() {
+        const sortValue = sortFilter.value;
+        
+        filteredImages.sort((a, b) => {
+            switch (sortValue) {
+                case 'date-desc':
+                    return compareDates(b.dateTaken, a.dateTaken);
+                case 'date-asc':
+                    return compareDates(a.dateTaken, b.dateTaken);
+                case 'title-asc':
+                    return a.title.localeCompare(b.title);
+                case 'camera':
+                    const cameraA = a.deviceModel || 'Unknown';
+                    const cameraB = b.deviceModel || 'Unknown';
+                    return cameraA.localeCompare(cameraB);
+                default:
+                    return 0;
+            }
+        });
+    }
+    
+    // Date comparison helper
+    function compareDates(dateA, dateB) {
+        if (!dateA && !dateB) return 0;
+        if (!dateA) return 1;
+        if (!dateB) return -1;
+        
+        const getTimestamp = (date) => {
+            if (date._ctor === 'ExifDateTime') {
+                return new Date(date.year, date.month - 1, date.day, date.hour, date.minute, date.second).getTime();
+            }
+            if (typeof date === 'string') {
+                return new Date(date).getTime();
+            }
+            return new Date().getTime();
+        };
+        
+        return getTimestamp(dateA) - getTimestamp(dateB);
+    }
+    
+    // Clear all filters
+    function clearFilters() {
+        searchInput.value = '';
+        sortFilter.value = 'date-desc';
+        tagFilter.value = '';
+        cameraFilter.value = '';
+        yearFilter.value = '';
+        filteredImages = [...allImages];
+        sortImages();
+        renderGallery();
+        
+        if (typeof trackEvent !== 'undefined') {
+            trackEvent('filters_cleared', 'Gallery');
+        }
+    }
+    
+    // Setup event listeners
+    function setupEventListeners() {
+        // Debounced search
+        const debouncedFilter = debounce(filterImages, 300);
+        searchInput.addEventListener('input', debouncedFilter);
+        
+        // Filter and sort changes
+        sortFilter.addEventListener('change', () => {
+            sortImages();
+            renderGallery();
+        });
+        tagFilter.addEventListener('change', filterImages);
+        cameraFilter.addEventListener('change', filterImages);
+        yearFilter.addEventListener('change', filterImages);
+        clearFiltersBtn.addEventListener('click', clearFilters);
+        
+        // Enhanced keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'SELECT') return;
+            
+            if (e.key === '/') {
+                e.preventDefault();
+                searchInput.focus();
+            } else if (e.key === 'c' && e.ctrlKey) {
+                e.preventDefault();
+                clearFilters();
+            }
+        });
+    }
+    
+    // Format date for display
+    function formatDateShort(dateObj) {
+        if (!dateObj) return 'Unknown';
+        if (dateObj._ctor === 'ExifDateTime') {
+            return `${dateObj.year}`;
+        }
+        if (typeof dateObj === 'string') {
+            return new Date(dateObj).getFullYear().toString();
+        }
+        return 'Unknown';
+    }
+
+    // Helper function to extract year from date object
+    function getYearFromDate(dateObj) {
+        if (!dateObj) return null;
+        if (typeof dateObj === 'string') {
+            return new Date(dateObj).getFullYear();
+        }
+        if (dateObj.year) return dateObj.year;
+        if (dateObj._ctor === 'ExifDateTime') return dateObj.year;
+        return null;
+    }
+    
+    function showModal(idx) {
+        currentIndex = idx;
+        const img = images[idx];
+        modalImg.src = img.fullImage;
+        modalImg.alt = img.title;
+        modalTitle.textContent = img.title;
+        modalMeta.innerHTML = `
+            <div><b>Camera:</b> ${img.deviceModel || 'Unknown'}</div>
+            <div><b>f-number:</b> ${img.fNumber || 'Unknown'}</div>
+            <div><b>Exposure:</b> ${img.exposureTime || 'Unknown'}</div>
+            <div><b>Date:</b> ${formatDate(img.dateTaken)}</div>
+            <div><b>Tags:</b> ${(img.tags || []).join(', ')}</div>
+        `;
+        
+        // Track photo view
+        if (typeof trackPhotoView !== 'undefined') {
+            trackPhotoView(img.title, 'Gallery');
+        }
+        modal.classList.add('show');
+        document.body.style.overflow = 'hidden';
+    }
+    function closeModal() {
+        modal.classList.remove('show');
+        document.body.style.overflow = '';
+    }
+    closeModalBtn.onclick = closeModal;
+    window.onclick = function(event) {
+        if (event.target === modal) closeModal();
+    };
+    // Keyboard navigation
+    document.addEventListener('keydown', function(e) {
+        if (!modal.classList.contains('show')) return;
+        if (e.key === 'Escape') closeModal();
+        if (e.key === 'ArrowLeft') showModal((currentIndex - 1 + images.length) % images.length);
+        if (e.key === 'ArrowRight') showModal((currentIndex + 1) % images.length);
+    });
+    // Touch support for closing modal (swipe down)
+    modal.addEventListener('touchstart', function(e) {
+        touchStartX = e.changedTouches[0].clientY;
+    });
+    modal.addEventListener('touchend', function(e) {
+        let touchEndX = e.changedTouches[0].clientY;
+        if (touchEndX - touchStartX > 80) closeModal();
+    });
+    // Helper to format date
+    </script>
+    <script src="scripts/unified-modal.js"></script>
+</body>
+</html>   

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Follow Devan Velji's fitness journey and triathlon training progress through Strava integration.">
+    <title>Fitness - Devan Velji</title>
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="styles/theme.css">
+    <style>
+        body { background: var(--bg-color); color: var(--text-color); }
+
+        .navbar {
+            background-color: var(--navbar-bg);
+            padding: 10px 0px;
+            color: var(--text-color);
+            text-align: center;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .navbar h1 {
+            margin: 0;
+            font-size: 1.5em;
+        }
+        
+        /* removed theme toggle */
+
+        .container {
+            margin: 80px auto;
+            text-align: center;
+            max-width: 1000px;
+            padding: 0 20px;
+        }
+        .frosted-glass {
+            background: var(--frosted-bg);
+            border-radius: 18px;
+            box-shadow: 0 4px 32px 0 var(--shadow-color);
+            backdrop-filter: blur(12px) saturate(1.5);
+            -webkit-backdrop-filter: blur(12px) saturate(1.5);
+            padding: 32px 24px 24px 24px;
+            margin: 0 auto 30px auto;
+        }
+
+        .social-links {
+            text-align: center;
+            margin: 20px 0;
+        }
+        .social-links a {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-color);
+            text-decoration: none;
+            font-size: 1.2em;
+            transition: color 0.3s ease, background-color 0.3s ease;
+            padding: 12px 20px;
+            background: var(--hover-bg);
+            border-radius: 8px;
+        }
+
+        .social-links a:hover {
+            color: var(--accent-hover);
+            background: var(--hover-bg);
+        }
+
+        .widgets {
+            margin: 20px auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .sports-text {
+            font-size: 1.1em;
+            line-height: 1.6;
+            text-align: left;
+        }
+
+        @media (max-width: 600px) {
+            .frosted-glass {
+                padding: 20px 16px;
+            }
+            .widgets iframe {
+                width: 280px;
+                height: 180px;
+            }
+            .widgets iframe:last-child {
+                height: 400px;
+            }
+        }
+        .title h1 {
+            display: block;
+            margin: 20px 0;
+            color: #ef4e21;
+            text-decoration: none;
+            font-size: 2em;
+            transition: color 0.3s ease;
+        }
+
+        .title h1:hover {
+            color: #f0f0f1;
+        }
+        .title-link a:visited, a:active  {
+            color: #ef4e21;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <h1><a href="index.html">Devan Velji</a></h1>
+    </nav>
+    
+    
+
+    <div class="container">
+
+        <div class="frosted-glass">
+            <h2>Sports & Goals</h2>
+            <div class="sports-text">
+                <strong>Sports:</strong>
+                <br>
+                Triathlon: Running, Cycling, Swimming
+                <br>
+                Hiking, Sailing, Surfing
+                <br>
+                
+            </div>
+        </div>
+
+        <div class="back-link">
+            <a href="index.html">← Back to Home</a>
+        </div>
+    </div>
+</body>
+</html>
