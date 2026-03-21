@@ -19,5 +19,6 @@ Books I have read by category:
 
 ## Fiction
 1. Recursion - Blake Crouch
-5. Candymakers - Wendy Mass
+2. Candymakers - Wendy Mass
+3. Warcross - Marie Lu
 
