@@ -3,157 +3,192 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="A bouncing ball animation created with Rive.">
+    <meta name="description" content="Bouncing Ball A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines. <div class="rive-container"> <canvas id="rive-canvas" width="400" height="...">
+    <meta name="keywords" content="">
+    <meta name="author" content="Devan Velji">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://devanvelji.com/blog/generated/bouncing-ball.html">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="article">
+    <meta property="og:url" content="https://devanvelji.com/blog/generated/bouncing-ball.html">
+    <meta property="og:title" content="Bouncing Ball">
+    <meta property="og:description" content="Bouncing Ball A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines. <div class="rive-container"> <canvas id="rive-canvas" width="400" height="...">
+    <meta property="og:image" content="https://devanvelji.com/images/blog-og-image.jpg">
+    <meta property="og:site_name" content="Devan Velji">
+    <meta property="article:author" content="Devan Velji">
+    <meta property="article:published_time" content="2026-01-12T00:00:00Z">
+    
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content="https://devanvelji.com/blog/generated/bouncing-ball.html">
+    <meta property="twitter:title" content="Bouncing Ball">
+    <meta property="twitter:description" content="Bouncing Ball A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines. <div class="rive-container"> <canvas id="rive-canvas" width="400" height="...">
+    <meta property="twitter:image" content="https://devanvelji.com/images/blog-og-image.jpg">
+    
     <title>Bouncing Ball - Devan Velji</title>
-    <link rel="icon" type="image/x-icon" href="../../favicon.ico">
-    <link rel="stylesheet" href="../../styles/theme.css">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="stylesheet" href="../styles/theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    
+    <!-- Analytics -->
+    <script src="../scripts/analytics.js"></script>
     <style>
         body {
             margin: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: Arial, sans-serif;
             background: var(--bg-color);
             color: var(--text-color);
             min-height: 100vh;
         }
-
+        
         .navbar {
             background-color: var(--navbar-bg);
-            padding: 10px 0;
+            padding: 10px 0px;
+            color: var(--text-color);
             text-align: center;
             position: fixed;
             top: 0;
             width: 100%;
             z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
-
+        
         .navbar h1 {
             margin: 0;
             font-size: 1.5em;
         }
-
-        .navbar a {
-            color: var(--text-color);
-            text-decoration: none;
-        }
-
+        
         .container {
             margin: 100px auto 50px auto;
             max-width: 800px;
             padding: 0 20px;
         }
-
+        
         .frosted-glass {
             background: var(--frosted-bg);
             border-radius: 18px;
             box-shadow: 0 4px 32px 0 var(--shadow-color);
             backdrop-filter: blur(12px) saturate(1.5);
             -webkit-backdrop-filter: blur(12px) saturate(1.5);
-            padding: 32px;
-            margin-bottom: 30px;
+            padding: 32px 24px 24px 24px;
+            margin: 0 auto 30px auto;
         }
-
-        .post-header {
-            margin-bottom: 24px;
-        }
-
-        .post-header h1 {
-            color: var(--accent-primary);
-            margin: 0 0 12px 0;
-            font-size: 2rem;
-        }
-
+        
         .post-meta {
             color: var(--accent-secondary);
+            margin-bottom: 20px;
             font-size: 0.9em;
         }
-
-        .post-content p {
+        
+        .post-content {
             line-height: 1.6;
-            margin: 16px 0;
         }
-
-        .rive-container {
-            width: 100%;
-            max-width: 400px;
-            margin: 32px auto;
+        
+        .post-content h1, .post-content h2, .post-content h3 {
+            color: var(--accent-primary);
         }
-
-        #rive-canvas {
-            width: 100%;
-            height: auto;
-            display: block;
-            border-radius: 12px;
-        }
-
-        .back-links {
-            text-align: center;
-            margin-top: 30px;
-        }
-
+        
         .back-link {
             color: var(--accent-primary);
             text-decoration: none;
-            font-size: 1em;
+            font-size: 1.1em;
         }
-
+        
         .back-link:hover {
             text-decoration: underline;
         }
+        
+        .post-content pre {
+            background: rgba(0,0,0,0.1);
+            padding: 15px;
+            border-radius: 8px;
+            overflow-x: auto;
+        }
+        
+        .post-content code {
+            background: rgba(0,0,0,0.1);
+            padding: 2px 4px;
+            border-radius: 4px;
+        }
     </style>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <script>
+        window.MathJax = {
+            tex: {
+                inlineMath: [['$', '$'], ['\\(', '\\)']],
+                displayMath: [['$$', '$$'], ['\\[', '\\]']]
+            }
+        };
+    </script>
+    
+    <!-- Structured Data for Blog Post -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "BlogPosting",
+        "headline": "Bouncing Ball",
+        "description": "Bouncing Ball A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines. <div class="rive-container"> <canvas id="rive-canvas" width="400" height="...",
+        "image": "https://devanvelji.com/images/blog-og-image.jpg",
+        "author": {
+            "@type": "Person",
+            "name": "Devan Velji",
+            "url": "https://devanvelji.com"
+        },
+        "publisher": {
+            "@type": "Person",
+            "name": "Devan Velji",
+            "url": "https://devanvelji.com"
+        },
+        "datePublished": "2026-01-12T00:00:00Z",
+        "dateModified": "2026-01-12T00:00:00Z",
+        "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://devanvelji.com/blog/generated/bouncing-ball.html"
+        },
+        "keywords": "",
+        "wordCount": "23",
+        "url": "https://devanvelji.com/blog/generated/bouncing-ball.html"
+    }
+    </script>
+    
+    <!-- Blog Enhancements -->
+    <script src="../scripts/blog-enhancements.js"></script>
 </head>
 <body>
     <nav class="navbar">
-        <h1><a href="../../index.html">Devan Velji</a></h1>
+        <h1><a href="../index.html">Devan Velji</a></h1>
     </nav>
-
+    
     <div class="container">
         <div class="frosted-glass">
-            <div class="post-header">
-                <h1>Bouncing Ball</h1>
-                <div class="post-meta">
-                    <i class="fas fa-calendar"></i> 2026-01-12
-                    <span style="margin-left: 16px;"><i class="fas fa-tags"></i> animation</span>
-                </div>
+            <div class="post-meta">
+                <i class="fas fa-calendar"></i> 2026-01-12
+                
             </div>
-
             <div class="post-content">
-                <p>A bouncing ball animation created with Rive.</p>
+                <h1 id="bouncing-ball">Bouncing Ball</h1>
+<div>A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.</div>
+<div>
+    
+</div>
+<div></div>
 
-                <div class="rive-container">
-                    <canvas id="rive-canvas" width="400" height="400"></canvas>
-                </div>
+
             </div>
         </div>
-
-        <div class="back-links">
-            <a href="../index.html" class="back-link"><i class="fas fa-arrow-left"></i> Back to Blog</a>
-            <span style="margin: 0 16px; color: var(--accent-secondary);">|</span>
-            <a href="../../index.html" class="back-link">Home</a>
+        
+        <div style="text-align: center; margin-top: 30px;">
+            <a href="../blog/index.html" class="back-link">← Back to Blog</a>
+            <span style="margin: 0 20px;">|</span>
+            <a href="../index.html" class="back-link">Home</a>
         </div>
     </div>
-
-    <script src="https://unpkg.com/@rive-app/canvas@2.21.6"></script>
-    <script>
-        const canvas = document.getElementById('rive-canvas');
-
-        const r = new rive.Rive({
-            src: '/blog/rive/bouncingBall.riv',
-            canvas: canvas,
-            autoplay: true,
-            fit: rive.Fit.Contain,
-            alignment: rive.Alignment.Center,
-            onLoad: () => {
-                r.resizeDrawingSurfaceToCanvas();
-            },
-            onLoadError: (e) => {
-                console.error('Rive load error:', e);
-            }
-        });
-
-        window.addEventListener('resize', () => {
-            r.resizeDrawingSurfaceToCanvas();
-        });
-    </script>
+    
+    
 </body>
 </html>

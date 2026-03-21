@@ -1,5 +1,14 @@
 [
   {
+    "slug": "bouncing-ball",
+    "title": "Bouncing Ball",
+    "date": "2026-01-12",
+    "tags": [],
+    "content": "<h1 id=\"bouncing-ball\">Bouncing Ball</h1>\n<div>A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.</div>\n<div>\n    \n</div>\n<div></div>\n\n",
+    "excerpt": "Bouncing Ball A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines. <div class=\"rive-container\"> <canvas id=\"rive-canvas\" width=\"400\" height=\"...",
+    "readingTime": 1
+  },
+  {
     "slug": "sample-post",
     "title": "Markdown Test Blog",
     "date": "2025-07-22",
