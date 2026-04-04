@@ -6,22 +6,30 @@
     <link>https://devanvelji.com/blog/</link>
     <atom:link href="https://devanvelji.com/rss.xml" rel="self" type="application/rss+xml" />
     <language>en-us</language>
-    <lastBuildDate>Sun, 12 Jan 2026 00:00:00 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 04 Apr 2026 23:22:07 GMT</lastBuildDate>
 
     <item>
       <title>Bouncing Ball</title>
       <link>https://devanvelji.com/blog/generated/bouncing-ball.html</link>
       <guid>https://devanvelji.com/blog/generated/bouncing-ball.html</guid>
-      <pubDate>Sun, 12 Jan 2026 00:00:00 GMT</pubDate>
-      <description>A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.</description>
+      <pubDate>Mon, 12 Jan 2026 00:00:00 GMT</pubDate>
+      <description>Bouncing Ball A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.</description>
     </item>
 
     <item>
-      <title>This is a test</title>
+      <title>Markdown Test Blog</title>
       <link>https://devanvelji.com/blog/generated/sample-post.html</link>
       <guid>https://devanvelji.com/blog/generated/sample-post.html</guid>
       <pubDate>Tue, 22 Jul 2025 00:00:00 GMT</pubDate>
-      <description>Test Blog with Mathematical Equations Testing Mathematical Concepts Here&apos;s a simple equation that demonstrates the relationship between energy and mass: And here&apos;s a more complex integral that appears...</description>
+      <description>Test Blog with Mathematical Equations Testing the markdown parser with mathematical equations. Mathematical Concepts Here&apos;s a simple equation that demonstrates the relationship between energy and mass...</description>
+    </item>
+
+    <item>
+      <title>Books</title>
+      <link>https://devanvelji.com/blog/generated/Books.html</link>
+      <guid>https://devanvelji.com/blog/generated/Books.html</guid>
+      <pubDate>Fri, 21 Mar 2025 00:00:00 GMT</pubDate>
+      <description>Books Books I have read by category: Business &amp; Tech 1. Zero to One - Peter Thiel 2. Thinking, Fast and Slow - Daniel Kahneman 3. The Signal and Noise - Nate Silver 4. Freakonomics - Stephen J. Dubner...</description>
     </item>
   </channel>
 </rss>

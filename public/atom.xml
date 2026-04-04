@@ -3,7 +3,7 @@
   <title>Devan Velji - Blog</title>
   <link href="https://devanvelji.com/atom.xml" rel="self" />
   <link href="https://devanvelji.com/blog/" />
-  <updated>2026-01-12T00:00:00.000Z</updated>
+  <updated>2026-04-04T23:22:07.688Z</updated>
   <id>https://devanvelji.com/</id>
   <author>
     <name>Devan Velji</name>
@@ -15,14 +15,22 @@
     <link href="https://devanvelji.com/blog/generated/bouncing-ball.html" />
     <id>https://devanvelji.com/blog/generated/bouncing-ball.html</id>
     <updated>2026-01-12T00:00:00.000Z</updated>
-    <summary>A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.</summary>
+    <summary>Bouncing Ball A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.</summary>
   </entry>
 
   <entry>
-    <title>This is a test</title>
+    <title>Markdown Test Blog</title>
     <link href="https://devanvelji.com/blog/generated/sample-post.html" />
     <id>https://devanvelji.com/blog/generated/sample-post.html</id>
     <updated>2025-07-22T00:00:00.000Z</updated>
-    <summary>Test Blog with Mathematical Equations Testing Mathematical Concepts Here&apos;s a simple equation that demonstrates the relationship between energy and mass: And here&apos;s a more complex integral that appears...</summary>
+    <summary>Test Blog with Mathematical Equations Testing the markdown parser with mathematical equations. Mathematical Concepts Here&apos;s a simple equation that demonstrates the relationship between energy and mass...</summary>
+  </entry>
+
+  <entry>
+    <title>Books</title>
+    <link href="https://devanvelji.com/blog/generated/Books.html" />
+    <id>https://devanvelji.com/blog/generated/Books.html</id>
+    <updated>2025-03-21T00:00:00.000Z</updated>
+    <summary>Books Books I have read by category: Business &amp; Tech 1. Zero to One - Peter Thiel 2. Thinking, Fast and Slow - Daniel Kahneman 3. The Signal and Noise - Nate Silver 4. Freakonomics - Stephen J. Dubner...</summary>
   </entry>
 </feed>

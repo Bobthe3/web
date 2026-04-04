@@ -1,20 +1,38 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
+    <loc>https://devanvelji.com/background.html</loc>
+    <lastmod>2026-01-13</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://devanvelji.com/blog/generated/Books.html</loc>
+    <lastmod>2026-04-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://devanvelji.com/blog/generated/bouncing-ball.html</loc>
+    <lastmod>2026-04-04</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
     <loc>https://devanvelji.com/blog/generated/sample-post.html</loc>
-    <lastmod>2025-11-22</lastmod>
+    <lastmod>2026-04-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://devanvelji.com/blog/</loc>
-    <lastmod>2025-11-22</lastmod>
+    <lastmod>2026-04-04</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.6</priority>
   </url>
   <url>
     <loc>https://devanvelji.com/fitness.html</loc>
-    <lastmod>2025-09-06</lastmod>
+    <lastmod>2025-11-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>
@@ -26,7 +44,7 @@
   </url>
   <url>
     <loc>https://devanvelji.com/</loc>
-    <lastmod>2025-08-21</lastmod>
+    <lastmod>2026-03-12</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
@@ -146,7 +164,13 @@
   </url>
   <url>
     <loc>https://devanvelji.com/resume.html</loc>
-    <lastmod>2025-08-17</lastmod>
+    <lastmod>2026-04-04</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  <url>
+    <loc>https://devanvelji.com/status.html</loc>
+    <lastmod>2026-03-12</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
   </url>

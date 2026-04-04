@@ -109,52 +109,78 @@ fs.readdir(imageDirectory, async (err, files) => {
     }
 });
 
+function escapeHtml(str) {
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;');
+}
+
+function parseTags(tagsValue) {
+    if (!tagsValue) return [];
+    // Handle JSON array format: ["tag1", "tag2"]
+    const jsonMatch = tagsValue.match(/^\[(.+)\]$/);
+    if (jsonMatch) {
+        try {
+            return JSON.parse(tagsValue);
+        } catch (e) {
+            // Fall through to comma-separated parsing
+        }
+    }
+    // Handle comma-separated format: "tag1, tag2"
+    return tagsValue.split(',').map(t => t.trim()).filter(Boolean);
+}
+
 async function generateBlogPosts() {
     const blogDir = './blog';
     const postsDir = path.join(blogDir, 'posts');
     const outputDir = path.join(blogDir, 'generated');
-    
+
     // Ensure directories exist
     if (!fs.existsSync(blogDir)) fs.mkdirSync(blogDir);
     if (!fs.existsSync(outputDir)) fs.mkdirSync(outputDir);
-    
+
     if (!fs.existsSync(postsDir)) {
         console.log('No blog posts directory found. Skipping blog generation.');
         return;
     }
-    
-    
+
+
     const posts = [];
     const files = fs.readdirSync(postsDir).filter(file => file.endsWith('.md'));
-    
+
     for (const file of files) {
         const filePath = path.join(postsDir, file);
         const content = fs.readFileSync(filePath, 'utf8');
-        
+
         const frontMatterMatch = content.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
         let frontMatter = {};
         let markdownContent = content;
-        
+
         if (frontMatterMatch) {
             const frontMatterText = frontMatterMatch[1];
             markdownContent = frontMatterMatch[2];
-            
+
             frontMatterText.split('\n').forEach(line => {
-                const match = line.match(/^(\w+):\s*"?([^"]*)"?$/);
-                if (match) {
-                    frontMatter[match[1]] = match[2];
-                }
+                const colonIndex = line.indexOf(':');
+                if (colonIndex === -1) return;
+                const key = line.substring(0, colonIndex).trim();
+                const value = line.substring(colonIndex + 1).trim();
+                // Remove surrounding quotes if present
+                frontMatter[key] = value.replace(/^"(.*)"$/, '$1');
             });
         }
-        
+
         const html = MathpixMarkdownModel.markdownToHTML(markdownContent, {
             htmlTags: true,
             linkify: true,
             typographer: true
         });
         const slug = path.basename(file, '.md');
-        
-        // Create clean excerpt by stripping markdown and LaTeX
+
+        // Create clean excerpt by stripping markdown, LaTeX, and HTML
         const cleanExcerpt = markdownContent
             .replace(/\$\$[\s\S]*?\$\$/g, '') // Remove display math
             .replace(/\$[^$]+\$/g, '') // Remove inline math
@@ -164,26 +190,28 @@ async function generateBlogPosts() {
             .replace(/\[(.+?)\]\(.+?\)/g, '$1') // Remove links, keep text
             .replace(/`(.+?)`/g, '$1') // Remove inline code
             .replace(/```[\s\S]*?```/g, '') // Remove code blocks
+            .replace(/<script[\s\S]*?<\/script>/gi, '') // Remove script tags
+            .replace(/<[^>]*>/g, '') // Remove all HTML tags
             .replace(/\n+/g, ' ') // Replace newlines with spaces
             .replace(/\s+/g, ' ') // Normalize whitespace
             .trim();
 
         // Calculate reading time
         const wordCount = cleanExcerpt.split(/\s+/).length;
-        const readingTime = Math.ceil(wordCount / 200); // Assuming 200 words per minute
+        const readingTime = Math.ceil(wordCount / 200);
 
         const post = {
             slug,
             title: frontMatter.title || slug,
             date: frontMatter.date || new Date().toISOString().split('T')[0],
-            tags: frontMatter.tags ? frontMatter.tags.split(',').map(t => t.trim()) : [],
+            tags: parseTags(frontMatter.tags),
             content: html,
             excerpt: cleanExcerpt.substring(0, 200) + (cleanExcerpt.length > 200 ? '...' : ''),
             readingTime: readingTime
         };
-        
+
         posts.push(post);
-        
+
         // Generate individual post HTML
         const postHtml = generatePostHtml(post);
         fs.writeFileSync(path.join(outputDir, `${slug}.html`), postHtml);
@@ -201,36 +229,38 @@ async function generateBlogPosts() {
 }
 
 function generatePostHtml(post) {
+    const safeExcerpt = escapeHtml(post.excerpt);
+    const safeTitle = escapeHtml(post.title);
     return `<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="${post.excerpt}">
-    <meta name="keywords" content="${post.tags ? post.tags.join(', ') : ''}">
+    <meta name="description" content="${safeExcerpt}">
+    <meta name="keywords" content="${post.tags ? post.tags.map(t => escapeHtml(t)).join(', ') : ''}">
     <meta name="author" content="Devan Velji">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://devanvelji.com/blog/generated/${post.slug}.html">
-    
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="article">
     <meta property="og:url" content="https://devanvelji.com/blog/generated/${post.slug}.html">
-    <meta property="og:title" content="${post.title}">
-    <meta property="og:description" content="${post.excerpt}">
+    <meta property="og:title" content="${safeTitle}">
+    <meta property="og:description" content="${safeExcerpt}">
     <meta property="og:image" content="https://devanvelji.com/images/blog-og-image.jpg">
     <meta property="og:site_name" content="Devan Velji">
     <meta property="article:author" content="Devan Velji">
     <meta property="article:published_time" content="${post.date}T00:00:00Z">
-    ${post.tags ? post.tags.map(tag => `<meta property="article:tag" content="${tag}">`).join('\n    ') : ''}
-    
+    ${post.tags ? post.tags.map(tag => `<meta property="article:tag" content="${escapeHtml(tag)}">`).join('\n    ') : ''}
+
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image">
     <meta property="twitter:url" content="https://devanvelji.com/blog/generated/${post.slug}.html">
-    <meta property="twitter:title" content="${post.title}">
-    <meta property="twitter:description" content="${post.excerpt}">
+    <meta property="twitter:title" content="${safeTitle}">
+    <meta property="twitter:description" content="${safeExcerpt}">
     <meta property="twitter:image" content="https://devanvelji.com/images/blog-og-image.jpg">
-    
-    <title>${post.title} - Devan Velji</title>
+
+    <title>${safeTitle} - Devan Velji</title>
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <link rel="stylesheet" href="../styles/theme.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
@@ -318,7 +348,6 @@ function generatePostHtml(post) {
             border-radius: 4px;
         }
     </style>
-    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
     <script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>
         window.MathJax = {
@@ -331,32 +360,20 @@ function generatePostHtml(post) {
     
     <!-- Structured Data for Blog Post -->
     <script type="application/ld+json">
-    {
+    ${JSON.stringify({
         "@context": "https://schema.org",
         "@type": "BlogPosting",
-        "headline": "${post.title}",
-        "description": "${post.excerpt}",
+        "headline": post.title,
+        "description": post.excerpt,
         "image": "https://devanvelji.com/images/blog-og-image.jpg",
-        "author": {
-            "@type": "Person",
-            "name": "Devan Velji",
-            "url": "https://devanvelji.com"
-        },
-        "publisher": {
-            "@type": "Person",
-            "name": "Devan Velji",
-            "url": "https://devanvelji.com"
-        },
-        "datePublished": "${post.date}T00:00:00Z",
-        "dateModified": "${post.date}T00:00:00Z",
-        "mainEntityOfPage": {
-            "@type": "WebPage",
-            "@id": "https://devanvelji.com/blog/generated/${post.slug}.html"
-        },
-        "keywords": "${post.tags ? post.tags.join(', ') : ''}",
-        "wordCount": "${post.content.split(' ').length}",
-        "url": "https://devanvelji.com/blog/generated/${post.slug}.html"
-    }
+        "author": { "@type": "Person", "name": "Devan Velji", "url": "https://devanvelji.com" },
+        "publisher": { "@type": "Person", "name": "Devan Velji", "url": "https://devanvelji.com" },
+        "datePublished": post.date + "T00:00:00Z",
+        "dateModified": post.date + "T00:00:00Z",
+        "mainEntityOfPage": { "@type": "WebPage", "@id": "https://devanvelji.com/blog/generated/" + post.slug + ".html" },
+        "keywords": post.tags ? post.tags.join(", ") : "",
+        "url": "https://devanvelji.com/blog/generated/" + post.slug + ".html"
+    }, null, 4)}
     </script>
     
     <!-- Blog Enhancements -->
@@ -393,14 +410,14 @@ function generateBlogIndexHtml(posts) {
     const allTags = [...new Set(posts.flatMap(post => post.tags))].sort();
 
     const postsHtml = posts.map(post => `
-        <div class="frosted-glass post-preview" data-tags="${post.tags.join(',')}" data-title="${post.title.toLowerCase()}" data-excerpt="${post.excerpt.toLowerCase()}">
-            <h2><a href="generated/${post.slug}.html" style="color: var(--accent-primary); text-decoration: none; font-size: 1.75rem; font-weight: 600;">${post.title}</a></h2>
+        <div class="frosted-glass post-preview" data-tags="${escapeHtml(post.tags.join(','))}" data-title="${escapeHtml(post.title.toLowerCase())}" data-excerpt="${escapeHtml(post.excerpt.toLowerCase())}">
+            <h2><a href="generated/${post.slug}.html" style="color: var(--accent-primary); text-decoration: none; font-size: 1.75rem; font-weight: 600;">${escapeHtml(post.title)}</a></h2>
             <div class="post-meta">
                 <i class="fas fa-calendar"></i> ${post.date}
                 ${post.readingTime ? `<span style="margin-left: 20px;"><i class="fas fa-clock"></i> ${post.readingTime} min read</span>` : ''}
-                ${post.tags.length > 0 ? `<span style="margin-left: 20px;"><i class="fas fa-tags"></i> ${post.tags.join(', ')}</span>` : ''}
+                ${post.tags.length > 0 ? `<span style="margin-left: 20px;"><i class="fas fa-tags"></i> ${post.tags.map(t => escapeHtml(t)).join(', ')}</span>` : ''}
             </div>
-            <p style="color: var(--text-color); line-height: 1.6; margin-bottom: 16px;">${post.excerpt}</p>
+            <p style="color: var(--text-color); line-height: 1.6; margin-bottom: 16px;">${escapeHtml(post.excerpt)}</p>
             <a href="generated/${post.slug}.html" style="color: var(--accent-primary); font-weight: 500;">Read more →</a>
         </div>
     `).join('');
