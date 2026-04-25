@@ -25,6 +25,7 @@ async function readExistingJson() {
     }
 }
 
+function processImagesAndBlog() {
 fs.readdir(imageDirectory, async (err, files) => {
     if (err) {
         console.error('Error reading directory:', err);
@@ -108,6 +109,13 @@ fs.readdir(imageDirectory, async (err, files) => {
         console.error('Error processing images:', error);
     }
 });
+}
+
+if (require.main === module) {
+    processImagesAndBlog();
+}
+
+module.exports = { generateBlogPosts: () => generateBlogPosts() };
 
 function escapeHtml(str) {
     return str
@@ -116,6 +124,48 @@ function escapeHtml(str) {
         .replace(/'/g, '&#39;')
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;');
+}
+
+function preserveRawHtml(markdown) {
+    const blocks = [];
+    const token = (i) => `xrawhtmlblock${i}xrawhtmlend`;
+
+    // Extract <script> blocks first (mathpix strips these entirely).
+    let processed = markdown.replace(/<script\b[\s\S]*?<\/script>/gi, (match) => {
+        blocks.push(match);
+        return token(blocks.length - 1);
+    });
+
+    // Extract top-level HTML blocks for elements mathpix mangles or whose
+    // attributes it strips (canvas, iframe, video, audio, and divs that carry
+    // attributes — e.g. <div class="rive-container">).
+    processed = processed.replace(
+        /^<(canvas|iframe|video|audio)\b[^>]*>[\s\S]*?<\/\1>/gim,
+        (match) => {
+            blocks.push(match);
+            return token(blocks.length - 1);
+        }
+    );
+
+    processed = processed.replace(
+        /^<div\b[^>]*>[\s\S]*?<\/div>/gim,
+        (match) => {
+            // Only protect divs that have attributes or contain a placeholder
+            // for an already-extracted block; plain <div>...</div> can pass
+            // through markdown unchanged.
+            if (!/^<div\s/i.test(match) && !/xrawhtmlblock\d+xrawhtmlend/.test(match)) {
+                return match;
+            }
+            blocks.push(match);
+            return token(blocks.length - 1);
+        }
+    );
+
+    return { processed, blocks };
+}
+
+function restoreRawHtml(html, blocks) {
+    return html.replace(/xrawhtmlblock(\d+)xrawhtmlend/g, (_, idx) => blocks[parseInt(idx, 10)] || '');
 }
 
 function parseTags(tagsValue) {
@@ -173,11 +223,13 @@ async function generateBlogPosts() {
             });
         }
 
-        const html = MathpixMarkdownModel.markdownToHTML(markdownContent, {
+        const { processed: protectedMarkdown, blocks: rawHtmlBlocks } = preserveRawHtml(markdownContent);
+        let html = MathpixMarkdownModel.markdownToHTML(protectedMarkdown, {
             htmlTags: true,
             linkify: true,
             typographer: true
         });
+        html = restoreRawHtml(html, rawHtmlBlocks);
         const slug = path.basename(file, '.md');
 
         // Create clean excerpt by stripping markdown, LaTeX, and HTML

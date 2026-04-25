@@ -7,7 +7,7 @@
       "rive",
       "animation"
     ],
-    "content": "<h1 id=\"bouncing-ball\">Bouncing Ball</h1>\n<div>A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.</div>\n<div>\n    \n</div>\n<div></div>\n\n",
+    "content": "<h1 id=\"bouncing-ball\">Bouncing Ball</h1>\n<div>A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.</div>\n<div><div class=\"rive-container\">\n    <canvas id=\"rive-canvas\" width=\"400\" height=\"400\"></canvas>\n</div></div>\n<div><script src=\"https://unpkg.com/@rive-app/canvas@2.21.6\"></script><br>\n<script>\n    const canvas = document.getElementById('rive-canvas');\n    const r = new rive.Rive({\n        src: '/blog/rive/bouncingBall.riv',\n        canvas: canvas,\n        autoplay: true,\n        fit: rive.Fit.Contain,\n        alignment: rive.Alignment.Center,\n        onLoad: () => {\n            r.resizeDrawingSurfaceToCanvas();\n        }\n    });\n    window.addEventListener('resize', () => {\n        r.resizeDrawingSurfaceToCanvas();\n    });\n</script></div>\n",
     "excerpt": "Bouncing Ball A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.",
     "readingTime": 1
   },

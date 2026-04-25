@@ -172,11 +172,26 @@
             <div class="post-content">
                 <h1 id="bouncing-ball">Bouncing Ball</h1>
 <div>A simple bouncing ball animation created with Rive. An experiment with Rive animation tools and state machines.</div>
-<div>
-    
-</div>
-<div></div>
-
+<div><div class="rive-container">
+    <canvas id="rive-canvas" width="400" height="400"></canvas>
+</div></div>
+<div><script src="https://unpkg.com/@rive-app/canvas@2.21.6"></script><br>
+<script>
+    const canvas = document.getElementById('rive-canvas');
+    const r = new rive.Rive({
+        src: '/blog/rive/bouncingBall.riv',
+        canvas: canvas,
+        autoplay: true,
+        fit: rive.Fit.Contain,
+        alignment: rive.Alignment.Center,
+        onLoad: () => {
+            r.resizeDrawingSurfaceToCanvas();
+        }
+    });
+    window.addEventListener('resize', () => {
+        r.resizeDrawingSurfaceToCanvas();
+    });
+</script></div>
 
             </div>
         </div>
