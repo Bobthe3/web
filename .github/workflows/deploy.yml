@@ -1,10 +1,16 @@
-# .github/workflows/firebase.yml
+# Auto-deploys the static site to Firebase Hosting whenever the prod branch
+# is pushed. Manual runs are also allowed via the Actions tab (workflow_dispatch).
 name: Build and Deploy to Firebase
 
 on:
   push:
     branches:
-      - main
+      - prod
+  workflow_dispatch:
+
+concurrency:
+  group: firebase-hosting-prod
+  cancel-in-progress: false
 
 jobs:
   build_and_deploy:
@@ -12,25 +18,24 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Set up Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '18' # or your preferred version
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: public/package-lock.json
 
       - name: Install dependencies
-        run: npm install
+        run: npm ci
         working-directory: public
 
-      - name: Generate images.json and blog posts
-        run: node generate-json.js
-        working-directory: public
-
-      - name: Build (generate images, feeds, sitemap)
+      - name: Build (images.json, blog, feeds, sitemap)
         run: npm run build
         working-directory: public
 
       - name: Deploy to Firebase Hosting
-        run: npx firebase-tools deploy --only hosting --token ${{ secrets.FIREBASE_TOKEN }}
-        working-directory: public
+        run: npx firebase-tools deploy --only hosting --project devanveljiwebsite --non-interactive --token "$FIREBASE_TOKEN"
+        env:
+          FIREBASE_TOKEN: ${{ secrets.FIREBASE_TOKEN }}
