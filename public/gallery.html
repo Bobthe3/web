@@ -186,6 +186,15 @@
             font-size: 0.8em;
             opacity: 0.9;
             margin-top: 5px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .device-icon {
+            height: 1.6em;
+            width: auto;
+            vertical-align: middle;
+            object-fit: contain;
         }
         .image-title {
             font-weight: 600;
@@ -437,17 +446,21 @@
                 item.style.animationDelay = (idx * 0.03) + 's';
                 
                 const formattedDate = formatDateShort(img.dateTaken);
-                const camera = img.deviceModel ? img.deviceModel.split(' ')[0] : 'Unknown';
-                
+                const rawCamera = img.deviceModel || 'Unknown';
+                const isSamsung = /samsung/i.test(rawCamera);
+                const cameraLabel = isSamsung
+                    ? `<img src="images/devices/samsung-pl150.png" alt="Samsung PL150" class="device-icon" />`
+                    : rawCamera.split(' ')[0];
+
                 item.innerHTML = `
-                    <img src="${img.preview}" 
-                         data-full="${img.fullImage}" 
-                         alt="${img.title}" 
-                         class="gallery-image" 
+                    <img src="${img.preview}"
+                         data-full="${img.fullImage}"
+                         alt="${img.title}"
+                         class="gallery-image"
                          loading="lazy" />
                     <div class="image-info">
                         <div class="image-title">${img.title}</div>
-                        <div class="image-meta">${camera} • ${formattedDate}</div>
+                        <div class="image-meta">${cameraLabel} <span>• ${formattedDate}</span></div>
                     </div>
                 `;
                 
